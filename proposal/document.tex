@@ -29,8 +29,20 @@ For those languages which use it, capitalization is an important signal for the 
 \section{Contributions}
 
 \subsection*{Exercise 1a}
-TODO: A clear list of the scientific hypotheses evaluated in the original paper. Some papers don't make this super clear, so it can take a couple readings of the paper to understand.
+Task: A clear list of the scientific hypotheses evaluated in the original paper. Some papers don't make this super clear, so it can take a couple readings of the paper to understand.
+\\
+\\
+The authors hypothesised that re-training standard NER and POS architectures with mixed cased and uncased training data would remove the dependence on casing and improves the F-score of such classification tasks. They perform experiments on cased and uncased test sets, retraining the NER and POS models using different embedding by 
+\begin{itemize}
+    \item Training on cased data
+    \item Training on uncased data
+    \item Training on concatenation of cased and uncased
+    \item Training on concatenation of cased and uncased but randomly lowercasing 50\% of the data
+    \item Training on cased and truecase the test data
+    \item Truecase both the training and test data
+\end{itemize}
 
+They perform the same experiments with The Broad Twitter data, an informal corpus, retraining the NER model and verify their hypothesis that re-training on a mixture of cased and uncased datasets will improve F-scores
 
 \section{Access to data}
 Task: Give a short description of whether and how you can access the data used in the paper.
