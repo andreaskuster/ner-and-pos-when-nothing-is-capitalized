@@ -88,6 +88,8 @@ PTB sections 22-24 \href{https://www.seas.upenn.edu/~pdtb/}{Penn Treebank}
 The project should be feasible because majority of models are either available pre-trained or with implemented architectures as authors specify exactly which implementation they used (mostly based on \href{https://github.com/allenai/allennlp}{AllenNLP github repo}).
 There will however be a few things such as \href{https://nlp.stanford.edu/pubs/glove.pdf}{Glove word vectors}, which I could not find official implementation for (\href{https://github.com/hans/glove.py}{There is this unofficial attempt} though, which would have to be checked for correctness). Hence, overall we should not be too heavy on GPU use, which is the biggest bottleneck in such project.
 
+Considering the fact that BiLSTM models with pre-trained weights are \href{https://github.com/UKPLab/emnlp2017-bilstm-cnn-crf/blob/master/docs/Pretrained_Models.md}{less than 500mb}, they should be easily able to fit in 8GB of memory of 1080TI. Since those are the biggest models used in paper, other should not be a problem either.
+
 Another nice thing about this project is that every data-set used is cited, and available. One thing to note is that sometimes the labels may not be available (as in Wikipedia dataset example), but due to nature of casing tasks, labels can be created automatically at virtually zero cost.
 
 Hence overall our work will be computationally feasible because it will mostly rely on fine-tuning models which is much cheaper than training them from scratch.
