@@ -44,43 +44,67 @@ The authors hypothesised that re-training standard NER and POS architectures wit
 
 They perform the same experiments with The Broad Twitter data, an informal corpus, retraining the NER model and verify their hypothesis that re-training on a mixture of cased and uncased datasets will improve F-scores
 
+
+
+
 \section{Access to data}
 Task: Give a short description of whether and how you can access the data used in the paper.
 \\
 \\
-We can access all the data CoNLL 2003, Penn Treebank and Twitter, but have to do some processing (i.e. cased/uncased/..). The links to the sources are below each F1 score comparison table.
+The paper describes different evaluations performed using several models and data sources. We will go through them, list all data sources, and give a summary at the end, where we describe how we can get hold of this data.
 
 
 \subsection*{Evaluation 1}
-\includegraphics{stat1}
+Performance evaluation of modern models trained on cased text, evaluated on lowercased text.
 \\
-\href{https://dl.acm.org/doi/10.3115/1119176.1119195}{CoNLL}
+\includegraphics[width=0.5\textwidth]{stat1}
 \\
-PTB sections 22-24 \href{https://www.seas.upenn.edu/~pdtb/}{Penn Treebank}
+Data sources:
+\begin{itemize}
+	\item \href{https://dl.acm.org/doi/10.3115/1119176.1119195}{CoNLL 2003}
+	\item \href{https://www.seas.upenn.edu/~pdtb/}{Penn TreeBank}
+\end{itemize}
 
 
 \subsection*{Evaluation 2}
-\includegraphics{stat2}
+Truecaser performance evaluation.
+\\
+\includegraphics[width=0.5\textwidth]{stat2}
+\\
+Data sources:
+\begin{itemize}
+	\item \href{https://cs.pomona.edu/~dkauchak/simplification/}{Simplified Wikipedia}
+	\item \href{https://dl.acm.org/doi/10.3115/1119176.1119195}{CoNLL 2003}
+	\item \href{https://www.seas.upenn.edu/~pdtb/}{Penn TreeBank}
+\end{itemize}
 
-\noindent
-\href{https://www.aclweb.org/anthology/W11-1601.pdf}{Wikipedia}\\
-\href{https://dl.acm.org/doi/10.3115/1119176.1119195}{CoNLL}\\
-PTB sections 22-24 \href{https://www.seas.upenn.edu/~pdtb/}{Penn Treebank}
 
-
-
-\subsection*{Evaluation 3}
-\includegraphics{stat3}
-
-\noindent
-\href{https://dl.acm.org/doi/10.3115/1119176.1119195}{CoNLL}\\
-PTB sections 22-24 \href{https://www.seas.upenn.edu/~pdtb/}{Penn Treebank}
+\subsection*{Evaluation 3} 
+NER+ELMo / POS+ELMo performance evaluation on CoNLL 2003 and PTB data.
+\\
+\includegraphics[width=0.5\textwidth]{stat3}
+\\
+Data sources:
+\begin{itemize}
+	\item \href{https://dl.acm.org/doi/10.3115/1119176.1119195}{CoNLL 2003}
+	\item \href{https://www.seas.upenn.edu/~pdtb/}{Penn TreeBank}
+\end{itemize}
 
 
 \subsection*{Evaluation 4}
-\includegraphics{stat4}
-\href{https://github.com/GateNLP/broad_twitter_corpus}{Twitter}
+NER+ELMo performance evaluation on twitter data.
+\\
+\includegraphics[width=0.5\textwidth]{stat4}
+\\
+Data sources:
+\begin{itemize}
+	\item \href{https://github.com/GateNLP/broad_twitter_corpus}{Twitter}
+\end{itemize}
 
+
+\subsection*{Conclusion}
+The data sources are: \href{https://dl.acm.org/doi/10.3115/1119176.1119195}{CoNLL 2003}, \href{https://www.seas.upenn.edu/~pdtb/}{Penn TreeBank}, \href{https://cs.pomona.edu/~dkauchak/simplification/}{Simplified Wikipedia} and \href{https://github.com/GateNLP/broad_twitter_corpus}{Twitter}.
+We were able to obtain a copy of the \textit{CoNLL 2003} and \textit{Penn TreeBank} dataset internally. Furthermore, the data from \textit{Simplified Wikipedia} and \textit{Twitter} is publicly available on the web. Therefore, we conclude that we obtained access to all required data for this project.
 
 
 
