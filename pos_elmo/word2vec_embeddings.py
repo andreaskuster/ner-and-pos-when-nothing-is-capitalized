@@ -49,7 +49,7 @@ class Word2VecPreprocessor:
                                             workers=4,  # number of parallel workers, default: 1
                                             size=200,  # NN size, default: 100
                                             min_count=5)  # ignore words with < min_count, default: 1
-                                            
+
     def store_model(self, path):
         self.model.save(path)
 
