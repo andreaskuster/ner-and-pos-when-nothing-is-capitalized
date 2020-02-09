@@ -13,6 +13,7 @@
     Credits:
         - https://nlp.stanford.edu/projects/glove/
         - https://github.com/stanfordnlp/GloVe
+        - https://github.com/JonathanRaiman/glove
         - https://medium.com/analytics-vidhya/basics-of-using-pre-trained-glove-vectors-in-python-d38905f356db
         - https://medium.com/ai-society/jkljlj-7d6e699895c4
         - https://linguistics.stackexchange.com/questions/3641/how-to-calculate-the-co-occurrence-between-two-words-in-a-window-of-text
