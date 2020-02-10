@@ -51,23 +51,18 @@ class GlovePreprocessor:
         self.data_sources = {
             "wikipedia2014_gigaword5_6b_uncased": {
                 "url": "http://nlp.stanford.edu/data/glove.6B.zip",
-                "files": [{
-                        "name": "glove.6B.50d.txt",
-                        "dim": 50
-                    },
-                    {
-                        "name": "glove.6B.100d.txt",
-                        "dim": 100
-                    },
-                    {
-                        "name": "glove.6B.200d.txt",
-                        "dim": 200
-                    },
-                    {
-                        "name": "glove.6B.300d.txt",
-                        "dim": 300
-                    }
-                ]
+                "glove.6B.50d.txt": {
+                    "dim": 50
+                },
+                "glove.6B.100d.txt": {
+                    "dim": 100
+                },
+                "glove.6B.200d.txt": {
+                    "dim": 200
+                },
+                "glove.6B.300d.txt": {
+                    "dim": 300
+                }
             },
             "common_crawl_42b_uncased": "http://nlp.stanford.edu/data/glove.42B.300d.zip",
             "common_crawl_840b_cased": "http://nlp.stanford.edu/data/glove.840B.300d.zip",
@@ -81,6 +76,7 @@ class GlovePreprocessor:
         self.counter = 0
         self.model = None
         self.pre_trained = None
+        self.dim = 0
 
     def prepare_pre_trained_data(self, datasource, dataset):
         # check if file already exists
@@ -103,6 +99,7 @@ class GlovePreprocessor:
         zip_ref.close()
 
     def import_pre_trained(self, datasource, dataset):
+        self.dim = self.data_sources[datasource][dataset]["dim"]
         self.embeddings = dict()
         with open(os.path.join(self.base_path, datasource, dataset), "r") as f:
             for line in f:
@@ -146,7 +143,8 @@ class GlovePreprocessor:
             window = window[1:].append(item)
 
     def train_model(self):
-        self.model = glove.Glove(self.co_occur, d=50, alpha=0.75, x_max=100.0)
+        self.dim = 50
+        self.model = glove.Glove(self.co_occur, d=self.dim, alpha=0.75, x_max=100.0)
         for epoch in range(100):
             err = self.model.train(batch_size=200, workers=8)
             print("epoch %d, error %.3f" % (epoch, err), flush=True)
@@ -154,7 +152,10 @@ class GlovePreprocessor:
 
     def word2vec(self, word):
         if self.pre_trained:
-            return self.embeddings[word]
+            if word in self.embeddings:
+                return self.embeddings[word]
+            else:
+                return np.zeros(self.dim)
         elif self.pre_trained == False:
             return self.model.W[self.word2no[word]]
         else:
