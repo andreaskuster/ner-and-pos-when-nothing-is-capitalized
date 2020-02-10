@@ -1,0 +1,1 @@
+[Github Link](https://github.com/raymondhs/char-rnn-truecase) to Susanto Paper (for truecasing)
