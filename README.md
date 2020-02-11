@@ -2,7 +2,7 @@
 
 ## Truecasing experiment
 
-| Truecaser trained on Wikipedia corpus | Test Set | F1 Score | F1 Score from paper |
+| Truecaser trained on Wikipedia corpus | Test Set | F1 Score | F1 Score from the paper |
 |---|---|---|---|
 |BiLSTM| Wikipedia | | 93.01|
 || ConLL Train| | 78.85|
@@ -12,7 +12,7 @@
 
 ## POS experiment
 BiLSTM-CRF on PTB
-| Experiment | Train data | Test data | F1 Score | Avg | F1 Score from paper | Avg from paper |
+| Experiment | Train data | Test data | accuracy | Avg | accuracy from the paper | Avg from the paper |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1.1 | Cased | Cased |  |  | 97.85 | - |
 | 1.2 | Cased | Uncased |  |  | 88.66 | 93.26 |
@@ -26,7 +26,7 @@ BiLSTM-CRF on PTB
 
 ## NER experiment
 BiLSTM-CRF trained on CoNLL
-| Experiment | Train data | Test data | F1 Score | Avg | F1 Score from paper | Avg from paper |
+| Experiment | Train data | Test data | F1 Score | Avg | F1 Score from the paper | Avg from the paper |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1.1 | Cased | Cased |  |  | 92.45| - |
 | 1.2 | Cased | Uncased |  |  | 34.46 | 63.46 |
@@ -39,7 +39,7 @@ BiLSTM-CRF trained on CoNLL
 | 5 | Truecase | Truecase |  |  | 90.25 | 90.25 |
 
 BiLSTM-CRF trained on CoNLL tested on Twitter Corpus
-| Experiment | Train data | F1 Score |  F1 Score from paper | 
+| Experiment | Train data | F1 Score |  F1 Score from the paper | 
 | --- | --- | --- | --- |
 | 1.1 | Cased |   | 58.63| 
 | 2 | Uncased |   | 53.13 | 
