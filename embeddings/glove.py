@@ -94,7 +94,7 @@ class GloVe:
                 }
             }
         }
-        self.base_path = "../embeddings/data"
+        self.base_path = "data"
         self.embeddings = dict()
         self.co_occur = dict()
         self.word2no = dict()
