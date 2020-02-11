@@ -27,7 +27,7 @@ import gensim.downloader as api
 import numpy as np
 
 
-class Word2VecPreprocessor:
+class Word2Vec:
 
     def __init__(self):
         self.model = None

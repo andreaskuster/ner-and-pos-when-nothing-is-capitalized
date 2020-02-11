@@ -47,7 +47,7 @@ import os
 import numpy as np
 
 
-class GlovePreprocessor:
+class Glove:
 
     def __init__(self):
         self.data_sources = {
