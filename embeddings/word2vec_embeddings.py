@@ -10,6 +10,8 @@
         - use specific text source for training
         - use different pre-trained source
 
+    Author: Andreas
+
     Credits:
         - https://code.google.com/archive/p/word2vec/
         - https://radimrehurek.com/gensim/auto_examples/tutorials/run_word2vec.html
@@ -22,6 +24,7 @@
 from gensim.models.keyedvectors import KeyedVectors
 import gensim.models
 import gensim.downloader as api
+import numpy as np
 
 
 class Word2VecPreprocessor:
@@ -29,11 +32,16 @@ class Word2VecPreprocessor:
     def __init__(self):
         self.model = None
 
-    def prepare_pre_trained_data(self, datasource):
+    def import_pre_trained_data(self, datasource):
+        print("Downloading and importing {}, this might take a while...".format(datasource))
         self.model = api.load(datasource)
+        print("Embedding import finished")
 
     def word2vec(self, word):
-        return self.model[word]
+        if word in self.model:
+            return self.model[word]
+        else:
+            return np.zeros(self.dim)
 
     def vec2word(self, vec):
         return self.model.most_similar(positive=[vec], topn=1)
@@ -62,4 +70,6 @@ if __name__ == "__main__":
     # instantiate preprocessor
     preprocessor = Word2VecPreprocessor()
     # download pre-trained data
-    preprocessor.prepare_pre_trained_data(_DATA_SOURCE)
+    preprocessor.import_pre_trained_data(_DATA_SOURCE)
+    # get embedding for "Hello World"
+    print("embedding for \"Hello World\" is {}".format([preprocessor.word2vec(word) for word in ["Hello", "World"]]))
