@@ -114,7 +114,7 @@ class GloVe:
             # unzip file
             self.unzip_data(datasource, dataset)
         # import data
-        self.import_pre_trained(_DATA_SOURCE, _DATA_SET)
+        self.import_pre_trained(datasource, dataset)
         print("Embedding import finished")
 
     def download_data(self, datasource):
@@ -207,7 +207,7 @@ if __name__ == "__main__":
     _DATA_SOURCE = "common_crawl_840b_cased"
     _DATA_SET = "glove.840B.300d.txt"
     # instantiate preprocessor
-    preprocessor = GlovePreprocessor()
+    preprocessor = GloVe()
     # prepare pre-trained data
     preprocessor.import_pre_trained_data(_DATA_SOURCE, _DATA_SET)
     # get embedding for "Hello World"
