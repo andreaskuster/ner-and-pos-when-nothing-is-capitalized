@@ -10,8 +10,8 @@ from torch import optim
 
 from tqdm import trange, tqdm
 
-TRAIN_PATH = 'data/wiki/input.txt'
-VAL_PATH = 'data/wiki/val_input.txt'
+TRAIN_PATH = '../datasets/wiki/input.txt'
+VAL_PATH = '../datasets/wiki/val_input.txt'
 
 HIDDEN_SIZE = 300
 
