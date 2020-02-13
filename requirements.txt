@@ -1,3 +1,10 @@
 glove
 numpy
 gensim
+tensorflow
+tensorflow_hub
+keras
+nltk
+sklearn
+pandas
+allennlp
