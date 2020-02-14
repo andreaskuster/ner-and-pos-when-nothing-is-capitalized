@@ -29,11 +29,14 @@ from embeddings.glove import GloVe
 from pos_elmo.multi_gpu import to_multi_gpu
 
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = ""  # show only relevant cuda gpu devices (i.e. mask some for parallel jobs)
-
+# show only relevant cuda gpu devices (i.e. mask some for parallel jobs)
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 
 _EMBEDDINGS = "glove"
+_DATA_SOURCE_WORD2VEC = "word2vec-google-news-300"
+_DATA_SOURCE_GLOVE = "common_crawl_840b_cased"
+_DATA_SET_GLOVE = "glove.840B.300d.txt"
 
 
 #################################
@@ -90,24 +93,20 @@ for i in range(len(testY)):
 #################################
 
 if _EMBEDDINGS == "word2vec":
-    _DATA_SOURCE = "word2vec-google-news-300"
     # instantiate preprocessor
     preprocessor = Word2Vec()
     # download pre-trained data
-    preprocessor.import_pre_trained_data(_DATA_SOURCE)
+    preprocessor.import_pre_trained_data(_DATA_SOURCE_WORD2VEC)
 
 elif _EMBEDDINGS == "elmo":
     # instantiate preprocessor
     preprocessor = ELMoV2()
 
 elif _EMBEDDINGS == "glove":
-
-    _DATA_SOURCE = "common_crawl_840b_cased"
-    _DATA_SET = "glove.840B.300d.txt"
     # instantiate preprocessor
     preprocessor = GloVe()
     # prepare pre-trained data
-    preprocessor.import_pre_trained_data(_DATA_SOURCE, _DATA_SET)
+    preprocessor.import_pre_trained_data(_DATA_SOURCE_GLOVE, _DATA_SET_GLOVE)
 
 else:
     raise RuntimeError("No embeddings preprocessor selected.")
