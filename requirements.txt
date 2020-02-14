@@ -4,6 +4,7 @@ gensim
 tensorflow
 tensorflow_hub
 keras
+keras_contrib
 nltk
 sklearn
 pandas
