@@ -68,7 +68,7 @@ class Word2Vec:
 if __name__ == "__main__":
     _DATA_SOURCE = "word2vec-google-news-300"
     # instantiate preprocessor
-    preprocessor = Word2VecPreprocessor()
+    preprocessor = Word2Vec()
     # download pre-trained data
     preprocessor.import_pre_trained_data(_DATA_SOURCE)
     # get embedding for "Hello World"
