@@ -21,7 +21,7 @@ class PTB:
 
     def __init__(self):
         # load config from file
-        with open("ptb_conf.json") as config:
+        with open(os.path.join(os.path.dirname(__file__), "ptb_conf.json")) as config:
             self.config = json.load(config)
 
     @staticmethod
@@ -56,4 +56,4 @@ if __name__ == "__main__":
     # get ptb section 0 and 1
     ptb01 = ptb.load_data([0, 1])
     # get ptb section 7 and 10, lowercase
-    test = ptb.load_data_lowercase([7, 10])
+    ptb710_lower = ptb.load_data_lowercase([7, 10])
