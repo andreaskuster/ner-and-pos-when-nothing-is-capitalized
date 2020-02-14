@@ -30,7 +30,7 @@ from pos_elmo.multi_gpu import to_multi_gpu
 
 import os
 # show only relevant cuda gpu devices (i.e. mask some for parallel jobs)
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
+# os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 
 _EMBEDDINGS = "glove"
