@@ -18,57 +18,51 @@
         - http://warmspringwinds.github.io/tensorflow/tf-slim/2016/12/18/image-segmentation-with-tensorflow-using-cnns-and-conditional-random-fields/
 """
 
-import nltk
-import os
-#os.environ["CUDA_VISIBLE_DEVICES"] = ""
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, Bidirectional, Activation
 from keras.optimizers import Adam
 import numpy as np
 from datasets.ptb.penn_treebank import PTB
+from embeddings.word2vec import Word2Vec
+from embeddings.elmo import ELMoV2
+from embeddings.glove import GloVe
+from pos_elmo.multi_gpu import to_multi_gpu
+
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = ""  # show only relevant cuda gpu devices (i.e. mask some for parallel jobs)
+
+
+
+_EMBEDDINGS = "glove"
+
 
 #################################
 # Import data
 #################################
+print("Importing Penn Treebank data...")
 
-# define train/dev/test split
+# instantiate Penn TreeBank data loader
+ptb = PTB()
+
 # train: 0..18 -> range(0, 19)
-train_files = [item for i in range(0, 19) for item in os.listdir(os.path.join("data/wsj/{:02}".format(i)))]
+trainX, trainY = ptb.load_data(range(0, 19))
 # dev: 19..21 -> range(19, 22)
-dev_files = [item for i in range(19, 22) for item in os.listdir(os.path.join("data/wsj/{:02}".format(i)))]
+devX, devY = ptb.load_data(range(19, 22))
 # test: 22..24 -> range(22, 25)
-test_files = [item for i in range(22, 25) for item in os.listdir(os.path.join("data/wsj/{:02}".format(i)))]
-
-# get train/dev/test data and split it into X and y
-# train
-trainX, trainY = [], []
-for tagged_sentence in nltk.corpus.treebank.tagged_sents(train_files):
-    sentence, tags = zip(*tagged_sentence)
-    trainX.append(np.array(sentence))
-    trainY.append(np.array(tags))
-# dev
-devX, devY = [], []
-for tagged_sentence in nltk.corpus.treebank.tagged_sents(dev_files):
-    sentence, tags = zip(*tagged_sentence)
-    devX.append(np.array(sentence))
-    devY.append(np.array(tags))
-# test
-testX, testY = [], []
-for tagged_sentence in nltk.corpus.treebank.tagged_sents(test_files):
-    sentence, tags = zip(*tagged_sentence)
-    testX.append(np.array(sentence))
-    testY.append(np.array(tags))
+testX, testY = ptb.load_data(range(22, 25))
 
 
 #################################
 # Pad sequences
 #################################
+print("Padding sequence...")
 
+# compute maximum sentence length
 token_train_len = [len(x) for x in trainX]
 token_dev_len = [len(x) for x in devX]
 token_test_len = [len(x) for x in testX]
-
 max_len = max(token_train_len + token_dev_len + token_test_len)
+
 
 for i in range(len(trainX)):
     no_pad = max_len - len(trainX[i])
@@ -95,62 +89,28 @@ for i in range(len(testY)):
 # Map to embeddings
 #################################
 
-"""
-dim_embedding_vec = 1024
+if _EMBEDDINGS == "word2vec":
+    _DATA_SOURCE = "word2vec-google-news-300"
+    # instantiate preprocessor
+    preprocessor = Word2Vec()
+    # download pre-trained data
+    preprocessor.import_pre_trained_data(_DATA_SOURCE)
 
-elmo = hub.Module("https://tfhub.dev/google/elmo/3", trainable=True)
+elif _EMBEDDINGS == "elmo":
+    # instantiate preprocessor
+    preprocessor = ELMoV2()
 
-trainX_embeddings = elmo(
-    inputs={
-        "tokens": trainX,
-        "sequence_len": [max_len]*len(trainX)  # token_train_len
-    },
-    signature="tokens",
-    as_dict=True)["elmo"]
+elif _EMBEDDINGS == "glove":
 
-devX_embeddings = elmo(
-    inputs={
-        "tokens": devX,
-        "sequence_len": [max_len]*len(devX)  # token_dev_len
-    },
-    signature="tokens",
-    as_dict=True)["elmo"]
+    _DATA_SOURCE = "common_crawl_840b_cased"
+    _DATA_SET = "glove.840B.300d.txt"
+    # instantiate preprocessor
+    preprocessor = GloVe()
+    # prepare pre-trained data
+    preprocessor.import_pre_trained_data(_DATA_SOURCE, _DATA_SET)
 
-testX_embeddings = elmo(
-    inputs={
-        "tokens": testX,
-        "sequence_len": [max_len]*len(testX)  # token_test_len
-    },
-    signature="tokens",
-    as_dict=True)["elmo"]
-"""
-"""
-from allennlp.modules.elmo import Elmo, batch_to_ids
-import numpy as np
-
-
-options_file = "https://allennlp.s3.amazonaws.com/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_options.json"
-weight_file = "https://allennlp.s3.amazonaws.com/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_weights.hdf5"
-
-# Compute two different representation for each token.
-# Each representation is a linear weighted combination for the
-# 3 layers in ELMo (i.e., charcnn, the outputs of the two BiLSTM))
-elmo = Elmo(options_file, weight_file, 2, dropout=0)
-
-# use batch_to_ids to convert sentences to character ids
-sentences = [['First', 'sentence', '.'], ['Another', '.']]
-character_ids = batch_to_ids(sentences)
-
-embeddings = elmo(character_ids)["elmo_representations"]
-"""
-
-from embeddings.glove import GloVe
-_DATA_SOURCE = "common_crawl_840b_cased"
-_DATA_SET = "glove.840B.300d.txt"
-# instantiate preprocessor
-preprocessor = GloVe()
-# prepare pre-trained data
-preprocessor.import_pre_trained_data(_DATA_SOURCE, _DATA_SET)
+else:
+    raise RuntimeError("No embeddings preprocessor selected.")
 
 
 trainX_embeddings = list()
@@ -194,7 +154,6 @@ model.add(Bidirectional(layer=LSTM(units=1024, return_sequences=True), input_sha
 model.add(Dense(num_categories))
 model.add(Activation('softmax'))
 
-from multi_gpu import to_multi_gpu
 model = to_multi_gpu(model, n_gpus=2)
 
 model.compile(loss='categorical_crossentropy',
