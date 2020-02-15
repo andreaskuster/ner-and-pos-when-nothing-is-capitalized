@@ -37,6 +37,7 @@ class ELMoV2:
         self.elmo = Elmo(self.options_file,
                          self.weight_file, 2,
                          dropout=0)
+        self.dim = 1024
 
     def word2vec(self, word):
         return self.elmo(batch_to_ids(word))["elmo_representations"]
