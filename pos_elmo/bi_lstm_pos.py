@@ -7,6 +7,9 @@
     File placement:
         - add penn treebank wsj files into ~/nltk_data/corpora/treebank/combined (extracted from 00-24 structure)
 
+    Package Install:
+        - keras_contrib: pip install git+https://www.github.com/keras-team/keras-contrib.git
+
     Credits:
         - https://nlpforhackers.io/lstm-pos-tagger-keras/
         - https://machinelearningmastery.com/save-load-keras-deep-learning-models/
@@ -21,14 +24,16 @@
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, Bidirectional, Activation
 from keras.optimizers import Adam
+from keras.models import Model, Input
+from keras.layers import LSTM, Embedding, Dense, TimeDistributed, Dropout, Bidirectional
+from keras_contrib.layers import CRF
 import numpy as np
 from datasets.ptb.penn_treebank import PTB
 from embeddings.word2vec import Word2Vec
 from embeddings.elmo import ELMoV2
 from embeddings.glove import GloVe
-from pos_elmo.multi_gpu import to_multi_gpu
+from helper.multi_gpu import to_multi_gpu
 
-import os
 # show only relevant cuda gpu devices (i.e. mask some for parallel jobs)
 # os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
@@ -37,7 +42,7 @@ _EMBEDDINGS = "glove"
 _DATA_SOURCE_WORD2VEC = "word2vec-google-news-300"
 _DATA_SOURCE_GLOVE = "common_crawl_840b_cased"
 _DATA_SET_GLOVE = "glove.840B.300d.txt"
-
+_NUM_GPUS = 2
 
 #################################
 # Import data
@@ -145,20 +150,38 @@ for sentence in testY:
     testY_int.append([word2int[word] for word in sentence])
 
 #################################
-# Define BiLSTM model
+# Define BiLSTM-CRF model
 #################################
-
+"""
 model = Sequential()
 model.add(Bidirectional(layer=LSTM(units=1024, return_sequences=True), input_shape=(max_len, dim_embedding_vec)))
 model.add(Dense(num_categories))
 model.add(Activation('softmax'))
 
-model = to_multi_gpu(model, n_gpus=2)
+crf = CRF(10, sparse_target=True)
+model.add(crf)
+
+model = to_multi_gpu(model, n_gpus=_NUM_GPUS)
 
 model.compile(loss='categorical_crossentropy',
               optimizer=Adam(0.001),
               metrics=['accuracy'])
 model.summary()
+"""
+
+model = Sequential()
+model.add(Bidirectional(layer=LSTM(units=1024, return_sequences=True), input_shape=(max_len, dim_embedding_vec)))
+model = TimeDistributed(Dense(50, activation="relu"))(model)  # a dense layer as suggested by neuralNer
+crf = CRF(10, sparse_target=True)
+out = crf(model)  # output
+
+model = Model(input, out)
+
+model = to_multi_gpu(model, n_gpus=_NUM_GPUS)
+
+model.compile(optimizer="rmsprop", loss=crf.loss_function, metrics=[crf.accuracy])
+model.summary()
+
 
 from keras.utils import to_categorical
 y = to_categorical(trainY_int, num_classes=num_categories)
