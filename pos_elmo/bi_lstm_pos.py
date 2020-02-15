@@ -37,8 +37,8 @@ from helper.multi_gpu import to_multi_gpu
 # show only relevant cuda gpu devices (i.e. mask some for parallel jobs)
 # os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
-
-_EMBEDDINGS = "glove"
+_DATASET = "dummy"
+_EMBEDDINGS = "elmo"
 _DATA_SOURCE_WORD2VEC = "word2vec-google-news-300"
 _DATA_SOURCE_GLOVE = "common_crawl_840b_cased"
 _DATA_SET_GLOVE = "glove.840B.300d.txt"
@@ -75,12 +75,20 @@ print("Importing Penn Treebank data...")
 # instantiate Penn TreeBank data loader
 ptb = PTB()
 
-# train: 0..18 -> range(0, 19)
-trainX, trainY = ptb.load_data(range(0, 19))
-# dev: 19..21 -> range(19, 22)
-devX, devY = ptb.load_data(range(19, 22))
-# test: 22..24 -> range(22, 25)
-testX, testY = ptb.load_data(range(22, 25))
+if _DATASET == "dummy":
+    # load two sentence dummy dataset
+    x, y = ptb.load_data([0])
+    trainX, trainY = x[0:2], y[0:2]
+    devX, devY = x[2:4], y[2:4]
+    testX, testY = x[4:6], y[4:6]
+
+else:
+    # train: 0..18 -> range(0, 19)
+    trainX, trainY = ptb.load_data(range(0, 19))
+    # dev: 19..21 -> range(19, 22)
+    devX, devY = ptb.load_data(range(19, 22))
+    # test: 22..24 -> range(22, 25)
+    testX, testY = ptb.load_data(range(22, 25))
 
 
 #################################
@@ -140,14 +148,21 @@ else:
     raise RuntimeError("No embeddings preprocessor selected.")
 
 
-trainX_embeddings = list()
-for sentence in trainX:
-    trainX_embeddings.append([preprocessor.word2vec(word) for word in sentence])
-trainX_embeddings = np.array(trainX_embeddings)
-testX_embeddings = list()
-for sentence in testX:
-    testX_embeddings.append([preprocessor.word2vec(word) for word in sentence])
-testX_embeddings = np.array(testX_embeddings)
+if _EMBEDDINGS == "elmo":
+
+    trainX_embeddings = preprocessor.embedding(trainX)
+
+    testX_embeddings = preprocessor.embedding(testX).eval()
+else:
+
+    trainX_embeddings = list()
+    for sentence in trainX:
+        trainX_embeddings.append([preprocessor.word2vec(word) for word in sentence])
+    trainX_embeddings = np.array(trainX_embeddings)
+    testX_embeddings = list()
+    for sentence in testX:
+        testX_embeddings.append([preprocessor.word2vec(word) for word in sentence])
+    testX_embeddings = np.array(testX_embeddings)
 
 dim_embedding_vec = preprocessor.dim
 
