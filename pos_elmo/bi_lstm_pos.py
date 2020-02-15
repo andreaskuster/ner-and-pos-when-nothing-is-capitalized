@@ -42,7 +42,30 @@ _EMBEDDINGS = "glove"
 _DATA_SOURCE_WORD2VEC = "word2vec-google-news-300"
 _DATA_SOURCE_GLOVE = "common_crawl_840b_cased"
 _DATA_SET_GLOVE = "glove.840B.300d.txt"
-_NUM_GPUS = 2
+_NUM_GPUS = 4
+
+
+def create_joined_crf_loss(crf):
+    def loss(y_true, y_pred):
+        offset = 0
+        
+        X = crf.input
+        mask = crf.input_mask
+        nloglik = crf.get_negative_log_likelihood(y_true, X, mask)
+        return nloglik
+
+    return loss
+
+
+from keras_contrib.metrics.crf_accuracies import _get_accuracy
+def create_joined_crf_accuracy(crf):
+    def accuracy(y_true, y_pred):        
+        X = crf.input
+        mask = crf.input_mask
+        y_pred = crf.viterbi_decoding(X, mask)
+        return _get_accuracy(y_true, y_pred, mask, crf.sparse_target)
+
+    return accuracy
 
 #################################
 # Import data
@@ -153,45 +176,45 @@ for sentence in testY:
 # Define BiLSTM-CRF model
 #################################
 """
+# BiLSTM model:
+
 model = Sequential()
 model.add(Bidirectional(layer=LSTM(units=1024, return_sequences=True), input_shape=(max_len, dim_embedding_vec)))
 model.add(Dense(num_categories))
 model.add(Activation('softmax'))
-
-crf = CRF(10, sparse_target=True)
-model.add(crf)
-
 model = to_multi_gpu(model, n_gpus=_NUM_GPUS)
-
 model.compile(loss='categorical_crossentropy',
               optimizer=Adam(0.001),
               metrics=['accuracy'])
 model.summary()
 """
 
+# multi gpu: https://github.com/keras-team/keras-contrib/issues/453
 model = Sequential()
 model.add(Bidirectional(layer=LSTM(units=1024, return_sequences=True), input_shape=(max_len, dim_embedding_vec)))
-model = TimeDistributed(Dense(50, activation="relu"))(model)  # a dense layer as suggested by neuralNer
-crf = CRF(10, sparse_target=True)
-out = crf(model)  # output
+model.add(TimeDistributed(Dense(50, activation="relu")))  # a dense layer as suggested by neuralNer
 
-model = Model(input, out)
+crf = CRF(10, sparse_target=True, learn_mode="join")
+model.add(crf)
 
-model = to_multi_gpu(model, n_gpus=_NUM_GPUS)
+#model = to_multi_gpu(model, n_gpus=_NUM_GPUS)
 
+from keras_contrib.metrics import crf_viterbi_accuracy
 model.compile(optimizer="rmsprop", loss=crf.loss_function, metrics=[crf.accuracy])
+
 model.summary()
 
 
 from keras.utils import to_categorical
 y = to_categorical(trainY_int, num_classes=num_categories)
 
-model.fit(trainX_embeddings, y, batch_size=1024, epochs=40)  # batch_size=2 steps_per_epoch=128, epochs=40
+model.fit(trainX_embeddings, y, batch_size=1024, epochs=10)  # batch_size=2 steps_per_epoch=128, epochs=40
 
 
 scores = model.evaluate(testX_embeddings, to_categorical(testY_int, num_classes=num_categories))
 print(f"{model.metrics_names[1]}: {scores[1] * 100}")  # acc: 99.09751977804825
 print()
+
 
 
 
