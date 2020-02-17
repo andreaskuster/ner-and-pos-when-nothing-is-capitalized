@@ -4,7 +4,7 @@
 
 | Truecaser trained on Wikipedia corpus | Test Set | F1 Score | F1 Score from the paper |
 |---|---|---|---|
-|BiLSTM| Wikipedia | | 93.01|
+|BiLSTM| Wikipedia | 92.65| 93.01|
 || ConLL Train| | 78.85|
 || ConLL Test | | 77.35|
 || PTB 01-18 | | 86.91|
