@@ -1,4 +1,9 @@
+import torch
 from torch import nn
+
+import pickle as pkl
+import os
+
 
 
 class TrueCaser(nn.Module):
@@ -25,3 +30,15 @@ class TrueCaser(nn.Module):
 
         x = self.decoder(x)
         return x, hidden
+
+def load_truecaser():
+    absFilePath = os.path.abspath(__file__)
+    folder_path, _ = os.path.split(absFilePath)
+
+    with open(f'{folder_path}/token_to_idx.pkl', mode='rb') as f:
+        token_to_idx = pkl.load(f)
+
+    result = TrueCaser(len(token_to_idx), 300)
+    result.load_state_dict(torch.load(f'{folder_path}/model_our.pth'))
+
+    return result
