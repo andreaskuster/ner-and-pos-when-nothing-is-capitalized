@@ -14,9 +14,14 @@ class TrueCaser(nn.Module):
         self.decoder = nn.Linear(2 * size_features, 2)
 
     def forward(self, x, hidden=None):
-
         x = self.encoder(x)
-        x = x.view([x.shape[1], x.shape[0], x.shape[2]])
+
+        # Apply LSTM
+        # * Transposes are necessary due to the fact that LSTMs
+        # * takes slightly different shape of data in (and out).
+        x = x.transpose(0, 1)
         x, hidden = self.lstm(x, hidden)
+        x = x.transpose(0, 1)
+
         x = self.decoder(x)
         return x, hidden
