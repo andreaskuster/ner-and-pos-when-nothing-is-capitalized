@@ -72,3 +72,19 @@ BiLSTM-CRF trained on CoNLL tested on Twitter Corpus
 | 3.5 | Half Mixed |     | 64.69 |
 | 4 | Cased |   | 58.22 | 
 | 5 | Truecase |    | 62.66 | 
+
+
+# Resources
+
+## Papers
+[ner and pos when nothing is capitalized](../master/papers/ner_and_pos_when_nothing_is_capitalized.pdf)
+
+[ner and pos when nothing is capitalized poster](../master/papers/poster.pdf)
+
+[Bidirectional LSTM-CRF Models for Sequence Tagging](../master/papers/bilstm_crf.pdf)
+
+[Deep contextualized word representations](../master/papers/elmo.pdf)
+
+[GloVe: Global Vectors for Word Representation](../master/papers/glove.pdf)
+
+[Learning to Capitalize with Character-Level Recurrent Neural Networks: An Empirical Study](../master/papers/truecasing.pdf)
