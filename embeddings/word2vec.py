@@ -31,6 +31,7 @@ class Word2Vec:
 
     def __init__(self):
         self.model = None
+        self.dim = 300
 
     def import_pre_trained_data(self, datasource):
         print("Downloading and importing {}, this might take a while...".format(datasource))
