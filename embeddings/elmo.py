@@ -25,6 +25,7 @@
 
 import tensorflow as tf
 import tensorflow_hub as hub
+import numpy as np
 from allennlp.modules.elmo import Elmo, batch_to_ids
 
 
@@ -47,9 +48,9 @@ class ELMoV2:
         # use batch_to_ids to convert sentences to character ids
         # sentences = [['First', 'sentence', '.'], ['Another', '.']]
         character_ids = batch_to_ids(sentences)
-        embeddings = self.elmo(character_ids)["elmo_representations"]
+        embeddings = self.elmo(character_ids)["elmo_representations"][0]
 
-        return embeddings
+        return embeddings.detach().numpy()
 
 
 class ELMoV1:
