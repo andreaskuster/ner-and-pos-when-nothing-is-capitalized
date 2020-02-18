@@ -11,7 +11,7 @@
 || PTB 22-24 | | 86.22|
 
 ## POS experiment
-BiLSTM-CRF on PTB
+BiLSTM-CRF on PTB (paper reproduction)
 | Experiment | Train data | Test data | accuracy | Avg | accuracy from the paper | Avg from the paper |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1.1 | Cased | Cased |  |  | 97.85 | - |
