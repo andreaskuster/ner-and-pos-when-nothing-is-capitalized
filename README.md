@@ -24,6 +24,20 @@ BiLSTM-CRF on PTB (paper reproduction)
 | 4 | Cased | Truecase |  |  | 95.21 | 95.21 |  |
 | 5 | Truecase | Truecase |  |  | 97.38 | 97.38 |  |
 
+POS on brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer
+| Train data | Test data | accuracy w2v | accuracy w2v crf | accuracy glove | accuracy glove crf | accuracy elmo | accuracy elmo crf| Code |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| __Brown__ |  |  |  |  |  |  |  | 
+| Cased | Cased |  |  |  |  |  |  |  |  |
+| Cased | Uncased |  |  |  |  |  |  |  |  |
+| Uncased | Uncased |  |  |  |  |  |  |  |  |
+| Cased | Truecase |  |  |  |  |  |  |  |  |
+| __CoNLL 2000__ |  |  |  |  |  |  |  | 
+| Cased | Cased |  |  |  |  |  |  |  |  |
+| Cased | Uncased |  |  |  |  |  |  |  |  |
+| Uncased | Uncased |  |  |  |  |  |  |  |  |
+| Cased | Truecase |  |  |  |  |  |  |  |  |
+
 ## NER experiment
 BiLSTM-CRF trained on CoNLL
 | Experiment | Train data | Test data | F1 Score | Avg | F1 Score from the paper | Avg from the paper |
