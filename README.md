@@ -9,6 +9,7 @@ As part of the CSE517 NLP class at UW, we seek to reproduce the results from the
 
 [Project Proposal](../master/proposal/document.pdf)
 
+# Findings
 
 ## Truecasing experiment
 
