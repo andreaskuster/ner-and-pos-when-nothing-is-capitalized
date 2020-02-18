@@ -24,7 +24,7 @@ BiLSTM-CRF on PTB (paper reproduction)
 | 4 | Cased | Truecase |  |  | 95.21 | 95.21 |  |
 | 5 | Truecase | Truecase |  |  | 97.38 | 97.38 |  |
 
-POS on brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer
+POS on brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer (additional experiments)
 | Train data | Test data | accuracy w2v | accuracy w2v crf | accuracy glove | accuracy glove crf | accuracy elmo | accuracy elmo crf| Code |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | __Brown__ |  |  |  |  |  |  |  | 
