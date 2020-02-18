@@ -22,7 +22,9 @@ As part of the CSE517 NLP class at UW, we seek to reproduce the results from the
 || PTB 22-24 | | 86.22|
 
 ## POS experiment
-BiLSTM-CRF on PTB (paper reproduction)
+
+### Paper Reproduction
+BiLSTM-CRF on PTB
 | Experiment | Train data | Test data | accuracy | Avg | accuracy from the paper | Avg from the paper | Code |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1.1 | Cased | Cased |  |  | 97.85 | - |  |
@@ -34,6 +36,8 @@ BiLSTM-CRF on PTB (paper reproduction)
 | 3.5.2 | Half Mixed | Uncased |  |  | 97.36 | 97.61 |  |
 | 4 | Cased | Truecase |  |  | 95.21 | 95.21 |  |
 | 5 | Truecase | Truecase |  |  | 97.38 | 97.38 |  |
+
+### Additional Experiments
 
 POS on brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer (additional experiments)
 | Train data | Test data | accuracy w2v | accuracy w2v crf | accuracy glove | accuracy glove crf | accuracy elmo | accuracy elmo crf| Code |
