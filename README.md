@@ -12,17 +12,17 @@
 
 ## POS experiment
 BiLSTM-CRF on PTB (paper reproduction)
-| Experiment | Train data | Test data | accuracy | Avg | accuracy from the paper | Avg from the paper |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1.1 | Cased | Cased |  |  | 97.85 | - |
-| 1.2 | Cased | Uncased |  |  | 88.66 | 93.26 |
-| 2 | Uncased | Uncased |  |  | 97.45 | 97.45 |
-| 3.1 | Augment | Cased |  |  | 97.79 | - |
-| 3.2 | Augment | Uncased |  |  | 97.35 | 97.57 |
-| 3.5.1 | Half Mixed | Cased |  |  | 97.85 | - |
-| 3.5.2 | Half Mixed | Uncased |  |  | 97.36 | 97.61 |
-| 4 | Cased | Truecase |  |  | 95.21 | 95.21 |
-| 5 | Truecase | Truecase |  |  | 97.38 | 97.38 |
+| Experiment | Train data | Test data | accuracy | Avg | accuracy from the paper | Avg from the paper | Code |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1.1 | Cased | Cased |  |  | 97.85 | - |  |
+| 1.2 | Cased | Uncased |  |  | 88.66 | 93.26 |  |
+| 2 | Uncased | Uncased |  |  | 97.45 | 97.45 |  |
+| 3.1 | Augment | Cased |  |  | 97.79 | - |  |
+| 3.2 | Augment | Uncased |  |  | 97.35 | 97.57 |  |
+| 3.5.1 | Half Mixed | Cased |  |  | 97.85 | - |  |
+| 3.5.2 | Half Mixed | Uncased |  |  | 97.36 | 97.61 |  |
+| 4 | Cased | Truecase |  |  | 95.21 | 95.21 |  |
+| 5 | Truecase | Truecase |  |  | 97.38 | 97.38 |  |
 
 ## NER experiment
 BiLSTM-CRF trained on CoNLL
