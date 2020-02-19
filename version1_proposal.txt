@@ -1,0 +1,2 @@
+Our main remaining work is to polish up NER and POS experiments, and run them on datasets for testing.
+This comes as a natural continuation of the way we splitted the work into subtasks each of us could work seperately on, and now we have to come together and combine the pieces together.

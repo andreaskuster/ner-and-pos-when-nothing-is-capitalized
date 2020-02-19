@@ -8,6 +8,7 @@ As part of the CSE517 NLP class at UW, we seek to reproduce the results from the
 For those languages which use it, capitalization is an important signal for the fundamental NLP tasks of Named Entity Recognition (NER) and Part of Speech (POS) tagging. In fact, it is such a strong signal that model performance on these tasks drops sharply in common lowercased scenarios, such as noisy web text or machine translation outputs. In this work, we perform a systematic analysis of solutions to this problem, modifying only the casing of the train or test data using lowercasing and truecasing methods. While prior work and first impressions might suggest training a caseless model, or using a truecaser at test time, we show that the most effective strategy is a concatenation of cased and lowercased training data, producing a single model with high performance on both cased and uncased text. As shown in our experiments, this result holds across tasks and input representations. Finally, we show that our proposed solution gives an 8\% F1 improvement in mention detection on noisy out-of-domain Twitter data.
 
 [Paper](../master/papers/ner_and_pos_when_nothing_is_capitalized.pdf)
+
 # Code
 [https://github.com/andreaskuster/uw-nlp](https://github.com/andreaskuster/uw-nlp)
 
@@ -135,17 +136,17 @@ TODO
 
 ## NER experiment
 BiLSTM-CRF using ELMo + Glove + character embeddings trained on CoNLL
-| Experiment | Train data | Test data | F1 Score | Avg | F1 Score from the paper | Avg from the paper |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1.1 | Cased | Cased |  |  | 92.45| - |
-| 1.2 | Cased | Uncased |  |  | 34.46 | 63.46 |
-| 2 | Uncased | Uncased |  |  | 89.32 | 89.32 |
-| 3.1 | Augment | Cased |  |  | 91.67| - |
-| 3.2 | Augment | Uncased |  |  | 89.31 | 90.49 |
+| Experiment | Train data | Test data | F1 Score | Avg | F1 Score from the paper   | Avg from the paper |
+| ---   | --- | --- | --- | --- | --- | --- |
+| 1.1   | Cased | Cased |  |  | 92.45| - |
+| 1.2   | Cased | Uncased |  |  | 34.46 | 63.46 |
+| 2     | Uncased | Uncased |  |  | 89.32 | 89.32 |
+| 3.1   | Augment | Cased |  |  | 91.67| - |
+| 3.2   | Augment | Uncased |  |  | 89.31 | 90.49 |
 | 3.5.1 | Half Mixed | Cased |  |  | 91.68 | - |
 | 3.5.2 | Half Mixed | Uncased |  |  | 89.05| 90.37 |
-| 4 | Cased | Truecase |  |  | 82.93 | 82.93 |
-| 5 | Truecase | Truecase |  |  | 90.25 | 90.25 |
+| 4     | Cased | Truecase |  |  | 82.93 | 82.93 |
+| 5     | Truecase | Truecase |  |  | 90.25 | 90.25 |
 
 BiLSTM-CRF using ELMo + Glove + character embeddings trained on CoNLL tested on Twitter Corpus
 | Experiment | Train data | F1 Score |  F1 Score from the paper | 
@@ -177,6 +178,7 @@ We expect to get similar results to those described in the paper.
 
 #### Conclusion
 TODO
+
 # Resources
 
 ## Papers
