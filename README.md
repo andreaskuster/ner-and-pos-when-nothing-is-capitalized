@@ -24,35 +24,87 @@ For those languages which use it, capitalization is an important signal for the 
 
 ## POS experiment
 
-### Paper Reproduction
-BiLSTM-CRF on PTB
+### Paper Reproduction (BiLSTM-CRF+POS+ELMo on PTB)
+
+#### Hypothesis
+We expect to get similar results to those described in the paper.
+
+#### Comparison
 | Experiment | Train data | Test data | accuracy | Avg | accuracy from the paper | Avg from the paper | Code |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1.1 | Cased | Cased |  |  | 97.85 | - |  |
-| 1.2 | Cased | Uncased |  |  | 88.66 | 93.26 |  |
-| 2 | Uncased | Uncased |  |  | 97.45 | 97.45 |  |
-| 3.1 | Augment | Cased |  |  | 97.79 | - |  |
-| 3.2 | Augment | Uncased |  |  | 97.35 | 97.57 |  |
-| 3.5.1 | Half Mixed | Cased |  |  | 97.85 | - |  |
-| 3.5.2 | Half Mixed | Uncased |  |  | 97.36 | 97.61 |  |
-| 4 | Cased | Truecase |  |  | 95.21 | 95.21 |  |
-| 5 | Truecase | Truecase |  |  | 97.38 | 97.38 |  |
+| 1.1 | Cased | Cased | TODO | TODO | 97.85 | - | TODO |
+| 1.2 | Cased | Uncased | TODO | TODO  | 88.66 | 93.26 | TODO |
+| 2 | Uncased | Uncased | TODO | TODO  | 97.45 | 97.45 | TODO |
+| 3.1 | Augment | Cased | TODO | TODO | 97.79 | - | TODO  |
+| 3.2 | Augment | Uncased | TODO | TODO | 97.35 | 97.57 | TODO |
+| 3.5.1 | Half Mixed | Cased | TODO  | TODO | 97.85 | - | TODO |
+| 3.5.2 | Half Mixed | Uncased | TODO | TODO | 97.36 | 97.61 | TODO |
+| 4 | Cased | Truecase | TODO | TODO | 95.21 | 95.21 | TODO |
+| 5 | Truecase | Truecase | TODO | TODO | 97.38 | 97.38 | TODO |
+
+#### Model Characteristics
+
+Train/Test/Dev data: TODO
+
+Pre-Processing: TODO
+
+Padding: TODO
+
+Embedding: TODO
+
+LSTM Model:
+* description of layers: TODO
+* hyperparameters (#units, batch size, epochs, solver,..) : TODO
+
+Evaluation: TODO
+
+
+#### Conclusion
+TODO
+
+
 
 ### Additional Experiments
+The goal of the additional experiments is to find out if the hypothesis from the paper is more generally applicable on different datasets, embeddings and LSTM models. Therefore, we run the tests on the brown and CoNLL2000 corpus, using word2vec, glove and elmo embeddings, and different LSTM models.
 
+#### Hypothesis
+We expect to get similar results to those described in the paper.
+
+#### Comparison
 POS on brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer (additional experiments)
 | Train data | Test data | accuracy w2v | accuracy w2v crf | accuracy glove | accuracy glove crf | accuracy elmo | accuracy elmo crf| Code |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | __Brown__ |  |  |  |  |  |  |  | 
-| Cased | Cased |  |  |  |  |  |  |  |  |
-| Cased | Uncased |  |  |  |  |  |  |  |  |
-| Uncased | Uncased |  |  |  |  |  |  |  |  |
-| Cased | Truecase |  |  |  |  |  |  |  |  |
+| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
 | __CoNLL 2000__ |  |  |  |  |  |  |  | 
-| Cased | Cased |  |  |  |  |  |  |  |  |
-| Cased | Uncased |  |  |  |  |  |  |  |  |
-| Uncased | Uncased |  |  |  |  |  |  |  |  |
-| Cased | Truecase |  |  |  |  |  |  |  |  |
+| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+
+
+#### Model Characteristics
+
+Train/Test/Dev data: TODO
+
+Pre-Processing: TODO
+
+Padding: TODO
+
+Embedding: TODO
+
+LSTM Model:
+* description of layers: TODO
+* hyperparameters (#units, batch size, epochs, solver,..) : TODO
+
+Evaluation: TODO
+
+#### Conclusion
+TODO
+
 
 ## NER experiment
 BiLSTM-CRF trained on CoNLL
