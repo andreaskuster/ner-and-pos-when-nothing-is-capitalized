@@ -14,13 +14,32 @@ For those languages which use it, capitalization is an important signal for the 
 
 ## Truecasing experiment
 
-| Truecaser trained on Wikipedia corpus | Test Set | F1 Score | F1 Score from the paper |
-|---|---|---|---|
-|BiLSTM| Wikipedia | 92.65| 93.01|
-|| ConLL Train| | 78.85|
-|| ConLL Test | | 77.35|
-|| PTB 01-18 | | 86.91|
-|| PTB 22-24 | | 86.22|
+### Paper Reproduction (BiLSTM on Wikipedia)
+
+#### Hypothesis
+We expect to get similar results to those described in the paper.
+
+#### Comparsion
+| Test Set   | F1 Score from our code | F1 Score from the paper |
+|:--         |:-:                     |:-:                      |
+| Wikipedia  | 92.65                  | 93.01                   |
+| ConLL Train| <b>TODO</b>            | 78.85                   |
+| ConLL Test | <b>TODO</b>            | 77.35                   |
+| PTB 01-18  | <b>TODO</b>            | 86.91                   |
+| PTB 22-24  | <b>TODO</b>            | 86.22                   |
+
+While the paper does not provide a lot of detail on implementation, we were able to reproduce results shown in it closely enough to be confident in our implementation.
+
+In particular we used an Adam optimizer (on default settings) and standard bidirectional, two layered LSTM with 300 hidden units. We used a batch size of 100, as metioned in [[Susanto]](./papers/trucasing.pdf). Then the model was trained for 30 epochs, and model with the smallest loss on validation set is chosen. That models loss on test set is reported above, as well as that model is made available for both NER and POS experiments.
+
+Instead of using pre-trained encodings we are learning our own (since number of unique characters in train set is around 50). Due to the fact that both validation and test sets contain tokens not included in train set we are forced to use OOV tokens. Each time a sentence is read each character has a 0.5% chance of becoming an OOV token.
+
+Lastly, to greatly increase training speed, all of our sentences are padded. Each padded has a target 0 (i.e. should not be capitalized), which counts towards training loss. However, padding does not count for either validation loss used to choose model epoch, and is not included in F1 score reported above.
+
+#### Conclusion
+On wikipedia dataset which we trained truecaser on we got performence similar to the one reported in the paper. The [original procedure](https://github.com/raymondhs/char-rnn-truecase) differed slightly from our version (mostly in a sense that it used char-rnn, while we used vanilla PyTorch), which can explain slight differences in results. However, achieving similar performence was not problematic with all information provided in the paper.
+
+<b>TODO</b>: Summarize for other datasets.
 
 ## POS experiment
 
@@ -151,4 +170,4 @@ BiLSTM-CRF trained on CoNLL tested on Twitter Corpus
 
 [GloVe: Global Vectors for Word Representation](../master/papers/glove.pdf)
 
-[Learning to Capitalize with Character-Level Recurrent Neural Networks: An Empirical Study](../master/papers/truecasing.pdf)
+[Learning to Capitalize with Character-Level Recurrent Neural Networks: An Empirical Study](./papers/truecasing.pdf)
