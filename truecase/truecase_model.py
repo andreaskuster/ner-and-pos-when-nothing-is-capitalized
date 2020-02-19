@@ -39,6 +39,9 @@ def load_truecaser():
         token_to_idx = pkl.load(f)
 
     result = TrueCaser(len(token_to_idx), 300)
-    result.load_state_dict(torch.load(f'{folder_path}/model_our.pth'))
+    if torch.cuda.is_available():
+        result.load_state_dict(torch.load(f'{folder_path}/model_our.pth'))
+    else:
+        result.load_state_dict(torch.load(f'{folder_path}/model_our.pth', map_location=torch.device('cpu')))
 
     return result
