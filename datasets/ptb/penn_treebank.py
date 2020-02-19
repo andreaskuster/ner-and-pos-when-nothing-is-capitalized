@@ -7,7 +7,7 @@
         - do once: execute generate_file_structure() over the initial ptb file setup (in folder 00,.. 24)
 
     Credits:
-    - http://www.nltk.org/howto/corpus.html#parsed-corpora
+        - http://www.nltk.org/howto/corpus.html#parsed-corpora
         - https://www.sketchengine.eu/penn-treebank-tagset/
 
 """
@@ -23,6 +23,8 @@ class PTB:
         # load config from file
         with open(os.path.join(os.path.dirname(__file__), "ptb_conf.json")) as config:
             self.config = json.load(config)
+        # download public available subset of penn treebank data
+        nltk.download("treebank")
 
     @staticmethod
     def generate_file_structure(base_path):

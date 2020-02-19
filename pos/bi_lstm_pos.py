@@ -27,28 +27,33 @@ from keras.optimizers import Adam
 from keras.models import Model, Input
 from keras.layers import LSTM, Embedding, Dense, TimeDistributed, Dropout, Bidirectional
 from keras_contrib.layers import CRF
+from keras_contrib.metrics.crf_accuracies import _get_accuracy
 import numpy as np
 from datasets.ptb.penn_treebank import PTB
 from embeddings.word2vec import Word2Vec
 from embeddings.elmo import ELMoV2
 from embeddings.glove import GloVe
 from helper.multi_gpu import to_multi_gpu
+from numpy import save, load
 
 # show only relevant cuda gpu devices (i.e. mask some for parallel jobs)
 # os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
-_DATASET = "dummy"
+_DATASET = ""
 _EMBEDDINGS = "elmo"
 _DATA_SOURCE_WORD2VEC = "word2vec-google-news-300"
 _DATA_SOURCE_GLOVE = "common_crawl_840b_cased"
 _DATA_SET_GLOVE = "glove.840B.300d.txt"
 _NUM_GPUS = 4
+_BATCH_SIZE_EMBEDDINGS = 4096
+_SAVE_EMBEDDING_ELMO = False
+_LOAD_EMBEDDING_ELMO = True
 
 
 def create_joined_crf_loss(crf):
     def loss(y_true, y_pred):
         offset = 0
-        
+
         X = crf.input
         mask = crf.input_mask
         nloglik = crf.get_negative_log_likelihood(y_true, X, mask)
@@ -56,10 +61,8 @@ def create_joined_crf_loss(crf):
 
     return loss
 
-
-from keras_contrib.metrics.crf_accuracies import _get_accuracy
 def create_joined_crf_accuracy(crf):
-    def accuracy(y_true, y_pred):        
+    def accuracy(y_true, y_pred):
         X = crf.input
         mask = crf.input_mask
         y_pred = crf.viterbi_decoding(X, mask)
@@ -78,9 +81,9 @@ ptb = PTB()
 if _DATASET == "dummy":
     # load two sentence dummy dataset
     x, y = ptb.load_data([0])
-    trainX, trainY = x[0:2], y[0:2]
-    devX, devY = x[2:4], y[2:4]
-    testX, testY = x[4:6], y[4:6]
+    trainX, trainY = x[0:10], y[0:10]
+    devX, devY = x[0:4], y[0:4]
+    testX, testY = x[4:10], y[4:10]
 
 else:
     # train: 0..18 -> range(0, 19)
@@ -150,9 +153,48 @@ else:
 
 if _EMBEDDINGS == "elmo":
 
-    trainX_embeddings = preprocessor.embedding(trainX)
+    if _SAVE_EMBEDDING_ELMO:
 
-    testX_embeddings = preprocessor.embedding(testX).eval()
+        print("start elmo embedding...")
+
+        num_batches = int(len(trainX) / _BATCH_SIZE_EMBEDDINGS)
+
+        trainX_embeddings = list()
+        for i in range(num_batches):
+            start = i*_BATCH_SIZE_EMBEDDINGS
+            end = (i+1)*_BATCH_SIZE_EMBEDDINGS
+            trainX_embeddings.append(preprocessor.embedding(trainX[start:end]))
+            print("elmo training embedding  round {}...".format(i))
+        trainX_embeddings = np.array(trainX_embeddings)
+        trainX_embeddings = trainX_embeddings.reshape(-1, trainX_embeddings[0].shape[-2], trainX_embeddings[0].shape[-1])
+        if end < len(trainX):
+            trainX_embeddings = np.concatenate((trainX_embeddings, preprocessor.embedding(trainX[end:])), axis=0)
+            print("elmo training embedding  round remainder...")
+        # trainX_embeddings = preprocessor.embedding(trainX)
+
+
+        num_batches = int(len(testX) / _BATCH_SIZE_EMBEDDINGS)
+
+        testX_embeddings = list()
+        for i in range(num_batches):
+            start = i*_BATCH_SIZE_EMBEDDINGS
+            end = (i+1)*_BATCH_SIZE_EMBEDDINGS
+            testX_embeddings.append(preprocessor.embedding(testX[start:end]))
+            print("elmo test embedding  round {}...".format(i))
+
+        testX_embeddings = np.array(testX_embeddings)
+        testX_embeddings = testX_embeddings.reshape(-1, testX_embeddings.shape[-2], testX_embeddings.shape[-1])
+        if end < len(testX):
+            testX_embeddings = np.concatenate((testX_embeddings, preprocessor.embedding(testX[end:])), axis=0)
+            print("elmo test embedding  round remainder...")
+        # testX_embeddings = preprocessor.embedding(testX)
+
+        save('trainX_embeddings_elmo.npy', trainX_embeddings)
+        save('testX_embeddings_elmo.npy', testX_embeddings)
+
+    if _LOAD_EMBEDDING_ELMO:
+        trainX_embeddings = load('trainX_embeddings_elmo.npy')
+        testX_embeddings = load('testX_embeddings_elmo.npy')
 else:
 
     trainX_embeddings = list()
@@ -176,8 +218,8 @@ for item in trainY + devY + testY:
         labels.add(label)
 
 num_categories = len(labels)  # number of pos tags
-
-word2int = {label: i for i, label in enumerate(list(labels))}
+int2word = list(labels)
+word2int = {label: i for i, label in enumerate(int2word)}
 
 # trainY = [word2int[word] for word in sentence for sentence in trainY]
 trainY_int = list()
@@ -190,9 +232,9 @@ for sentence in testY:
 #################################
 # Define BiLSTM-CRF model
 #################################
-"""
-# BiLSTM model:
 
+# BiLSTM model:
+"""
 model = Sequential()
 model.add(Bidirectional(layer=LSTM(units=1024, return_sequences=True), input_shape=(max_len, dim_embedding_vec)))
 model.add(Dense(num_categories))
@@ -202,14 +244,14 @@ model.compile(loss='categorical_crossentropy',
               optimizer=Adam(0.001),
               metrics=['accuracy'])
 model.summary()
-"""
 
+"""
 # multi gpu: https://github.com/keras-team/keras-contrib/issues/453
 model = Sequential()
 model.add(Bidirectional(layer=LSTM(units=1024, return_sequences=True), input_shape=(max_len, dim_embedding_vec)))
 model.add(TimeDistributed(Dense(50, activation="relu")))  # a dense layer as suggested by neuralNer
 
-crf = CRF(10, sparse_target=True, learn_mode="join")
+crf = CRF(num_categories)
 model.add(crf)
 
 #model = to_multi_gpu(model, n_gpus=_NUM_GPUS)
@@ -226,9 +268,28 @@ y = to_categorical(trainY_int, num_classes=num_categories)
 model.fit(trainX_embeddings, y, batch_size=1024, epochs=10)  # batch_size=2 steps_per_epoch=128, epochs=40
 
 
-scores = model.evaluate(testX_embeddings, to_categorical(testY_int, num_classes=num_categories))
-print(f"{model.metrics_names[1]}: {scores[1] * 100}")  # acc: 99.09751977804825
-print()
+y_pred = model.predict(testX_embeddings)
+
+total = 0
+count = 0
+pred_itr = y_pred.__iter__()
+for sentence in testY_int:
+    total += len(sentence)
+    pred_sentence = pred_itr.__next__()
+    pred_sentence = pred_sentence.__iter__()
+    for word in [int2word[x] for x in sentence]:
+        pred_vec = pred_sentence.__next__()
+        pred_word = int2word[np.argmax(pred_vec)]
+        if word == "":
+            total -= 1  # padding
+        else:
+            count += 1 if word == pred_word else 0
+
+print("accuracy: {}".format(count/total))
+
+#scores = model.evaluate(testX_embeddings, to_categorical(testY_int, num_classes=num_categories))
+#print(f"{model.metrics_names[1]}: {scores[1] * 100}")  # acc: 99.09751977804825
+#print()
 
 
 
