@@ -8,7 +8,8 @@ As part of the CSE517 NLP class at UW, we seek to reproduce the results from the
 For those languages which use it, capitalization is an important signal for the fundamental NLP tasks of Named Entity Recognition (NER) and Part of Speech (POS) tagging. In fact, it is such a strong signal that model performance on these tasks drops sharply in common lowercased scenarios, such as noisy web text or machine translation outputs. In this work, we perform a systematic analysis of solutions to this problem, modifying only the casing of the train or test data using lowercasing and truecasing methods. While prior work and first impressions might suggest training a caseless model, or using a truecaser at test time, we show that the most effective strategy is a concatenation of cased and lowercased training data, producing a single model with high performance on both cased and uncased text. As shown in our experiments, this result holds across tasks and input representations. Finally, we show that our proposed solution gives an 8\% F1 improvement in mention detection on noisy out-of-domain Twitter data.
 
 [Paper](../master/papers/ner_and_pos_when_nothing_is_capitalized.pdf)
-
+# Code
+[https://github.com/andreaskuster/uw-nlp](https://github.com/andreaskuster/uw-nlp)
 
 # Findings
 
@@ -51,7 +52,7 @@ We expect to get similar results to those described in the paper.
 #### Comparison
 | Experiment | Train data | Test data | accuracy | Avg | accuracy from the paper | Avg from the paper | Code |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1.1 | Cased | Cased | TODO | TODO | 97.85 | - | TODO |
+| 1.1 | Cased | Cased | 97.47 | TODO | 97.85 | - | TODO |
 | 1.2 | Cased | Uncased | TODO | TODO  | 88.66 | 93.26 | TODO |
 | 2 | Uncased | Uncased | TODO | TODO  | 97.45 | 97.45 | TODO |
 | 3.1 | Augment | Cased | TODO | TODO | 97.79 | - | TODO  |
@@ -133,7 +134,7 @@ TODO
 
 
 ## NER experiment
-BiLSTM-CRF trained on CoNLL
+BiLSTM-CRF using ELMo + Glove + character embeddings trained on CoNLL
 | Experiment | Train data | Test data | F1 Score | Avg | F1 Score from the paper | Avg from the paper |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1.1 | Cased | Cased |  |  | 92.45| - |
@@ -146,7 +147,7 @@ BiLSTM-CRF trained on CoNLL
 | 4 | Cased | Truecase |  |  | 82.93 | 82.93 |
 | 5 | Truecase | Truecase |  |  | 90.25 | 90.25 |
 
-BiLSTM-CRF trained on CoNLL tested on Twitter Corpus
+BiLSTM-CRF using ELMo + Glove + character embeddings trained on CoNLL tested on Twitter Corpus
 | Experiment | Train data | F1 Score |  F1 Score from the paper | 
 | --- | --- | --- | --- |
 | 1.1 | Cased |   | 58.63| 
@@ -156,7 +157,26 @@ BiLSTM-CRF trained on CoNLL tested on Twitter Corpus
 | 4 | Cased |   | 58.22 | 
 | 5 | Truecase |    | 62.66 | 
 
+ 
+### Additional Experiments
+We run the same tests on Groningen Meaning Bank (GMB) dataset using the same or adjusted model and embeddings.
 
+#### Hypothesis
+We expect to get similar results to those described in the paper.
+
+#### Comparison
+| Experiment | Train data | F1 Score |
+| --- | --- | --- | 
+| 1.1 | Cased |   | 
+| 2 | Uncased |   | 
+| 3 | Augment |   | 
+| 3.5 | Half Mixed |     | 
+| 4 | Cased |   | 
+| 5 | Truecase |    | 
+
+
+#### Conclusion
+TODO
 # Resources
 
 ## Papers
