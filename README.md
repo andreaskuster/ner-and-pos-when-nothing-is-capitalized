@@ -80,6 +80,7 @@ LSTM Model:
 
 Evaluation: TODO
 
+Computational Requirements: HW / average runtime, #trials, #GPU hours
 
 #### Conclusion
 TODO
@@ -135,6 +136,8 @@ LSTM Model:
 
 Evaluation: TODO
 
+Computational Requirements: HW / average runtime, #trials, #GPU hours
+
 #### Conclusion
 TODO
 
@@ -183,6 +186,10 @@ We expect to get similar results to those described in the paper.
 
 #### Conclusion
 TODO
+
+# Implications
+
+Description if the results were reproducible, what was not, ... TODO
 
 # Resources
 
