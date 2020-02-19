@@ -114,7 +114,7 @@ TODO
 
 
 ## NER experiment
-BiLSTM-CRF trained on CoNLL
+BiLSTM-CRF using ELMo + Glove + character embeddings trained on CoNLL
 | Experiment | Train data | Test data | F1 Score | Avg | F1 Score from the paper | Avg from the paper |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1.1 | Cased | Cased |  |  | 92.45| - |
@@ -127,7 +127,7 @@ BiLSTM-CRF trained on CoNLL
 | 4 | Cased | Truecase |  |  | 82.93 | 82.93 |
 | 5 | Truecase | Truecase |  |  | 90.25 | 90.25 |
 
-BiLSTM-CRF trained on CoNLL tested on Twitter Corpus
+BiLSTM-CRF using ELMo + Glove + character embeddings trained on CoNLL tested on Twitter Corpus
 | Experiment | Train data | F1 Score |  F1 Score from the paper | 
 | --- | --- | --- | --- |
 | 1.1 | Cased |   | 58.63| 
@@ -137,7 +137,26 @@ BiLSTM-CRF trained on CoNLL tested on Twitter Corpus
 | 4 | Cased |   | 58.22 | 
 | 5 | Truecase |    | 62.66 | 
 
+ 
+### Additional Experiments
+We run the same tests on Groningen Meaning Bank (GMB) dataset using the same or adjusted model and embeddings.
 
+#### Hypothesis
+We expect to get similar results to those described in the paper.
+
+#### Comparison
+| Experiment | Train data | F1 Score |
+| --- | --- | --- | 
+| 1.1 | Cased |   | 
+| 2 | Uncased |   | 
+| 3 | Augment |   | 
+| 3.5 | Half Mixed |     | 
+| 4 | Cased |   | 
+| 5 | Truecase |    | 
+
+
+#### Conclusion
+TODO
 # Resources
 
 ## Papers
