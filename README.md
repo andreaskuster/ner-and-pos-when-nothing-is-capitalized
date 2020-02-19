@@ -55,6 +55,7 @@ Embedding: TODO
 LSTM Model:
 * description of layers: TODO
 * hyperparameters (#units, batch size, epochs, solver,..) : TODO
+* graphs: learning rate for different hyperparemeters
 
 Evaluation: TODO
 
@@ -99,6 +100,7 @@ Embedding: TODO
 LSTM Model:
 * description of layers: TODO
 * hyperparameters (#units, batch size, epochs, solver,..) : TODO
+* graphs: learning rate for different hyperparemeters
 
 Evaluation: TODO
 
