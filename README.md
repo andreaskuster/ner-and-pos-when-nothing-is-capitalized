@@ -54,7 +54,7 @@ Embedding: TODO
 
 LSTM Model:
 * description of layers: TODO
-* hyperparameters (#units, batch size, epochs, solver,..) : TODO
+* hyperparameters (#units, batch size, epochs, solver,..) including hyperparameter search (and graph of it) : TODO
 * graphs: learning rate for different hyperparemeters
 
 Evaluation: TODO
@@ -72,9 +72,14 @@ The goal of the additional experiments is to find out if the hypothesis from the
 We expect to get similar results to those described in the paper.
 
 #### Comparison
-POS on brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer (additional experiments)
+POS on penn treebank reduced dataset, brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer (additional experiments)
 | Train data | Test data | accuracy w2v | accuracy w2v crf | accuracy glove | accuracy glove crf | accuracy elmo | accuracy elmo crf| Code |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| __PTB Reduced Dataset__ |  |  |  |  |  |  |  | 
+| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
 | __Brown__ |  |  |  |  |  |  |  | 
 | Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
 | Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
@@ -99,7 +104,7 @@ Embedding: TODO
 
 LSTM Model:
 * description of layers: TODO
-* hyperparameters (#units, batch size, epochs, solver,..) : TODO
+* hyperparameters (#units, batch size, epochs, solver,..) including hyperparameter search (and graph of it) : TODO
 * graphs: learning rate for different hyperparemeters
 
 Evaluation: TODO
