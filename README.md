@@ -53,7 +53,7 @@ We expect to get similar results to those described in the paper.
 #### Comparison
 | Experiment | Train data | Test data | accuracy | Avg | accuracy from the paper | Avg from the paper | Code |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1.1 | Cased | Cased | 97.47 | TODO | 97.85 | - | TODO |
+| 1.1 | Cased | Cased | 97.56 | TODO | 97.85 | - | TODO |
 | 1.2 | Cased | Uncased | TODO | TODO  | 88.66 | 93.26 | TODO |
 | 2 | Uncased | Uncased | TODO | TODO  | 97.45 | 97.45 | TODO |
 | 3.1 | Augment | Cased | TODO | TODO | 97.79 | - | TODO  |
@@ -96,6 +96,11 @@ We expect to get similar results to those described in the paper.
 POS on penn treebank reduced dataset, brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer (additional experiments)
 | Train data | Test data | accuracy w2v | accuracy w2v crf | accuracy glove | accuracy glove crf | accuracy elmo | accuracy elmo crf| Code |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| __PTB Dataset__ |  |  |  |  |  |  |  | 
+| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | 97.47 |
+| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
 | __PTB Reduced Dataset__ |  |  |  |  |  |  |  | 
 | Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
 | Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
