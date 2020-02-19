@@ -33,7 +33,7 @@ We expect to get similar results to those described in the paper.
 #### Comparison
 | Experiment | Train data | Test data | accuracy | Avg | accuracy from the paper | Avg from the paper | Code |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1.1 | Cased | Cased | TODO | TODO | 97.85 | - | TODO |
+| 1.1 | Cased | Cased | 97.47 | TODO | 97.85 | - | TODO |
 | 1.2 | Cased | Uncased | TODO | TODO  | 88.66 | 93.26 | TODO |
 | 2 | Uncased | Uncased | TODO | TODO  | 97.45 | 97.45 | TODO |
 | 3.1 | Augment | Cased | TODO | TODO | 97.79 | - | TODO  |
