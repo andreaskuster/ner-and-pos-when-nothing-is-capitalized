@@ -1,5 +1,5 @@
-from truecase_model import TrueCaser
-from singlechar_dataset import TrueCaseDataset
+from .truecase_model import TrueCaser
+from .singlechar_dataset import TrueCaseDataset
 
 import matplotlib.pyplot as plt
 

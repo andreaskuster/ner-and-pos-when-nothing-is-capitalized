@@ -2,6 +2,9 @@ from torch.utils.data import Dataset
 import torch
 
 import numpy as np
+import pickle as pkl
+
+import os
 
 from typing import Dict
 
@@ -102,3 +105,13 @@ class TrueCaseDataset(Dataset):
             mask = torch.tensor(mask, dtype=bool)
 
             return lower, target, mask
+
+
+def load_truecase_dataset(path: str):
+    absFilePath = os.path.abspath(__file__)
+    folder_path, _ = os.path.split(absFilePath)
+
+    with open(f'{folder_path}/token_to_idx.pkl', mode='rb') as f:
+        token_to_idx = pkl.load(f)
+
+    return TrueCaseDataset(path, token_to_idx, train=False)
