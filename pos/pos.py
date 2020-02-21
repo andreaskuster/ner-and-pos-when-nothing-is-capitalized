@@ -1,8 +1,8 @@
 import os
 import sys
-import argparse
 
 from enum import Enum, auto
+from argparse import ArgumentParser
 
 from sklearn.model_selection import train_test_split
 
@@ -11,7 +11,7 @@ from datasets.brown.brown import Brown
 from datasets.conll2000.conll2000 import CoNLL2000
 
 
-class Verbosity(Enum):
+class LogLevel(Enum):
     NO = 0
     LIMITED = 1
     FULL = 2
@@ -31,11 +31,29 @@ class CaseType(Enum):
     TRUECASE = auto()
 
 
+class Embedding(Enum):
+    GLOVE = auto()
+    WORD2VEC = auto()
+    ELMO = auto()
+
+
 class POS:
 
     def __init__(self,
-                 verbosity_level: Verbosity = Verbosity.LIMITED):
-        self.verbosity_level = verbosity_level  # 0: none, 1: limited, 2: full
+                 log_level: LogLevel = LogLevel.LIMITED):
+        self.log_level: LogLevel = log_level  # 0: none, 1: limited, 2: full
+
+        self.train_x, self.train_y, self.test_x, self.test_y, self.dev_x, self.dev_y = None, None, None, None, None, None
+        self.dataset = {
+            "train_x": None,
+            "train_y": None,
+            "test_x": None,
+            "test_y": None,
+            "dev_x": None,
+            "dev_y": None
+        }
+
+        self.max_sentence_length: int = 0
 
     def set_cuda_visible_devices(self,
                                  devices: str = None):
@@ -45,8 +63,8 @@ class POS:
         :return None
         """
         # report action
-        if self.verbosity_level.value >= Verbosity.LIMITED.value:
-            print("Set visible cuda devices to {}".format(devices))
+        if self.log_level.value >= LogLevel.LIMITED.value:
+            print("Set visible cuda devices...")
         # skip upon None val
         if devices is not None:
             # set environment variable
@@ -64,7 +82,7 @@ class POS:
         :return:
         """
         # report action
-        if self.verbosity_level.value >= Verbosity.LIMITED.value:
+        if self.log_level.value >= LogLevel.LIMITED.value:
             print("Importing data...")
         # load data
         train_x, train_y, test_x, test_y, dev_x, dev_y = None, None, None, None, None, None
@@ -78,10 +96,10 @@ class POS:
                 data_x, data_y = ptb.load_data_lowercase([0])
             elif casetype == CaseType.TRUECASE:
                 data_x, data_y = ptb.load_data_truecase([0])
-            # split data: train: 10 sentences, dev & test: 4 sentences each with 2 overlapping sentences
-            train_x, train_y = data_x[2:12], data_y[2:12]
-            dev_x, dev_y = data_x[0:4], data_y[0:4]
-            test_x, test_y = data_x[10:14], data_y[10:14]
+            # split data: train: 4 sentences, dev & test: 2 sentences each with 1 overlapping sentences
+            train_x, train_y = data_x[1:5], data_y[1:5]
+            dev_x, dev_y = data_x[0:2], data_y[0:2]
+            test_x, test_y = data_x[4:6], data_y[4:6]
 
         elif dataset == Dataset.PTB or dataset == Dataset.PTB_REDUCED:
             # instantiate data loader
@@ -122,24 +140,56 @@ class POS:
                                                                 shuffle=True)  # do not expect data to be pre-shuffled
         else:
             raise RuntimeError("Unknown dataset.")
-        # return data
+        # store dataset internally
+        self.train_x, self.train_y, self.test_x, self.test_y, self.dev_x, self.dev_y = train_x, train_y, test_x, test_y, dev_x, dev_y
+        # return dataset
         return train_x, train_y, test_x, test_y, dev_x, dev_y
+
+    def pad_sequence(self):
+
+        # report action
+        if self.log_level.value >= LogLevel.LIMITED.value:
+            print("Padding sequence...")
+
+        # update maximum sentence length
+        for data_x in [self.train_x, self.test_x, self.dev_x]:
+            self.max_sentence_length = max(self.max_sentence_length, max([len(x) for x in data_x]))
+
+        # pad x
+        for data_x in [self.train_x, self.test_x, self.dev_x]:
+            for i in range(len(data_x)):
+                no_pad = self.max_sentence_length - len(data_x[i])
+                data_x[i] = list(data_x[i]) + ([""] * no_pad)
+
+        # pad y
+        for data_y in [self.train_y, self.test_y, self.dev_y]:
+            for i in range(len(data_y)):
+                no_pad = self.max_sentence_length - len(data_y[i])
+                data_y[i] = list(data_y[i]) + ([""] * no_pad)
 
 
 if __name__ == "__main__":
 
     # parse arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-o', '--output', action='store_true',
-                        help="shows output")
+    parser: ArgumentParser = ArgumentParser()
+    parser.add_argument("-d", "--dataset", default="PTB", choices=[x.name for x in Dataset])
+    parser.add_argument("-c", "--casetype", default="CASED", choices=[x.name for x in CaseType])
     args = parser.parse_args()
 
-    if args.output:
-        print("This is some output")
+    # convert args to correct data types
+    dataset: Dataset = Dataset[args.dataset]
+    casetype: CaseType = CaseType[args.casetype]
+
+
+    print("Dataset is: {}".format(dataset.name))
+    print("Casetype is: {}".format(casetype.name))
 
     pos = POS()
+    pos.import_data(dataset=dataset,
+                    casetype=casetype)
+    pos.pad_sequence()
 
     # exit
-    if pos.verbosity_level.value >= Verbosity.LIMITED.value:
+    if pos.log_level.value >= LogLevel.LIMITED.value:
         print("Exit.")
     sys.exit(0)
