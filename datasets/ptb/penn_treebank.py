@@ -51,7 +51,7 @@ class PTB:
         return self.load_data(sections=sections,
                               text_map_func=str.lower)
 
-    def load_data_truecase(self):
+    def load_data_truecase(self, sections):
         raise NotImplementedError()
 
 
