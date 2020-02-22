@@ -9,6 +9,13 @@ from typing import Tuple
 from os.path import isfile
 
 from sklearn.model_selection import train_test_split
+from keras import Sequential
+from keras.layers import LSTM, Dense, Activation, Bidirectional, TimeDistributed
+from keras.optimizers import Adam
+from keras.models import model_from_json
+from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.utils import to_categorical
+from keras_contrib.layers import CRF
 
 from datasets.ptb.penn_treebank import PTB
 from datasets.brown.brown import Brown
@@ -17,6 +24,8 @@ from datasets.conll2000.conll2000 import CoNLL2000
 from embeddings.word2vec import Word2Vec
 from embeddings.glove import GloVe
 from embeddings.elmov2 import ELMo
+
+from helper.multi_gpu import to_multi_gpu
 
 
 class LogLevel(Enum):
@@ -74,7 +83,7 @@ class POS:
         self.train_x_embedded, self.test_x_embedded, self.dev_x_embedded = None, None, None
         self.dataset_x_embedded: dict = dict()
         # tag to index mapping
-        self.train_int, self.test_int, self.dev_int = None, None, None
+        self.train_y_int, self.test_y_int, self.dev_y_int = None, None, None
         self.dataset_y_int: dict = dict()
         self.labels: set = None
         self.num_categories: int = -1
@@ -85,9 +94,9 @@ class POS:
             "train_x": "train_x_embedded",
             "test_x": "test_x_embedded",
             "dev_x": "dev_x_embedded",
-            "train_y": "train_int",
-            "test_y": "test_int",
-            "dev_y": "dev_int"
+            "train_y": "train_y_int",
+            "test_y": "test_y_int",
+            "dev_y": "dev_y_int"
         }
         # padding
         self.max_sentence_length: int = -1
@@ -96,6 +105,9 @@ class POS:
         self.dim_embedding_vec: int = -1
         self.data_source_word2vec: str = data_source_word2vec.value
         self.data_source_glove, self.data_set_glove = data_source_glove.value
+        # model
+        self.model = None
+        self.model_details: dict = None
 
     def set_cuda_visible_devices(self,
                                  devices: str = None):
@@ -230,7 +242,7 @@ class POS:
         """
         # report action
         if self.log_level.value >= LogLevel.LIMITED.value:
-            print("Embed data...")
+            print("Embedding data...")
         if embedding == Embedding.WORD2VEC:
             # instantiate preprocessor
             preprocessor = Word2Vec()
@@ -255,9 +267,12 @@ class POS:
             path_data_x = "elmo_embedding_{}_{}_data_x.npz".format(self.dataset.name, self.casetype.name)
             if isfile(path_data_x):
                 with np.load(path_data_x) as data:
-                    self.dataset_x_embedded["train_x_embedded"], self.train_x_embedded = data["train_x_embedded"], data["train_x_embedded"]
-                    self.dataset_x_embedded["test_x_embedded"], self.test_x_embedded = data["test_x_embedded"], data["test_x_embedded"]
-                    self.dataset_x_embedded["dev_x_embedded"], self.dev_x_embedded = data["dev_x_embedded"], data["dev_x_embedded"]
+                    self.dataset_x_embedded["train_x_embedded"], self.train_x_embedded = data["train_x_embedded"], data[
+                        "train_x_embedded"]
+                    self.dataset_x_embedded["test_x_embedded"], self.test_x_embedded = data["test_x_embedded"], data[
+                        "test_x_embedded"]
+                    self.dataset_x_embedded["dev_x_embedded"], self.dev_x_embedded = data["dev_x_embedded"], data[
+                        "dev_x_embedded"]
             else:
                 # run batch-wise embedding (it uses too much memory otherwise)
                 if self.log_level.value >= LogLevel.LIMITED.value:
@@ -278,9 +293,11 @@ class POS:
                             if self.log_level.value >= LogLevel.FULL.value:
                                 print("elmo embedding round {}...".format(i))
                         data_x_embedding = np.array(data_x_embedding)
-                        data_x_embedding = data_x_embedding.reshape(-1, data_x_embedding[0].shape[-2], data_x_embedding[0].shape[-1])
+                        data_x_embedding = data_x_embedding.reshape(-1, data_x_embedding[0].shape[-2],
+                                                                    data_x_embedding[0].shape[-1])
                         if end < len(self.data_x[dataset]):
-                            data_x_embedding = np.concatenate((data_x_embedding, preprocessor.embedding(self.data_x[dataset][end:])), axis=0)
+                            data_x_embedding = np.concatenate(
+                                (data_x_embedding, preprocessor.embedding(self.data_x[dataset][end:])), axis=0)
                             # report action
                             if self.log_level.value >= LogLevel.FULL.value:
                                 print("Elmo embedding round remainder...")
@@ -325,6 +342,139 @@ class POS:
                 data_y_int.append([self.word2int[word] for word in sentence])
             # store data internally
             self.dataset_y_int[self.dataset_map[dataset]] = data_y_int
+        self.train_y_int, self.test_y_int, self.dev_y_int = self.dataset_y_int["train_y_int"], self.dataset_y_int["test_y_int"], self.dataset_y_int["dev_y_int"]
+
+    def model_name(self) -> str:
+        if self.model_details is None:
+            return ""
+        return "{}_{}units_{}dropout_{}recdropout_{}lr".format(self.model_details["name"],
+                                                               self.model_details["lstm_hidden_units"],
+                                                               self.model_details["lstm_dropout"],
+                                                               self.model_details["lstm_recurrent_dropout"],
+                                                               self.model_details["learning_rate"],)
+
+    def create_model_bilstm(self,
+                            lstm_hidden_units=1024,
+                            lstm_dropout=0.1,
+                            lstm_recurrent_dropout=0.1,
+                            num_gpus=1,
+                            learning_rate=1e-3):
+        # set model details
+        self.model_details = dict()
+        self.model_details["name"] = "bilstm"
+        self.model_details["lstm_hidden_units"] = lstm_hidden_units
+        self.model_details["lstm_dropout"] = lstm_dropout
+        self.model_details["lstm_recurrent_dropout"] = lstm_recurrent_dropout
+        self.model_details["learning_rate"] = learning_rate
+
+        # create model
+        self.model = Sequential()
+        self.model.add(Bidirectional(layer=LSTM(units=lstm_hidden_units,
+                                                return_sequences=True,
+                                                dropout=lstm_dropout,
+                                                recurrent_dropout=lstm_recurrent_dropout),
+                                     input_shape=(self.max_sentence_length, self.dim_embedding_vec)))
+        self.model.add(Dense(self.num_categories)) # self.model.add(TimeDistributed(Dense(self.num_categories, activation="relu")))
+        self.model.add(Activation("softmax"))
+        self.model = to_multi_gpu(self.model, n_gpus=num_gpus)
+        self.model.compile(loss="categorical_crossentropy",
+                           optimizer=Adam(learning_rate),
+                           metrics=["accuracy"])
+        if self.log_level.value >= LogLevel.LIMITED.value:
+            self.model.summary()
+
+    def create_model_bilstm_crf(self,
+                            lstm_hidden_units=1024,
+                            lstm_dropout=0.1,
+                            lstm_recurrent_dropout=0.1,
+                            num_gpus=1,
+                            learning_rate=1e-3):
+        # set model details
+        self.model_details = dict()
+        self.model_details["name"] = "bilstmcrf"
+        self.model_details["lstm_hidden_units"] = lstm_hidden_units
+        self.model_details["lstm_dropout"] = lstm_dropout
+        self.model_details["lstm_recurrent_dropout"] = lstm_recurrent_dropout
+        self.model_details["learning_rate"] = learning_rate
+
+        # create model
+        self.model = Sequential()
+        self.model.add(Bidirectional(layer=LSTM(units=lstm_hidden_units,
+                                                return_sequences=True,
+                                                dropout=lstm_dropout,
+                                                recurrent_dropout=lstm_recurrent_dropout),
+                                     input_shape=(self.max_len, self.dim_embedding_vec)))
+        self.model.add(TimeDistributed(Dense(self.num_categories, activation="relu")))
+        crf = CRF(self.num_categories)
+        self.model.add(crf)
+        # self.model = to_multi_gpu(self.model, n_gpus=num_gpus)
+        self.model.compile(optimizer="rmsprop", loss=crf.loss_function, metrics=[crf.accuracy])
+
+        if self.log_level.value >= LogLevel.LIMITED.value:
+            self.model.summary()
+
+    def save_model(self):
+        if self.log_level.value >= LogLevel.LIMITED.value:
+            print("Save model to file...")
+        # serialize model
+        model_json = self.model.to_json()
+        # save model
+        with open("{}.json".format(self.model_name()), "w") as json_file:
+            json_file.write(model_json)
+        # save weights
+        self.model.save_weights("{}.h5".format(self.model_name()))
+
+    def try_load_model(self) -> bool:
+        if isfile("{}.json".format(self.model_name())) and isfile("{}.h5".format(self.model_name())):
+            if self.log_level.value >= LogLevel.LIMITED.value:
+                print("Loading model from file...")
+            # load model
+            json_file = open("{}.json".format(self.model_name()), "r")
+            loaded_model_json = json_file.read()
+            json_file.close()
+            self.model = model_from_json(loaded_model_json)
+            # load pre-trained weights
+            self.model.load_weights("{}.h5".format(self.model_name()))
+            return True
+        return False
+
+    def train_model(self,
+                    batch_size=1024,
+                    epochs=40):
+        es = EarlyStopping(monitor="accuracy", mode="max", verbose=1, patience=4)
+        # mc = ModelCheckpoint('best_model.h5', monitor='val_accuracy', mode='max', verbose=1, save_best_only=True)
+        # fit model
+        history = self.model.fit(self.train_x_embedded, to_categorical(self.train_y_int, self.num_categories),
+                                 batch_size=batch_size,
+                                 epochs=epochs,
+                                 callbacks=[es])
+        # store history
+        from matplotlib import pyplot
+        pyplot.plot(history.history["accuracy"], label="train")
+        pyplot.legend()
+        pyplot.show()
+
+    def model_accuracy(self):
+
+        y_pred = self.model.predict(self.test_x_embedded)
+
+        total = 0
+        count = 0
+        pred_itr = y_pred.__iter__()
+        for sentence in self.test_y_int:
+            total += len(sentence)
+            pred_sentence = pred_itr.__next__()
+            pred_sentence = pred_sentence.__iter__()
+            for word in [self.int2word[x] for x in sentence]:
+                pred_vec = pred_sentence.__next__()
+                pred_word = self.int2word[np.argmax(pred_vec)]
+                if word == "":
+                    total -= 1  # padding
+                else:
+                    count += 1 if word == pred_word else 0
+        accuracy = count / total
+        print("accuracy: {}".format(accuracy))
+        return accuracy
 
 
 if __name__ == "__main__":
@@ -366,6 +516,11 @@ if __name__ == "__main__":
     pos.pad_sequence()
     pos.embedding(embedding=embedding)
     pos.map_y()
+    if not pos.try_load_model():
+        pos.create_model_bilstm()
+        pos.train_model()
+        pos.save_model()
+    pos.model_accuracy()
 
     # exit
     if pos.log_level.value >= LogLevel.LIMITED.value:
