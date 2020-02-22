@@ -1,8 +1,12 @@
 import os
 import sys
 
+import numpy as np
+
 from enum import Enum, auto
 from argparse import ArgumentParser
+from typing import Tuple
+from os.path import isfile
 
 from sklearn.model_selection import train_test_split
 
@@ -10,11 +14,15 @@ from datasets.ptb.penn_treebank import PTB
 from datasets.brown.brown import Brown
 from datasets.conll2000.conll2000 import CoNLL2000
 
+from embeddings.word2vec import Word2Vec
+from embeddings.glove import GloVe
+from embeddings.elmov2 import ELMo
+
 
 class LogLevel(Enum):
-    NO = 0
-    LIMITED = 1
-    FULL = 2
+    NO: int = 0
+    LIMITED: int = 1
+    FULL: int = 2
 
 
 class Dataset(Enum):
@@ -37,23 +45,47 @@ class Embedding(Enum):
     ELMO = auto()
 
 
+class DataSourceWord2Vec(Enum):
+    GOOGLE_NEWS_300: str = "word2vec-google-news-300"
+
+
+class DataSourceGlove(Enum):
+    COMMON_CRAWL_840B_CASED_300D: Tuple[str, str] = ("common_crawl_840b_cased", "glove.840B.300d.txt")
+
+
 class POS:
 
     def __init__(self,
-                 log_level: LogLevel = LogLevel.LIMITED):
+                 log_level: LogLevel = LogLevel.LIMITED,
+                 data_source_word2vec: DataSourceWord2Vec = DataSourceWord2Vec.GOOGLE_NEWS_300,
+                 data_source_glove: DataSourceGlove = DataSourceGlove.COMMON_CRAWL_840B_CASED_300D,
+                 batch_size_embedding: int = 4096):
+        # log level
         self.log_level: LogLevel = log_level  # 0: none, 1: limited, 2: full
-
+        # dataset
+        self.dataset = None
+        # casetype
+        self.casetype = None
+        # dataset
         self.train_x, self.train_y, self.test_x, self.test_y, self.dev_x, self.dev_y = None, None, None, None, None, None
-        self.dataset = {
-            "train_x": None,
-            "train_y": None,
-            "test_x": None,
-            "test_y": None,
-            "dev_x": None,
-            "dev_y": None
+        self.data_x: dict = None
+        self.data_y: dict = None
+        # embedded dataset
+        self.train_x_embedded, self.test_x_embedded, self.dev_x_embedded = None, None, None
+        self.dataset_x_embedded: dict = dict()
+        # mapping
+        self.dataset_map: dict = {
+            "train_x": "train_x_embedded",
+            "test_x": "test_x_embedded",
+            "dev_x": "dev_x_embedded"
         }
-
-        self.max_sentence_length: int = 0
+        # padding
+        self.max_sentence_length: int = -1
+        # embedding
+        self.batch_size_embedding: int = batch_size_embedding
+        self.dim_embedding_vec: int = -1
+        self.data_source_word2vec: str = data_source_word2vec.value
+        self.data_source_glove, self.data_set_glove = data_source_glove.value
 
     def set_cuda_visible_devices(self,
                                  devices: str = None):
@@ -84,6 +116,9 @@ class POS:
         # report action
         if self.log_level.value >= LogLevel.LIMITED.value:
             print("Importing data...")
+        # store parameters
+        self.dataset = dataset
+        self.casetype = casetype
         # load data
         train_x, train_y, test_x, test_y, dev_x, dev_y = None, None, None, None, None, None
         if dataset == Dataset.PTB_DUMMY:
@@ -142,52 +177,160 @@ class POS:
             raise RuntimeError("Unknown dataset.")
         # store dataset internally
         self.train_x, self.train_y, self.test_x, self.test_y, self.dev_x, self.dev_y = train_x, train_y, test_x, test_y, dev_x, dev_y
+        self.data_x = {
+            "train_x": self.train_x,
+            "test_x": self.test_x,
+            "dev_x": self.dev_x
+        }
+        self.data_y = {
+            "train_y": self.train_y,
+            "test_y": self.test_y,
+            "dev_y": self.dev_y
+        }
         # return dataset
         return train_x, train_y, test_x, test_y, dev_x, dev_y
 
     def pad_sequence(self):
+        """
 
+        :return:
+        """
         # report action
         if self.log_level.value >= LogLevel.LIMITED.value:
             print("Padding sequence...")
-
         # update maximum sentence length
-        for data_x in [self.train_x, self.test_x, self.dev_x]:
-            self.max_sentence_length = max(self.max_sentence_length, max([len(x) for x in data_x]))
-
+        for dataset in self.data_x:
+            self.max_sentence_length = max(self.max_sentence_length, max([len(x) for x in self.data_x[dataset]]))
         # pad x
-        for data_x in [self.train_x, self.test_x, self.dev_x]:
-            for i in range(len(data_x)):
-                no_pad = self.max_sentence_length - len(data_x[i])
-                data_x[i] = list(data_x[i]) + ([""] * no_pad)
-
+        for dataset in self.data_x:
+            for i in range(len(self.data_x[dataset])):
+                no_pad = self.max_sentence_length - len(self.data_x[dataset][i])
+                self.data_x[dataset][i] = list(self.data_x[dataset][i]) + ([""] * no_pad)
         # pad y
-        for data_y in [self.train_y, self.test_y, self.dev_y]:
-            for i in range(len(data_y)):
-                no_pad = self.max_sentence_length - len(data_y[i])
-                data_y[i] = list(data_y[i]) + ([""] * no_pad)
+        for dataset in self.data_y:
+            for i in range(len(self.data_y[dataset])):
+                no_pad = self.max_sentence_length - len(self.data_y[dataset][i])
+                self.data_y[dataset][i] = list(self.data_y[dataset][i]) + ([""] * no_pad)
+
+    def embedding(self, embedding: Embedding):
+        """
+
+        :param embedding:
+        :return:
+        """
+        # report action
+        if self.log_level.value >= LogLevel.LIMITED.value:
+            print("Embed data...")
+        if embedding == Embedding.WORD2VEC:
+            # instantiate preprocessor
+            preprocessor = Word2Vec()
+            # download pre-trained data
+            preprocessor.import_pre_trained_data(self.data_source_word2vec)
+        elif embedding == Embedding.ELMO:
+            # instantiate preprocessor
+            preprocessor = ELMo()
+        elif embedding == Embedding.GLOVE:
+            # instantiate preprocessor
+            preprocessor = GloVe()
+            # prepare pre-trained data
+            preprocessor.import_pre_trained_data(self.data_source_glove, self.data_set_glove)
+        else:
+            raise RuntimeError("Unknown embedding.")
+
+        # set embedding vector length
+        self.dim_embedding_vec = preprocessor.dim
+
+        if embedding == Embedding.ELMO:
+            # try to load embeddings (elmo uses a lot of CPU/RAM resources, therefore, we save them to disk for re-use)
+            path_data_x = "elmo_embedding_{}_{}_data_x.npz".format(self.dataset.name, self.casetype.name)
+            if isfile(path_data_x):
+                with np.load(path_data_x) as data:
+                    self.dataset_x_embedded["train_x_embedded"], self.train_x_embedded = data["train_x_embedded"], data["train_x_embedded"]
+                    self.dataset_x_embedded["test_x_embedded"], self.test_x_embedded = data["test_x_embedded"], data["test_x_embedded"]
+                    self.dataset_x_embedded["dev_x_embedded"], self.dev_x_embedded = data["dev_x_embedded"], data["dev_x_embedded"]
+            else:
+                # run batch-wise embedding (it uses too much memory otherwise)
+                if self.log_level.value >= LogLevel.LIMITED.value:
+                    print("Start elmo embedding...")
+
+                for dataset in self.data_x:
+                    num_batches = int(len(self.data_x[dataset]) / self.batch_size_embedding)
+
+                    if num_batches > 0:
+                        start, end = 0, 0
+                        for i in range(num_batches):
+                            # compute indices
+                            start = i * self.batch_size_embedding
+                            end = (i + 1) * self.batch_size_embedding
+                            # do batch embedding
+                            data_x_embedding.append(preprocessor.embedding(self.data_x[dataset][start:end]))
+                            # report action
+                            if self.log_level.value >= LogLevel.FULL.value:
+                                print("elmo embedding round {}...".format(i))
+                        data_x_embedding = np.array(data_x_embedding)
+                        data_x_embedding = data_x_embedding.reshape(-1, data_x_embedding[0].shape[-2], data_x_embedding[0].shape[-1])
+                        if end < len(self.data_x[dataset]):
+                            data_x_embedding = np.concatenate((data_x_embedding, preprocessor.embedding(self.data_x[dataset][end:])), axis=0)
+                            # report action
+                            if self.log_level.value >= LogLevel.FULL.value:
+                                print("Elmo embedding round remainder...")
+                    else:
+                        data_x_embedding = preprocessor.embedding(self.data_x[dataset])
+                    # store data internally
+                    self.dataset_x_embedded[self.dataset_map[dataset]] = data_x_embedding
+                # store data to file
+                path_data_x = "elmo_embedding_{}_{}_data_x.npz".format(self.dataset.name, self.casetype.name)
+                np.savez(path_data_x,
+                         train_x_embedded=self.dataset_x_embedded["train_x_embedded"],
+                         test_x_embedded=self.dataset_x_embedded["test_x_embedded"],
+                         dev_x_embedded=self.dataset_x_embedded["dev_x_embedded"])
+
+        else:  # glove and word2vec are sequence independent -> process one-by-one
+            for dataset in self.dataset_x:
+                data_x_embedded = list()
+                for sentence in self.data_x[dataset]:
+                    data_x_embedded.append([preprocessor.word2vec(word) for word in sentence])
+                self.dataset_map[self.data_x[dataset]] = np.array(data_x_embedded)
 
 
 if __name__ == "__main__":
-
     # parse arguments
     parser: ArgumentParser = ArgumentParser()
-    parser.add_argument("-d", "--dataset", default="PTB", choices=[x.name for x in Dataset])
+    parser.add_argument("-d", "--dataset", default="PTB_DUMMY", choices=[x.name for x in Dataset])
     parser.add_argument("-c", "--casetype", default="CASED", choices=[x.name for x in CaseType])
+    parser.add_argument("-v", "--loglevel", default="FULL", choices=[x.name for x in LogLevel])
+    parser.add_argument("-e", "--embedding", default="ELMO", choices=[x.name for x in Embedding])
+    parser.add_argument("-w", "--datasource_word2vec", default="GOOGLE_NEWS_300",
+                        choices=[x.name for x in DataSourceWord2Vec])
+    parser.add_argument("-g", "--datasource_glove", default="COMMON_CRAWL_840B_CASED_300D",
+                        choices=[x.name for x in DataSourceGlove])
+
     args = parser.parse_args()
 
     # convert args to correct data types
     dataset: Dataset = Dataset[args.dataset]
     casetype: CaseType = CaseType[args.casetype]
+    log_level: LogLevel = LogLevel[args.loglevel]
+    embedding: Embedding = Embedding[args.embedding]
+    datasource_word2vec: DataSourceWord2Vec = DataSourceWord2Vec[args.datasource_word2vec]
+    datasource_glove: DataSourceGlove = DataSourceGlove[args.datasource_glove]
 
+    if log_level.value >= LogLevel.LIMITED.value:
+        print("Dataset is: {}".format(dataset.name))
+        print("Casetype is: {}".format(casetype.name))
+        print("Log level is: {}".format(log_level.name))
+        print("Embedding is: {}".format(embedding.name))
+        print("Data source word2vec is: {}".format(datasource_word2vec.name))
+        print("Data source glove is: {}".format(datasource_glove.name))
 
-    print("Dataset is: {}".format(dataset.name))
-    print("Casetype is: {}".format(casetype.name))
-
-    pos = POS()
+    pos = POS(log_level=log_level,
+              data_source_word2vec=datasource_word2vec,
+              data_source_glove=datasource_glove)
+    pos.set_cuda_visible_devices(devices=None)
     pos.import_data(dataset=dataset,
                     casetype=casetype)
     pos.pad_sequence()
+    pos.embedding(embedding=embedding)
 
     # exit
     if pos.log_level.value >= LogLevel.LIMITED.value:
