@@ -300,7 +300,7 @@ class POS:
 
     def map_y(self):
         """
-        
+
         :return:
         """
         self.labels: set = set()
