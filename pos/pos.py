@@ -491,6 +491,7 @@ if __name__ == "__main__":
                         choices=[x.name for x in DataSourceWord2Vec])
     parser.add_argument("-g", "--datasource_glove", default="COMMON_CRAWL_840B_CASED_300D",
                         choices=[x.name for x in DataSourceGlove])
+    parser.add_argument("-n", "--numgpus", default="1")
 
     args = parser.parse_args()
 
@@ -501,6 +502,7 @@ if __name__ == "__main__":
     embedding: Embedding = Embedding[args.embedding]
     datasource_word2vec: DataSourceWord2Vec = DataSourceWord2Vec[args.datasource_word2vec]
     datasource_glove: DataSourceGlove = DataSourceGlove[args.datasource_glove]
+    num_gpus: int = int(args.numgpus)
 
     if log_level.value >= LogLevel.LIMITED.value:
         print("Dataset is: {}".format(dataset.name))
@@ -509,6 +511,7 @@ if __name__ == "__main__":
         print("Embedding is: {}".format(embedding.name))
         print("Data source word2vec is: {}".format(datasource_word2vec.name))
         print("Data source glove is: {}".format(datasource_glove.name))
+        print("Number of GPUs is: {}".format(num_gpus))
 
     pos = POS(log_level=log_level,
               data_source_word2vec=datasource_word2vec,
@@ -520,7 +523,7 @@ if __name__ == "__main__":
     pos.embedding(embedding=embedding)
     pos.map_y()
     if not pos.try_load_model():
-        pos.create_model_bilstm()
+        pos.create_model_bilstm(num_gpus=num_gpus)
         pos.train_model()
         pos.save_model()
     pos.model_accuracy()
