@@ -292,7 +292,7 @@ class POS:
                             data_x_embedding.append(preprocessor.embedding(self.data_x[dataset][start:end]))
                             # report action
                             if self.log_level.value >= LogLevel.FULL.value:
-                                print("elmo embedding round {}...".format(i))
+                                print("Elmo embedding round {}...".format(i))
                         data_x_embedding = np.array(data_x_embedding)
                         data_x_embedding = data_x_embedding.reshape(-1, data_x_embedding[0].shape[-2],
                                                                     data_x_embedding[0].shape[-1])
@@ -481,7 +481,7 @@ class POS:
 if __name__ == "__main__":
     # parse arguments
     parser: ArgumentParser = ArgumentParser()
-    parser.add_argument("-d", "--dataset", default="PTB", choices=[x.name for x in Dataset])
+    parser.add_argument("-d", "--dataset", default="PTB_DUMMY", choices=[x.name for x in Dataset])
     parser.add_argument("-c", "--casetype", default="CASED", choices=[x.name for x in CaseType])
     parser.add_argument("-v", "--loglevel", default="FULL", choices=[x.name for x in LogLevel])
     parser.add_argument("-e", "--embedding", default="ELMO", choices=[x.name for x in Embedding])
