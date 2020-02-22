@@ -73,11 +73,17 @@ class POS:
         # embedded dataset
         self.train_x_embedded, self.test_x_embedded, self.dev_x_embedded = None, None, None
         self.dataset_x_embedded: dict = dict()
+        # tag to index mapping
+        self.train_int, self.test_int, self.dev_int = None, None, None
+        self.dataset_y_int: dict = dict()
         # mapping
         self.dataset_map: dict = {
             "train_x": "train_x_embedded",
             "test_x": "test_x_embedded",
-            "dev_x": "dev_x_embedded"
+            "dev_x": "dev_x_embedded",
+            "train_y": "train_int",
+            "test_y": "test_int",
+            "dev_y": "dev_int"
         }
         # padding
         self.max_sentence_length: int = -1
@@ -292,6 +298,27 @@ class POS:
                     data_x_embedded.append([preprocessor.word2vec(word) for word in sentence])
                 self.dataset_map[self.data_x[dataset]] = np.array(data_x_embedded)
 
+    def map_y(self):
+        """
+        
+        :return:
+        """
+        self.labels: set = set()
+        for item in self.train_y + self.test_y + self.dev_y:
+            for label in item:
+                self.labels.add(label)
+
+        self.num_categories = len(self.labels)  # number of pos tags
+        self.int2word = list(self.labels)
+        self.word2int = {label: i for i, label in enumerate(self.int2word)}
+
+        for dataset in self.data_y:
+            data_y_int = list()
+            for sentence in self.data_y[dataset]:
+                data_y_int.append([self.word2int[word] for word in sentence])
+            # store data internally
+            self.dataset_y_int[self.dataset_map[dataset]] = data_y_int
+
 
 if __name__ == "__main__":
     # parse arguments
@@ -331,6 +358,7 @@ if __name__ == "__main__":
                     casetype=casetype)
     pos.pad_sequence()
     pos.embedding(embedding=embedding)
+    pos.map_y()
 
     # exit
     if pos.log_level.value >= LogLevel.LIMITED.value:
