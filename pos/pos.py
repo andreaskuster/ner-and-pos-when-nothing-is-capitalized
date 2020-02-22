@@ -306,6 +306,8 @@ class POS:
                         data_x_embedding = preprocessor.embedding(self.data_x[dataset])
                     # store data internally
                     self.dataset_x_embedded[self.dataset_map[dataset]] = data_x_embedding
+                    self.train_x_embedded, self.test_x_embedded, self.dev_x_embedded = self.dataset_x_embedded["train_x_embedded"], self.dataset_x_embedded["test_x_embedded"], self.dataset_x_embedded["dev_x_embedded"]
+
                 # store data to file
                 path_data_x = "elmo_embedding_{}_{}_data_x.npz".format(self.dataset.name, self.casetype.name)
                 np.savez(path_data_x,
