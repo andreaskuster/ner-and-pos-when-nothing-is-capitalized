@@ -283,6 +283,7 @@ class POS:
 
                     if num_batches > 0:
                         start, end = 0, 0
+                        data_x_embedding = list()
                         for i in range(num_batches):
                             # compute indices
                             start = i * self.batch_size_embedding
@@ -480,7 +481,7 @@ class POS:
 if __name__ == "__main__":
     # parse arguments
     parser: ArgumentParser = ArgumentParser()
-    parser.add_argument("-d", "--dataset", default="PTB_DUMMY", choices=[x.name for x in Dataset])
+    parser.add_argument("-d", "--dataset", default="PTB", choices=[x.name for x in Dataset])
     parser.add_argument("-c", "--casetype", default="CASED", choices=[x.name for x in CaseType])
     parser.add_argument("-v", "--loglevel", default="FULL", choices=[x.name for x in LogLevel])
     parser.add_argument("-e", "--embedding", default="ELMO", choices=[x.name for x in Embedding])
