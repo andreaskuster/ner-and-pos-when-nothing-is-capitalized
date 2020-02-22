@@ -76,6 +76,10 @@ class POS:
         # tag to index mapping
         self.train_int, self.test_int, self.dev_int = None, None, None
         self.dataset_y_int: dict = dict()
+        self.labels: set = None
+        self.num_categories: int = -1
+        self.int2word: list = None
+        self.word2int: dict = None
         # mapping
         self.dataset_map: dict = {
             "train_x": "train_x_embedded",
@@ -303,6 +307,9 @@ class POS:
 
         :return:
         """
+        # report action
+        if self.log_level.value >= LogLevel.LIMITED.value:
+            print("Add label to int mapping...")
         self.labels: set = set()
         for item in self.train_y + self.test_y + self.dev_y:
             for label in item:
