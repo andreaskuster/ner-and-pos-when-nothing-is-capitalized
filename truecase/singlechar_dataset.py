@@ -6,19 +6,27 @@ import pickle as pkl
 
 import os
 
-from typing import Dict
+from typing import Dict, Union, List
 
 
 class TrueCaseDataset(Dataset):
-    def __init__(self, path: str, token_dict: Dict[str, int] = None, train: bool = False, OOV_rate: float = 0.0):
+    def __init__(self, data: Union[str, List[List[str]]], token_dict: Dict[str, int] = None, train: bool = False, OOV_rate: float = 0.0):
         super().__init__()
 
         data_set = []
         max_len = -np.inf
         if token_dict is None:
             unique_tokens = []
-        with open(path, mode='r') as f:
-            for l in f.readlines():
+        if isinstance(data, str):
+            with open(data, mode='r') as f:
+                for l in f.readlines():
+                    max_len = max(max_len, len(list(l)))
+                    data_set.append(list(l))
+                    if token_dict is None:
+                        unique_tokens = np.union1d(unique_tokens, list(l))
+        else:
+            for l in data:
+                l = ' '.join(l)
                 max_len = max(max_len, len(list(l)))
                 data_set.append(list(l))
                 if token_dict is None:
