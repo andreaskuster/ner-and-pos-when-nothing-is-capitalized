@@ -61,6 +61,10 @@ class DataSourceWord2Vec(Enum):
 class DataSourceGlove(Enum):
     COMMON_CRAWL_840B_CASED_300D: Tuple[str, str] = ("common_crawl_840b_cased", "glove.840B.300d.txt")
 
+class Model(Enum):
+    BILSTM = "bilstm"
+    BILSTM_CRF = "bilstmcrf"
+
 
 class POS:
 
@@ -74,7 +78,8 @@ class POS:
         # dataset
         self.dataset = None
         # casetype
-        self.casetype = None
+        self.train_casetype = None
+        self.test_casetype = None
         # dataset
         self.train_x, self.train_y, self.test_x, self.test_y, self.dev_x, self.dev_y = None, None, None, None, None, None
         self.data_x: dict = None
@@ -126,12 +131,14 @@ class POS:
 
     def import_data(self,
                     dataset: Dataset,
-                    casetype: CaseType,
+                    train_casetype: CaseType,
+                    test_casetype: CaseType,
                     test_size: float = 0.2):
         """
 
         :param dataset:
-        :param casetype:
+        :param train_casetype:
+        :param test_casetype:
         :param test_size:
         :return:
         """
@@ -140,22 +147,32 @@ class POS:
             print("Importing data...")
         # store parameters
         self.dataset = dataset
-        self.casetype = casetype
+        self.train_casetype = train_casetype
+        self.test_casetype = test_casetype
         # load data
         train_x, train_y, test_x, test_y, dev_x, dev_y = None, None, None, None, None, None
         if dataset == Dataset.PTB_DUMMY:
             # instantiate data loader
             ptb = PTB()
-            # load first section
-            if casetype == CaseType.CASED:
-                data_x, data_y = ptb.load_data([0])
-            elif casetype == CaseType.UNCASED:
-                data_x, data_y = ptb.load_data_lowercase([0])
-            elif casetype == CaseType.TRUECASE:
-                data_x, data_y = ptb.load_data_truecase([0])
             # split data: train: 4 sentences, dev & test: 2 sentences each with 1 overlapping sentences
+            data_x, data_y = ptb.load_data([0])
+            # development data
+            dev_x, dev_y = data_x[0:2], data_y[0:2]  # always use cased
+            # training data
+            if train_casetype == CaseType.CASED:
+                data_x, data_y = ptb.load_data([0])
+            elif train_casetype == CaseType.UNCASED:
+                data_x, data_y = ptb.load_data_lowercase([0])
+            elif train_casetype == CaseType.TRUECASE:
+                data_x, data_y = ptb.load_data_truecase([0])
             train_x, train_y = data_x[1:5], data_y[1:5]
-            dev_x, dev_y = data_x[0:2], data_y[0:2]
+            # test data
+            if test_casetype == CaseType.CASED:
+                data_x, data_y = ptb.load_data([0])
+            elif test_casetype == CaseType.UNCASED:
+                data_x, data_y = ptb.load_data_lowercase([0])
+            elif test_casetype == CaseType.TRUECASE:
+                data_x, data_y = ptb.load_data_truecase([0])
             test_x, test_y = data_x[4:6], data_y[4:6]
 
         elif dataset == Dataset.PTB or dataset == Dataset.PTB_REDUCED:
@@ -168,33 +185,50 @@ class POS:
             # test sections: 22..24
             test_sections = range(22, 25) if dataset == Dataset.PTB else range(7, 9)
             # load data
-            if casetype == CaseType.CASED:
+            # development data
+            dev_x, dev_y = ptb.load_data(dev_sections)  # always use cased
+
+            # training data
+            if train_casetype == CaseType.CASED:
                 train_x, train_y = ptb.load_data(train_sections)
-                dev_x, dev_y = ptb.load_data(dev_sections)
-                test_x, test_y = ptb.load_data(test_sections)
-            elif casetype == CaseType.UNCASED:
+            elif train_casetype == CaseType.UNCASED:
                 train_x, train_y = ptb.load_data_lowercase(train_sections)
-                dev_x, dev_y = ptb.load_data_lowercase(dev_sections)
-                test_x, test_y = ptb.load_data_lowercase(test_sections)
-            elif casetype == CaseType.TRUECASE:
+            elif train_casetype == CaseType.TRUECASE:
                 train_x, train_y = ptb.load_data_truecase(train_sections)
-                dev_x, dev_y = ptb.load_data_truecase(dev_sections)
-                test_x, test_y = ptb.load_data_truecase(test_sections)
+
+            # test data
+            if test_casetype == CaseType.CASED:
+                test_x, test_y = ptb.load_data(train_sections)
+            elif test_casetype == CaseType.UNCASED:
+                test_x, test_y = ptb.load_data_lowercase(train_sections)
+            elif test_casetype == CaseType.TRUECASE:
+                ttest_x, test_y = ptb.load_data_truecase(train_sections)
 
         elif dataset == Dataset.BROWN or dataset == Dataset.CONLL2000:
             # instantiate data loader
             data_loader = Brown() if dataset == Dataset.BROWN else CoNLL2000()
-            # load data
-            if casetype == CaseType.CASED:
-                data_x, data_y = data_loader.load_data()
-            elif casetype == CaseType.UNCASED:
-                data_x, data_y = data_loader.load_data_lowercase()
-            elif casetype == CaseType.TRUECASE:
-                data_x, data_y = data_loader.load_data_truecase()
+
+            # training data
+            if train_casetype == CaseType.CASED:
+                train_x, train_y = data_loader.load_data()
+            elif train_casetype == CaseType.UNCASED:
+                train_x, train_y = data_loader.load_data_lowercase()
+            elif train_casetype == CaseType.TRUECASE:
+                train_x, train_y = data_loader.load_data_truecase()
+            # test data
+            if test_casetype == CaseType.CASED:
+                test_x, test_y = data_loader.load_data()
+            elif test_casetype == CaseType.UNCASED:
+                test_x, test_y = data_loader.load_data_lowercase()
+            elif test_casetype == CaseType.TRUECASE:
+                test_x, test_y = data_loader.load_data_truecase()
+
+            # compute train/test dataset size
+            total_size = len(train_x)
+            start, middle, end = 0, (1.0-test_size)*total_size, total_size
             # split data
-            train_x, test_x, train_y, test_y = train_test_split(data_x, data_y,
-                                                                test_size=test_size,
-                                                                shuffle=True)  # do not expect data to be pre-shuffled
+            train_x, train_y = train_x[start: middle], train_y[start: middle]
+            test_x, test_y = test_x[middle:end], test_y[middle:end]
         else:
             raise RuntimeError("Unknown dataset.")
         # store dataset internally
@@ -264,7 +298,7 @@ class POS:
 
         if embedding == Embedding.ELMO:
             # try to load embeddings (elmo uses a lot of CPU/RAM resources, therefore, we save them to disk for re-use)
-            path_data_x = "elmo_embedding_{}_{}_data_x.npz".format(self.dataset.name, self.casetype.name)
+            path_data_x = "elmo_embedding_{}_train_{}_test_{}_data_x.npz".format(self.dataset.name, self.train_casetype.name, self.test_casetype.name)
             if isfile(path_data_x):
                 with np.load(path_data_x) as data:
                     self.dataset_x_embedded["train_x_embedded"], self.train_x_embedded = data["train_x_embedded"], data[
@@ -306,10 +340,12 @@ class POS:
                         data_x_embedding = preprocessor.embedding(self.data_x[dataset])
                     # store data internally
                     self.dataset_x_embedded[self.dataset_map[dataset]] = data_x_embedding
-                    self.train_x_embedded, self.test_x_embedded, self.dev_x_embedded = self.dataset_x_embedded["train_x_embedded"], self.dataset_x_embedded["test_x_embedded"], self.dataset_x_embedded["dev_x_embedded"]
+                self.train_x_embedded, self.test_x_embedded, self.dev_x_embedded = self.dataset_x_embedded["train_x_embedded"], self.dataset_x_embedded["test_x_embedded"], self.dataset_x_embedded["dev_x_embedded"]
 
                 # store data to file
-                path_data_x = "elmo_embedding_{}_{}_data_x.npz".format(self.dataset.name, self.casetype.name)
+                path_data_x = "elmo_embedding_{}_train_{}_test_{}_data_x.npz".format(self.dataset.name,
+                                                                                     self.train_casetype.name,
+                                                                                     self.test_casetype.name)
                 np.savez(path_data_x,
                          train_x_embedded=self.dataset_x_embedded["train_x_embedded"],
                          test_x_embedded=self.dataset_x_embedded["test_x_embedded"],
@@ -350,7 +386,7 @@ class POS:
     def model_name(self) -> str:
         if self.model_details is None:
             return ""
-        return "{}_{}units_{}dropout_{}recdropout_{}lr".format(self.model_details["name"],
+        return "{}_{}units_{}dropout_{}recdropout_{}lr".format(self.model_details["model"].name,
                                                                self.model_details["lstm_hidden_units"],
                                                                self.model_details["lstm_dropout"],
                                                                self.model_details["lstm_recurrent_dropout"],
@@ -362,14 +398,6 @@ class POS:
                             lstm_recurrent_dropout=0.1,
                             num_gpus=1,
                             learning_rate=1e-3):
-        # set model details
-        self.model_details = dict()
-        self.model_details["name"] = "bilstm"
-        self.model_details["lstm_hidden_units"] = lstm_hidden_units
-        self.model_details["lstm_dropout"] = lstm_dropout
-        self.model_details["lstm_recurrent_dropout"] = lstm_recurrent_dropout
-        self.model_details["learning_rate"] = learning_rate
-
         # create model
         self.model = Sequential()
         self.model.add(Bidirectional(layer=LSTM(units=lstm_hidden_units,
@@ -392,26 +420,18 @@ class POS:
                             lstm_recurrent_dropout=0.1,
                             num_gpus=1,
                             learning_rate=1e-3):
-        # set model details
-        self.model_details = dict()
-        self.model_details["name"] = "bilstmcrf"
-        self.model_details["lstm_hidden_units"] = lstm_hidden_units
-        self.model_details["lstm_dropout"] = lstm_dropout
-        self.model_details["lstm_recurrent_dropout"] = lstm_recurrent_dropout
-        self.model_details["learning_rate"] = learning_rate
-
         # create model
         self.model = Sequential()
         self.model.add(Bidirectional(layer=LSTM(units=lstm_hidden_units,
                                                 return_sequences=True,
                                                 dropout=lstm_dropout,
                                                 recurrent_dropout=lstm_recurrent_dropout),
-                                     input_shape=(self.max_len, self.dim_embedding_vec)))
+                                                input_shape=(self.max_sentence_length, self.dim_embedding_vec)))
         self.model.add(TimeDistributed(Dense(self.num_categories, activation="relu")))
         crf = CRF(self.num_categories)
         self.model.add(crf)
         # self.model = to_multi_gpu(self.model, n_gpus=num_gpus)
-        self.model.compile(optimizer="rmsprop", loss=crf.loss_function, metrics=[crf.accuracy])
+        self.model.compile(optimizer=Adam(learning_rate), loss=crf.loss_function, metrics=[crf.accuracy]) # rmsprop
 
         if self.log_level.value >= LogLevel.LIMITED.value:
             self.model.summary()
@@ -428,6 +448,7 @@ class POS:
         self.model.save_weights("{}.h5".format(self.model_name()))
 
     def try_load_model(self) -> bool:
+        return False  # save/load doesn't match (https://github.com/keras-team/keras/issues/4875) -> temporary disabled
         if isfile("{}.json".format(self.model_name())) and isfile("{}.h5".format(self.model_name())):
             if self.log_level.value >= LogLevel.LIMITED.value:
                 print("Loading model from file...")
@@ -435,27 +456,38 @@ class POS:
             json_file = open("{}.json".format(self.model_name()), "r")
             loaded_model_json = json_file.read()
             json_file.close()
-            self.model = model_from_json(loaded_model_json)
+            self.model = model_from_json(loaded_model_json, custom_objects={"CRF": CRF})
             # load pre-trained weights
             self.model.load_weights("{}.h5".format(self.model_name()))
+            # compile model
+            if self.model_details["model"] == Model.BILSTM:
+                self.model.compile(loss="categorical_crossentropy",
+                                   optimizer=Adam(self.model_details["learning_rate"]),
+                                   metrics=["accuracy"])
+            else:
+                crf = CRF(self.num_categories)
+                self.model.compile(optimizer="rmsprop", loss=crf.loss_function, metrics=[crf.accuracy])
+
             return True
         return False
 
     def train_model(self,
                     batch_size=1024,
                     epochs=40):
-        es = EarlyStopping(monitor="accuracy", mode="max", verbose=1, patience=4)
+        es = EarlyStopping(monitor="accuracy", mode="max", verbose=1, patience=4, min_delta=1e-3)
         # mc = ModelCheckpoint('best_model.h5', monitor='val_accuracy', mode='max', verbose=1, save_best_only=True)
         # fit model
         history = self.model.fit(self.train_x_embedded, to_categorical(self.train_y_int, self.num_categories),
                                  batch_size=batch_size,
                                  epochs=epochs,
                                  callbacks=[es])
-        # store history
-        from matplotlib import pyplot
-        pyplot.plot(history.history["accuracy"], label="train")
-        pyplot.legend()
-        pyplot.show()
+        # store history to file
+        np.savetxt(self.model_name() + "_history_epoch", history.epoch)
+        np.savetxt(self.model_name() + "_history_loss", history.history["loss"])
+        if self.model_details["model"] == Model.BILSTM_CRF:
+            np.savetxt(self.model_name() + "_history_accuracy", history.history["crf_viterbi_accuracy"])
+        else:
+            np.savetxt(self.model_name() + "_history_accuracy", history.history["accuracy"])
 
     def model_accuracy(self):
 
@@ -479,51 +511,125 @@ class POS:
         print("accuracy: {}".format(accuracy))
         return accuracy
 
+    def set_model_params(self,
+                            model=Model.BILSTM_CRF,
+                            lstm_hidden_units=1024,
+                            lstm_dropout=0.1,
+                            lstm_recurrent_dropout=0.1,
+                            num_gpus=1,
+                            learning_rate=1e-3):
+        # set model details
+        self.model_details = dict()
+        self.model_details["model"] = model
+        self.model_details["lstm_hidden_units"] = lstm_hidden_units
+        self.model_details["lstm_dropout"] = lstm_dropout
+        self.model_details["lstm_recurrent_dropout"] = lstm_recurrent_dropout
+        self.model_details["num_gpus"] = num_gpus
+        self.model_details["learning_rate"] = learning_rate
+
+    def create_model(self):
+
+        if self.model_details["model"] == Model.BILSTM:
+            self.create_model_bilstm(
+                lstm_hidden_units=self.model_details["lstm_hidden_units"],
+                lstm_dropout=self.model_details["lstm_dropout"],
+                lstm_recurrent_dropout=self.model_details["lstm_recurrent_dropout"],
+                num_gpus=self.model_details["num_gpus"],
+                learning_rate=self.model_details["learning_rate"])
+        elif self.model_details["model"] == Model.BILSTM_CRF:
+            self.create_model_bilstm_crf(
+                lstm_hidden_units = self.model_details["lstm_hidden_units"],
+                lstm_dropout = self.model_details["lstm_dropout"],
+                lstm_recurrent_dropout = self.model_details["lstm_recurrent_dropout"],
+                num_gpus = self.model_details["num_gpus"],
+                learning_rate = self.model_details["learning_rate"])
+        else:
+            raise RuntimeError("Undefined model.")
+
 
 if __name__ == "__main__":
     # parse arguments
     parser: ArgumentParser = ArgumentParser()
-    parser.add_argument("-d", "--dataset", default="PTB_DUMMY", choices=[x.name for x in Dataset])
-    parser.add_argument("-c", "--casetype", default="CASED", choices=[x.name for x in CaseType])
-    parser.add_argument("-v", "--loglevel", default="FULL", choices=[x.name for x in LogLevel])
-    parser.add_argument("-e", "--embedding", default="ELMO", choices=[x.name for x in Embedding])
-    parser.add_argument("-w", "--datasource_word2vec", default="GOOGLE_NEWS_300",
+    parser.add_argument("-d", "--dataset", default=Dataset.PTB_DUMMY.name, choices=[x.name for x in Dataset])
+    parser.add_argument("-ctr", "--traincasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
+    parser.add_argument("-cte", "--testcasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
+
+    parser.add_argument("-v", "--loglevel", default=LogLevel.FULL.name, choices=[x.name for x in LogLevel])
+    parser.add_argument("-e", "--embedding", default=Embedding.ELMO.name, choices=[x.name for x in Embedding])
+    parser.add_argument("-w", "--datasource_word2vec", default=DataSourceWord2Vec.GOOGLE_NEWS_300.name,
                         choices=[x.name for x in DataSourceWord2Vec])
-    parser.add_argument("-g", "--datasource_glove", default="COMMON_CRAWL_840B_CASED_300D",
+    parser.add_argument("-g", "--datasource_glove", default=DataSourceGlove.COMMON_CRAWL_840B_CASED_300D.name,
                         choices=[x.name for x in DataSourceGlove])
-    parser.add_argument("-n", "--numgpus", default="1")
+
+    parser.add_argument("-b", "--batchsize", default="1024")
+    parser.add_argument("-p", "--epochs", default="40")
+
+    parser.add_argument("-m", "--model", default=Model.BILSTM.name, choices=[x.name for x in Model])
+
+    parser.add_argument("-ng", "--numgpus", default="1")
+    parser.add_argument("-lr", "--learningrate", default="1e-3")
+
+    parser.add_argument("-hu", "--lstmhiddenunits", default="1024")
+    parser.add_argument("-dr", "--lstmdropout", default="1e-1")
+    parser.add_argument("-rdr", "--lstmrecdropout", default="1e-1")
+
 
     args = parser.parse_args()
 
     # convert args to correct data types
     dataset: Dataset = Dataset[args.dataset]
-    casetype: CaseType = CaseType[args.casetype]
+    train_casetype: CaseType = CaseType[args.traincasetype]
+    test_casetype: CaseType = CaseType[args.testcasetype]
+
+
     log_level: LogLevel = LogLevel[args.loglevel]
     embedding: Embedding = Embedding[args.embedding]
     datasource_word2vec: DataSourceWord2Vec = DataSourceWord2Vec[args.datasource_word2vec]
     datasource_glove: DataSourceGlove = DataSourceGlove[args.datasource_glove]
+    batch_size: int = int(args.batchsize)
+    epochs: int = int(args.epochs)
+    model: Model = Model[args.model]
+
+    learning_rate: float = float(args.learningrate)
     num_gpus: int = int(args.numgpus)
+    lstm_hidden_units: int = int(args.lstmhiddenunits)
+    lstm_dropout: float = float(args.lstmdropout)
+    lstm_recurrent_dropout: float = float(args.lstmrecdropout)
 
     if log_level.value >= LogLevel.LIMITED.value:
         print("Dataset is: {}".format(dataset.name))
-        print("Casetype is: {}".format(casetype.name))
+        print("Casetype training data is: {}".format(train_casetype.name))
+        print("Casetype test data is: {}".format(test_casetype.name))
         print("Log level is: {}".format(log_level.name))
         print("Embedding is: {}".format(embedding.name))
-        print("Data source word2vec is: {}".format(datasource_word2vec.name))
-        print("Data source glove is: {}".format(datasource_glove.name))
+        if embedding == Embedding.WORD2VEC:
+            print("Data source word2vec is: {}".format(datasource_word2vec.name))
+        if embedding == Embedding.GLOVE:
+            print("Data source glove is: {}".format(datasource_glove.name))
         print("Number of GPUs is: {}".format(num_gpus))
+
+    from keras.backend import manual_variable_initialization
+    manual_variable_initialization(True)
 
     pos = POS(log_level=log_level,
               data_source_word2vec=datasource_word2vec,
               data_source_glove=datasource_glove)
     pos.set_cuda_visible_devices(devices=None)
     pos.import_data(dataset=dataset,
-                    casetype=casetype)
+                    train_casetype=train_casetype,
+                    test_casetype=test_casetype)
     pos.pad_sequence()
     pos.embedding(embedding=embedding)
     pos.map_y()
+    pos.set_model_params(model=model,
+                         lstm_hidden_units=lstm_hidden_units,
+                         lstm_dropout=lstm_dropout,
+                         lstm_recurrent_dropout=lstm_recurrent_dropout,
+                         num_gpus=num_gpus,
+                         learning_rate=learning_rate)
+
     if not pos.try_load_model():
-        pos.create_model_bilstm(num_gpus=num_gpus)
+        pos.create_model()
         pos.train_model()
         pos.save_model()
     pos.model_accuracy()
@@ -532,3 +638,4 @@ if __name__ == "__main__":
     if pos.log_level.value >= LogLevel.LIMITED.value:
         print("Exit.")
     sys.exit(0)
+
