@@ -1,10 +1,6 @@
 import nltk
-from truecase import load_truecaser, load_truecase_dataset, evaluate
-import pickle as pkl
+from truecase.external_utils import predict_truecasing
 
-import torch
-from torch import nn
-from torch.utils.data import DataLoader
 
 class Brown:
 
@@ -26,7 +22,8 @@ class Brown:
         return self.load_data(text_map_func=str.lower)
 
     def load_data_truecase(self):
-        raise NotImplementedError()
+        lower_sentence, tag = self.load_data_lowercase()
+        return predict_truecasing(lower_sentence), tag
 
 
 if __name__ == "__main__":

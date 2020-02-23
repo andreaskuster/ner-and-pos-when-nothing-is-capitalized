@@ -15,6 +15,7 @@
 import os
 import json
 import nltk
+from truecase.external_utils import predict_truecasing
 
 
 class PTB:
@@ -52,8 +53,9 @@ class PTB:
                               text_map_func=str.lower)
 
     def load_data_truecase(self, sections):
-        raise NotImplementedError()
-
+        lower_sentence, tag = self.load_data_lowercase()
+        return predict_truecasing(lower_sentence), tag
+    
 
 if __name__ == "__main__":
     # instantiate class

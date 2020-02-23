@@ -1,4 +1,5 @@
 import nltk
+from truecase.external_utils import predict_truecasing
 
 
 class CoNLL2000:
@@ -21,7 +22,8 @@ class CoNLL2000:
         return self.load_data(text_map_func=str.lower)
 
     def load_data_truecase(self):
-        raise NotImplementedError()
+        lower_sentence, tag = self.load_data_lowercase()
+        return predict_truecasing(lower_sentence), tag
 
     
 if __name__ == "__main__":
