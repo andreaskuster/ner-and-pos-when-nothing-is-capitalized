@@ -20,7 +20,10 @@ class CoNLL2000:
     def load_data_lowercase(self):
         return self.load_data(text_map_func=str.lower)
 
+    def load_data_truecase(self):
+        raise NotImplementedError()
 
+    
 if __name__ == "__main__":
     # instantiate class
     conll2000 = CoNLL2000()
