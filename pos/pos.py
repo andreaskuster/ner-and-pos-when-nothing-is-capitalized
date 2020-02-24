@@ -88,6 +88,7 @@ class POS:
         # casetype
         self.train_casetype = None
         self.test_casetype = None
+        self.dev_casetype = None
         # dataset
         self.train_x, self.train_y, self.test_x, self.test_y, self.dev_x, self.dev_y = None, None, None, None, None, None
         self.data_x: dict = None
@@ -158,14 +159,11 @@ class POS:
             print("Importing data...")
         if dev_casetype is None:
             dev_casetype = test_casetype
-        # add casing to model paramas
-        self.model_details["train_casetype"] = train_casetype
-        self.model_details["test_casetype"] = test_casetype
-        self.model_details["dev_casetype"] = dev_casetype
         # store parameters
         self.dataset = dataset
         self.train_casetype = train_casetype
         self.test_casetype = test_casetype
+        self.dev_casetype = dev_casetype
         # load data
         train_x, train_y, test_x, test_y, dev_x, dev_y = None, None, None, None, None, None
         if dataset == Dataset.PTB_DUMMY:
@@ -334,7 +332,7 @@ class POS:
 
         if embedding == Embedding.ELMO:
             # try to load embeddings (elmo uses a lot of CPU/RAM resources, therefore, we save them to disk for re-use)
-            path_data_x = "elmo_embedding_{}_train_{}_test_{}_data_x.npz".format(self.dataset.name, self.train_casetype.name, self.test_casetype.name)
+            path_data_x = "elmo_embedding_{}_train_{}_test_{}_dev_{}_data_x.npz".format(self.dataset.name, self.train_casetype.name, self.test_casetype.name, self.dev_casetype.name)
             if isfile(path_data_x):
                 with np.load(path_data_x) as data:
                     self.dataset_x_embedded["train_x_embedded"], self.train_x_embedded = data["train_x_embedded"], data[
@@ -379,9 +377,10 @@ class POS:
                 self.train_x_embedded, self.test_x_embedded, self.dev_x_embedded = self.dataset_x_embedded["train_x_embedded"], self.dataset_x_embedded["test_x_embedded"], self.dataset_x_embedded["dev_x_embedded"]
 
                 # store data to file
-                path_data_x = "elmo_embedding_{}_train_{}_test_{}_data_x.npz".format(self.dataset.name,
+                path_data_x = "elmo_embedding_{}_train_{}_test_{}_dev_{}_data_x.npz".format(self.dataset.name,
                                                                                      self.train_casetype.name,
-                                                                                     self.test_casetype.name)
+                                                                                     self.test_casetype.name,
+                                                                                    self.dev_casetype.name)
                 np.savez(path_data_x,
                          train_x_embedded=self.dataset_x_embedded["train_x_embedded"],
                          test_x_embedded=self.dataset_x_embedded["test_x_embedded"],
@@ -431,9 +430,9 @@ class POS:
                                                                self.model_details["lstm_dropout"],
                                                                self.model_details["lstm_recurrent_dropout"],
                                                                self.model_details["learning_rate"],
-                                                               self.model_details["train_casetype"],
-                                                               self.model_details["test_casetype"],
-                                                               self.model_details["dev_casetype"])
+                                                               self.train_casetype,
+                                                               self.test_casetype,
+                                                               self.dev_casetype)
 
     def create_model_bilstm(self,
                             lstm_hidden_units=1024,
@@ -653,7 +652,7 @@ if __name__ == "__main__":
     """
     # parse arguments
     parser: ArgumentParser = ArgumentParser()
-    parser.add_argument("-d", "--dataset", default=Dataset.PTB.name, choices=[x.name for x in Dataset])
+    parser.add_argument("-d", "--dataset", default=Dataset.PTB_DUMMY.name, choices=[x.name for x in Dataset])
     parser.add_argument("-ctr", "--traincasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
     parser.add_argument("-cte", "--testcasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
     parser.add_argument("-v", "--loglevel", default=LogLevel.FULL.name, choices=[x.name for x in LogLevel])
@@ -691,7 +690,7 @@ if __name__ == "__main__":
     lstm_hidden_units: int = int(args.lstmhiddenunits)
     lstm_dropout: float = float(args.lstmdropout)
     lstm_recurrent_dropout: float = float(args.lstmrecdropout)
-    hyperparameter_search: bool = bool(args.hyperparamsearch)
+    hyperparameter_search: bool = args.hyperparamsearch == "True"
 
     if log_level.value >= LogLevel.LIMITED.value:
         print("Dataset is: {}".format(dataset.name))
