@@ -215,19 +215,19 @@ class POS:
 
             # test data
             if test_casetype == CaseType.CASED:
-                test_x, test_y = ptb.load_data(train_sections)
+                test_x, test_y = ptb.load_data(test_sections)
             elif test_casetype == CaseType.UNCASED:
-                test_x, test_y = ptb.load_data_lowercase(train_sections)
+                test_x, test_y = ptb.load_data_lowercase(test_sections)
             elif test_casetype == CaseType.TRUECASE:
-                test_x, test_y = ptb.load_data_truecase(train_sections)
+                test_x, test_y = ptb.load_data_truecase(test_sections)
 
             # dev data
             if dev_casetype == CaseType.CASED:
-                test_x, test_y = ptb.load_data(dev_sections)
+                dev_x, dev_y = ptb.load_data(dev_sections)
             elif dev_casetype == CaseType.UNCASED:
-                test_x, test_y = ptb.load_data_lowercase(dev_sections)
+                dev_x, dev_y = ptb.load_data_lowercase(dev_sections)
             elif dev_casetype == CaseType.TRUECASE:
-                test_x, test_y = ptb.load_data_truecase(dev_sections)
+                dev_x, dev_y  = ptb.load_data_truecase(dev_sections)
 
         elif dataset == Dataset.BROWN or dataset == Dataset.CONLL2000:
             # instantiate data loader
@@ -643,7 +643,7 @@ if __name__ == "__main__":
     """
     # parse arguments
     parser: ArgumentParser = ArgumentParser()
-    parser.add_argument("-d", "--dataset", default=Dataset.PTB_DUMMY.name, choices=[x.name for x in Dataset])
+    parser.add_argument("-d", "--dataset", default=Dataset.PTB.name, choices=[x.name for x in Dataset])
     parser.add_argument("-ctr", "--traincasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
     parser.add_argument("-cte", "--testcasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
     parser.add_argument("-v", "--loglevel", default=LogLevel.FULL.name, choices=[x.name for x in LogLevel])
