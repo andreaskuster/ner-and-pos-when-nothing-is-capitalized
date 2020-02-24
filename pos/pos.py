@@ -61,6 +61,7 @@ class DataSourceWord2Vec(Enum):
 class DataSourceGlove(Enum):
     COMMON_CRAWL_840B_CASED_300D: Tuple[str, str] = ("common_crawl_840b_cased", "glove.840B.300d.txt")
 
+
 class Model(Enum):
     BILSTM = "bilstm"
     BILSTM_CRF = "bilstmcrf"
@@ -73,6 +74,13 @@ class POS:
                  data_source_word2vec: DataSourceWord2Vec = DataSourceWord2Vec.GOOGLE_NEWS_300,
                  data_source_glove: DataSourceGlove = DataSourceGlove.COMMON_CRAWL_840B_CASED_300D,
                  batch_size_embedding: int = 4096):
+        """
+        TODO: add description
+        :param log_level:
+        :param data_source_word2vec:
+        :param data_source_glove:
+        :param batch_size_embedding:
+        """
         # log level
         self.log_level: LogLevel = log_level  # 0: none, 1: limited, 2: full
         # dataset
@@ -133,13 +141,15 @@ class POS:
                     dataset: Dataset,
                     train_casetype: CaseType,
                     test_casetype: CaseType,
-                    test_size: float = 0.2):
+                    test_size: float = 0.1,
+                    dev_size: float = 0.1):
         """
-
+        TODO: add description
         :param dataset:
         :param train_casetype:
         :param test_casetype:
         :param test_size:
+        :param dev_size:
         :return:
         """
         # report action
@@ -248,7 +258,7 @@ class POS:
 
     def pad_sequence(self):
         """
-
+        TODO: add description
         :return:
         """
         # report action
@@ -270,7 +280,7 @@ class POS:
 
     def embedding(self, embedding: Embedding):
         """
-
+        TODO: add description
         :param embedding:
         :return:
         """
@@ -360,7 +370,7 @@ class POS:
 
     def map_y(self):
         """
-
+        TODO: add description
         :return:
         """
         # report action
@@ -384,6 +394,10 @@ class POS:
         self.train_y_int, self.test_y_int, self.dev_y_int = self.dataset_y_int["train_y_int"], self.dataset_y_int["test_y_int"], self.dataset_y_int["dev_y_int"]
 
     def model_name(self) -> str:
+        """
+        TODO: add description
+        :return:
+        """
         if self.model_details is None:
             return ""
         return "{}_{}units_{}dropout_{}recdropout_{}lr".format(self.model_details["model"].name,
@@ -398,6 +412,15 @@ class POS:
                             lstm_recurrent_dropout=0.1,
                             num_gpus=1,
                             learning_rate=1e-3):
+        """
+        TODO: add description
+        :param lstm_hidden_units:
+        :param lstm_dropout:
+        :param lstm_recurrent_dropout:
+        :param num_gpus:
+        :param learning_rate:
+        :return:
+        """
         # create model
         self.model = Sequential()
         self.model.add(Bidirectional(layer=LSTM(units=lstm_hidden_units,
@@ -420,6 +443,15 @@ class POS:
                             lstm_recurrent_dropout=0.1,
                             num_gpus=1,
                             learning_rate=1e-3):
+        """
+        TODO: add description
+        :param lstm_hidden_units:
+        :param lstm_dropout:
+        :param lstm_recurrent_dropout:
+        :param num_gpus:
+        :param learning_rate:
+        :return:
+        """
         # create model
         self.model = Sequential()
         self.model.add(Bidirectional(layer=LSTM(units=lstm_hidden_units,
@@ -437,6 +469,10 @@ class POS:
             self.model.summary()
 
     def save_model(self):
+        """
+        TODO: add description
+        :return:
+        """
         if self.log_level.value >= LogLevel.LIMITED.value:
             print("Save model to file...")
         # serialize model
@@ -448,6 +484,10 @@ class POS:
         self.model.save_weights("{}.h5".format(self.model_name()))
 
     def try_load_model(self) -> bool:
+        """
+        TODO: add description
+        :return:
+        """
         return False  # save/load doesn't match (https://github.com/keras-team/keras/issues/4875) -> temporary disabled
         if isfile("{}.json".format(self.model_name())) and isfile("{}.h5".format(self.model_name())):
             if self.log_level.value >= LogLevel.LIMITED.value:
@@ -474,6 +514,12 @@ class POS:
     def train_model(self,
                     batch_size=1024,
                     epochs=40):
+        """
+        TODO: add description
+        :param batch_size:
+        :param epochs:
+        :return:
+        """
         es = EarlyStopping(monitor="accuracy", mode="max", verbose=1, patience=4, min_delta=1e-3)
         # mc = ModelCheckpoint('best_model.h5', monitor='val_accuracy', mode='max', verbose=1, save_best_only=True)
         # fit model
@@ -490,7 +536,10 @@ class POS:
             np.savetxt(self.model_name() + "_history_accuracy", history.history["accuracy"])
 
     def model_accuracy(self):
-
+        """
+        TODO: add description
+        :return:
+        """
         y_pred = self.model.predict(self.test_x_embedded)
 
         total = 0
@@ -518,6 +567,16 @@ class POS:
                             lstm_recurrent_dropout=0.1,
                             num_gpus=1,
                             learning_rate=1e-3):
+        """
+        TODO: add description
+        :param model:
+        :param lstm_hidden_units:
+        :param lstm_dropout:
+        :param lstm_recurrent_dropout:
+        :param num_gpus:
+        :param learning_rate:
+        :return:
+        """
         # set model details
         self.model_details = dict()
         self.model_details["model"] = model
@@ -528,7 +587,10 @@ class POS:
         self.model_details["learning_rate"] = learning_rate
 
     def create_model(self):
-
+        """
+        TODO: add description
+        :return:
+        """
         if self.model_details["model"] == Model.BILSTM:
             self.create_model_bilstm(
                 lstm_hidden_units=self.model_details["lstm_hidden_units"],
@@ -548,27 +610,25 @@ class POS:
 
 
 if __name__ == "__main__":
+    """
+    TODO: add description
+    """
     # parse arguments
     parser: ArgumentParser = ArgumentParser()
     parser.add_argument("-d", "--dataset", default=Dataset.PTB_DUMMY.name, choices=[x.name for x in Dataset])
     parser.add_argument("-ctr", "--traincasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
     parser.add_argument("-cte", "--testcasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
-
     parser.add_argument("-v", "--loglevel", default=LogLevel.FULL.name, choices=[x.name for x in LogLevel])
     parser.add_argument("-e", "--embedding", default=Embedding.ELMO.name, choices=[x.name for x in Embedding])
     parser.add_argument("-w", "--datasource_word2vec", default=DataSourceWord2Vec.GOOGLE_NEWS_300.name,
                         choices=[x.name for x in DataSourceWord2Vec])
     parser.add_argument("-g", "--datasource_glove", default=DataSourceGlove.COMMON_CRAWL_840B_CASED_300D.name,
                         choices=[x.name for x in DataSourceGlove])
-
     parser.add_argument("-b", "--batchsize", default="1024")
     parser.add_argument("-p", "--epochs", default="40")
-
     parser.add_argument("-m", "--model", default=Model.BILSTM.name, choices=[x.name for x in Model])
-
     parser.add_argument("-ng", "--numgpus", default="1")
     parser.add_argument("-lr", "--learningrate", default="1e-3")
-
     parser.add_argument("-hu", "--lstmhiddenunits", default="1024")
     parser.add_argument("-dr", "--lstmdropout", default="1e-1")
     parser.add_argument("-rdr", "--lstmrecdropout", default="1e-1")
@@ -580,8 +640,6 @@ if __name__ == "__main__":
     dataset: Dataset = Dataset[args.dataset]
     train_casetype: CaseType = CaseType[args.traincasetype]
     test_casetype: CaseType = CaseType[args.testcasetype]
-
-
     log_level: LogLevel = LogLevel[args.loglevel]
     embedding: Embedding = Embedding[args.embedding]
     datasource_word2vec: DataSourceWord2Vec = DataSourceWord2Vec[args.datasource_word2vec]
@@ -589,7 +647,6 @@ if __name__ == "__main__":
     batch_size: int = int(args.batchsize)
     epochs: int = int(args.epochs)
     model: Model = Model[args.model]
-
     learning_rate: float = float(args.learningrate)
     num_gpus: int = int(args.numgpus)
     lstm_hidden_units: int = int(args.lstmhiddenunits)
@@ -607,9 +664,7 @@ if __name__ == "__main__":
         if embedding == Embedding.GLOVE:
             print("Data source glove is: {}".format(datasource_glove.name))
         print("Number of GPUs is: {}".format(num_gpus))
-
-    from keras.backend import manual_variable_initialization
-    manual_variable_initialization(True)
+        # TODO: add remaining arguments
 
     pos = POS(log_level=log_level,
               data_source_word2vec=datasource_word2vec,
