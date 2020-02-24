@@ -428,7 +428,7 @@ class POS:
         """
         if self.model_details is None:
             return ""
-        return "{}_{}units_{}dropout_{}recdropout_{}lr_{}train_{}test_{}dev".format(self.model_details["model"].name,
+        return "{}_{}_units_{}_dropout_{}_recdropout_{}_lr_{}_train_{}_test_{}_dev".format(self.model_details["model"].name,
                                                                self.model_details["lstm_hidden_units"],
                                                                self.model_details["lstm_dropout"],
                                                                self.model_details["lstm_recurrent_dropout"],
@@ -721,10 +721,10 @@ if __name__ == "__main__":
 
     if hyperparameter_search:
         _MODELS = [Model.BILSTM_CRF]
-        _LSTM_HIDDEN_UNITS = [16, 64, 256, 1024, 2048]
-        _LSTM_DROPOUT = [1e-2, 1e-3]
-        _LSTM_RECURRENT_DROPOUT = [1e-2, 1e-3]
-        _LEARNING_RATE = [1e-2, 1e-3, 1e-4]
+        _LSTM_HIDDEN_UNITS = [16, 32, 64, 128, 256, 512, 1024]
+        _LSTM_DROPOUT = [0.1, 0.2, 0.3]
+        _LSTM_RECURRENT_DROPOUT = [0.1, 0.2, 0.3]
+        _LEARNING_RATE = [1e-2, 1e-3]
 
         for model in _MODELS:
             for lstm_hidden_units in _LSTM_HIDDEN_UNITS:
