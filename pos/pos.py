@@ -332,7 +332,10 @@ class POS:
 
         if embedding == Embedding.ELMO:
             # try to load embeddings (elmo uses a lot of CPU/RAM resources, therefore, we save them to disk for re-use)
-            path_data_x = "elmo_embedding_{}_train_{}_test_{}_dev_{}_data_x.npz".format(self.dataset.name, self.train_casetype.name, self.test_casetype.name, self.dev_casetype.name)
+            path_data_x = "elmo_embedding_{}_train_{}_test_{}_dev_{}_data_x.npz".format(self.dataset.name,
+                                                                                        self.train_casetype.name,
+                                                                                        self.test_casetype.name,
+                                                                                        self.dev_casetype.name)
             if isfile(path_data_x):
                 with np.load(path_data_x) as data:
                     self.dataset_x_embedded["train_x_embedded"], self.train_x_embedded = data["train_x_embedded"], data[
@@ -430,9 +433,9 @@ class POS:
                                                                self.model_details["lstm_dropout"],
                                                                self.model_details["lstm_recurrent_dropout"],
                                                                self.model_details["learning_rate"],
-                                                               self.train_casetype,
-                                                               self.test_casetype,
-                                                               self.dev_casetype)
+                                                               self.train_casetype.name,
+                                                               self.test_casetype.name,
+                                                               self.dev_casetype.name)
 
     def create_model_bilstm(self,
                             lstm_hidden_units=1024,
