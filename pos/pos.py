@@ -141,6 +141,7 @@ class POS:
                     dataset: Dataset,
                     train_casetype: CaseType,
                     test_casetype: CaseType,
+                    dev_casetype: CaseType = None,
                     test_size: float = 0.1,
                     dev_size: float = 0.1):
         """
@@ -155,6 +156,8 @@ class POS:
         # report action
         if self.log_level.value >= LogLevel.LIMITED.value:
             print("Importing data...")
+        if dev_casetype is None:
+            dev_casetype = test_casetype
         # store parameters
         self.dataset = dataset
         self.train_casetype = train_casetype
@@ -166,8 +169,6 @@ class POS:
             ptb = PTB()
             # split data: train: 4 sentences, dev & test: 2 sentences each with 1 overlapping sentences
             data_x, data_y = ptb.load_data([0])
-            # development data
-            dev_x, dev_y = data_x[0:2], data_y[0:2]  # always use cased
             # training data
             if train_casetype == CaseType.CASED:
                 data_x, data_y = ptb.load_data([0])
@@ -184,6 +185,14 @@ class POS:
             elif test_casetype == CaseType.TRUECASE:
                 data_x, data_y = ptb.load_data_truecase([0])
             test_x, test_y = data_x[4:6], data_y[4:6]
+            # dev data
+            if dev_casetype == CaseType.CASED:
+                data_x, data_y = ptb.load_data([0])
+            elif dev_casetype == CaseType.UNCASED:
+                data_x, data_y = ptb.load_data_lowercase([0])
+            elif dev_casetype == CaseType.TRUECASE:
+                data_x, data_y = ptb.load_data_truecase([0])
+            dev_x, dev_y = data_x[0:2], data_y[0:2]  # always use cased
 
         elif dataset == Dataset.PTB or dataset == Dataset.PTB_REDUCED:
             # instantiate data loader
@@ -195,8 +204,6 @@ class POS:
             # test sections: 22..24
             test_sections = range(22, 25) if dataset == Dataset.PTB else range(7, 9)
             # load data
-            # development data
-            dev_x, dev_y = ptb.load_data(dev_sections)  # always use cased
 
             # training data
             if train_casetype == CaseType.CASED:
@@ -212,7 +219,15 @@ class POS:
             elif test_casetype == CaseType.UNCASED:
                 test_x, test_y = ptb.load_data_lowercase(train_sections)
             elif test_casetype == CaseType.TRUECASE:
-                ttest_x, test_y = ptb.load_data_truecase(train_sections)
+                test_x, test_y = ptb.load_data_truecase(train_sections)
+
+            # dev data
+            if dev_casetype == CaseType.CASED:
+                test_x, test_y = ptb.load_data(dev_sections)
+            elif dev_casetype == CaseType.UNCASED:
+                test_x, test_y = ptb.load_data_lowercase(dev_sections)
+            elif dev_casetype == CaseType.TRUECASE:
+                test_x, test_y = ptb.load_data_truecase(dev_sections)
 
         elif dataset == Dataset.BROWN or dataset == Dataset.CONLL2000:
             # instantiate data loader
@@ -232,13 +247,20 @@ class POS:
                 test_x, test_y = data_loader.load_data_lowercase()
             elif test_casetype == CaseType.TRUECASE:
                 test_x, test_y = data_loader.load_data_truecase()
-
-            # compute train/test dataset size
+            # dev data
+            if dev_casetype == CaseType.CASED:
+                test_x, test_y = data_loader.load_data()
+            elif dev_casetype == CaseType.UNCASED:
+                test_x, test_y = data_loader.load_data_lowercase()
+            elif dev_casetype == CaseType.TRUECASE:
+                test_x, test_y = data_loader.load_data_truecase()
+            # compute train/test/dev dataset size
             total_size = len(train_x)
-            start, middle, end = 0, (1.0-test_size)*total_size, total_size
+            start, middle0, middle1, end = 0, (1.0-test_size)*total_size,  (1.0-test_size-dev_size)*total_size, total_size
             # split data
-            train_x, train_y = train_x[start: middle], train_y[start: middle]
-            test_x, test_y = test_x[middle:end], test_y[middle:end]
+            train_x, train_y = train_x[start:middle0], train_y[start:middle0]
+            test_x, test_y = test_x[middle0:middle1], test_y[middle0:middle1]
+            dev_x, dev_y = dev_x[middle1:end], dev_y[middle1:end]
         else:
             raise RuntimeError("Unknown dataset.")
         # store dataset internally
