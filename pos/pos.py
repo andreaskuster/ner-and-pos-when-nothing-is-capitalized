@@ -158,6 +158,10 @@ class POS:
             print("Importing data...")
         if dev_casetype is None:
             dev_casetype = test_casetype
+        # add casing to model paramas
+        self.model_details["train_casetype"] = train_casetype
+        self.model_details["test_casetype"] = test_casetype
+        self.model_details["dev_casetype"] = dev_casetype
         # store parameters
         self.dataset = dataset
         self.train_casetype = train_casetype
@@ -422,11 +426,14 @@ class POS:
         """
         if self.model_details is None:
             return ""
-        return "{}_{}units_{}dropout_{}recdropout_{}lr".format(self.model_details["model"].name,
+        return "{}_{}units_{}dropout_{}recdropout_{}lr_{}train_{}test_{}dev".format(self.model_details["model"].name,
                                                                self.model_details["lstm_hidden_units"],
                                                                self.model_details["lstm_dropout"],
                                                                self.model_details["lstm_recurrent_dropout"],
-                                                               self.model_details["learning_rate"],)
+                                                               self.model_details["learning_rate"],
+                                                               self.model_details["train_casetype"],
+                                                               self.model_details["test_casetype"],
+                                                               self.model_details["dev_casetype"])
 
     def create_model_bilstm(self,
                             lstm_hidden_units=1024,
