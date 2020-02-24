@@ -588,7 +588,7 @@ class POS:
                     count += 1 if word == pred_word else 0
         accuracy = count / total
         print("accuracy: {}".format(accuracy))
-        np.savetxt(self.model_name() + "_test_accuracy", accuracy)
+        np.savetxt(self.model_name() + "_test_accuracy", [accuracy])
         return accuracy
 
     def set_model_params(self,
@@ -663,6 +663,7 @@ if __name__ == "__main__":
     parser.add_argument("-hu", "--lstmhiddenunits", default="1024")
     parser.add_argument("-dr", "--lstmdropout", default="1e-1")
     parser.add_argument("-rdr", "--lstmrecdropout", default="1e-1")
+    parser.add_argument("-s", "--hyperparamsearch", default="False", choices=["True", "False"])
 
 
     args = parser.parse_args()
@@ -683,6 +684,7 @@ if __name__ == "__main__":
     lstm_hidden_units: int = int(args.lstmhiddenunits)
     lstm_dropout: float = float(args.lstmdropout)
     lstm_recurrent_dropout: float = float(args.lstmrecdropout)
+    hyperparameter_search: bool = bool(args.hyperparamsearch)
 
     if log_level.value >= LogLevel.LIMITED.value:
         print("Dataset is: {}".format(dataset.name))
@@ -707,18 +709,46 @@ if __name__ == "__main__":
     pos.pad_sequence()
     pos.embedding(embedding=embedding)
     pos.map_y()
-    pos.set_model_params(model=model,
-                         lstm_hidden_units=lstm_hidden_units,
-                         lstm_dropout=lstm_dropout,
-                         lstm_recurrent_dropout=lstm_recurrent_dropout,
-                         num_gpus=num_gpus,
-                         learning_rate=learning_rate)
 
-    if not pos.try_load_model():
-        pos.create_model()
-        pos.train_model()
-        pos.save_model()
-    pos.model_accuracy()
+    if hyperparameter_search:
+        _MODELS = [Model.BILSTM_CRF]
+        _LSTM_HIDDEN_UNITS = [16, 64, 256, 1024, 2048]
+        _LSTM_DROPOUT = [1e-2, 1e-3]
+        _LSTM_RECURRENT_DROPOUT = [1e-2, 1e-3]
+        _LEARNING_RATE = [1e-2, 1e-3, 1e-4]
+
+        for model in _MODELS:
+            for lstm_hidden_units in _LSTM_HIDDEN_UNITS:
+                for lstm_dropout in _LSTM_DROPOUT:
+                    for lstm_recurrent_dropout in _LSTM_RECURRENT_DROPOUT:
+                        for learning_rate in _LEARNING_RATE:
+                            pos.set_model_params(model=model,
+                                                 lstm_hidden_units=lstm_hidden_units,
+                                                 lstm_dropout=lstm_dropout,
+                                                 lstm_recurrent_dropout=lstm_recurrent_dropout,
+                                                 num_gpus=num_gpus,
+                                                 learning_rate=learning_rate)
+
+                            if not pos.try_load_model():
+                                pos.create_model()
+                                pos.train_model()
+                                pos.save_model()
+                            pos.model_accuracy()
+
+
+    else:
+        pos.set_model_params(model=model,
+                             lstm_hidden_units=lstm_hidden_units,
+                             lstm_dropout=lstm_dropout,
+                             lstm_recurrent_dropout=lstm_recurrent_dropout,
+                             num_gpus=num_gpus,
+                             learning_rate=learning_rate)
+
+        if not pos.try_load_model():
+            pos.create_model()
+            pos.train_model()
+            pos.save_model()
+        pos.model_accuracy()
 
     # exit
     if pos.log_level.value >= LogLevel.LIMITED.value:
