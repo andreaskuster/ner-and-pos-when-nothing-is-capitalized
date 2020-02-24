@@ -542,7 +542,10 @@ class POS:
         :param epochs:
         :return:
         """
-        es = EarlyStopping(monitor="val_accuracy", mode="max", verbose=1, patience=4, min_delta=1e-3)
+        if self.model_details["model"] == Model.BILSTM_CRF:
+            es = EarlyStopping(monitor="crf_viterbi_accuracy", mode="max", verbose=1, patience=4, min_delta=1e-3)
+        else:
+            es = EarlyStopping(monitor="val_accuracy", mode="max", verbose=1, patience=4, min_delta=1e-3)
         # mc = ModelCheckpoint('best_model.h5', monitor='val_accuracy', mode='max', verbose=1, save_best_only=True)
         # fit model
         history = self.model.fit(self.train_x_embedded, to_categorical(self.train_y_int, self.num_categories),
@@ -561,7 +564,6 @@ class POS:
         else:
             np.savetxt(self.model_name() + "_history_val_accuracy", history.history["val_accuracy"])
             np.savetxt(self.model_name() + "_history_accuracy", history.history["accuracy"])
-
 
     def model_accuracy(self):
         """
