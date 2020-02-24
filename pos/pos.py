@@ -227,7 +227,7 @@ class POS:
             elif dev_casetype == CaseType.UNCASED:
                 dev_x, dev_y = ptb.load_data_lowercase(dev_sections)
             elif dev_casetype == CaseType.TRUECASE:
-                dev_x, dev_y  = ptb.load_data_truecase(dev_sections)
+                dev_x, dev_y = ptb.load_data_truecase(dev_sections)
 
         elif dataset == Dataset.BROWN or dataset == Dataset.CONLL2000:
             # instantiate data loader
@@ -586,6 +586,7 @@ class POS:
                     count += 1 if word == pred_word else 0
         accuracy = count / total
         print("accuracy: {}".format(accuracy))
+        np.savetxt(self.model_name() + "_test_accuracy", accuracy)
         return accuracy
 
     def set_model_params(self,
