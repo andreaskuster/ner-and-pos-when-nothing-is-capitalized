@@ -542,20 +542,26 @@ class POS:
         :param epochs:
         :return:
         """
-        es = EarlyStopping(monitor="accuracy", mode="max", verbose=1, patience=4, min_delta=1e-3)
+        es = EarlyStopping(monitor="val_accuracy", mode="max", verbose=1, patience=4, min_delta=1e-3)
         # mc = ModelCheckpoint('best_model.h5', monitor='val_accuracy', mode='max', verbose=1, save_best_only=True)
         # fit model
         history = self.model.fit(self.train_x_embedded, to_categorical(self.train_y_int, self.num_categories),
                                  batch_size=batch_size,
                                  epochs=epochs,
+                                 validation_data=(self.dev_x_embedded, to_categorical(self.dev_y_int, self.num_categories)),
                                  callbacks=[es])
         # store history to file
         np.savetxt(self.model_name() + "_history_epoch", history.epoch)
         np.savetxt(self.model_name() + "_history_loss", history.history["loss"])
+        np.savetxt(self.model_name() + "_history_val_loss", history.history["val_loss"])
+
         if self.model_details["model"] == Model.BILSTM_CRF:
             np.savetxt(self.model_name() + "_history_accuracy", history.history["crf_viterbi_accuracy"])
+            np.savetxt(self.model_name() + "_history_val_accuracy", history.history["val_crf_viterbi_accuracy"])
         else:
+            np.savetxt(self.model_name() + "_history_val_accuracy", history.history["val_accuracy"])
             np.savetxt(self.model_name() + "_history_accuracy", history.history["accuracy"])
+
 
     def model_accuracy(self):
         """
@@ -648,7 +654,7 @@ if __name__ == "__main__":
                         choices=[x.name for x in DataSourceGlove])
     parser.add_argument("-b", "--batchsize", default="1024")
     parser.add_argument("-p", "--epochs", default="40")
-    parser.add_argument("-m", "--model", default=Model.BILSTM.name, choices=[x.name for x in Model])
+    parser.add_argument("-m", "--model", default=Model.BILSTM_CRF.name, choices=[x.name for x in Model])
     parser.add_argument("-ng", "--numgpus", default="1")
     parser.add_argument("-lr", "--learningrate", default="1e-3")
     parser.add_argument("-hu", "--lstmhiddenunits", default="1024")
