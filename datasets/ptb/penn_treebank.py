@@ -53,9 +53,9 @@ class PTB:
                               text_map_func=str.lower)
 
     def load_data_truecase(self, sections):
-        lower_sentence, tag = self.load_data_lowercase()
+        lower_sentence, tag = self.load_data_lowercase(sections)
         return predict_truecasing(lower_sentence), tag
-    
+
 
 if __name__ == "__main__":
     # instantiate class
