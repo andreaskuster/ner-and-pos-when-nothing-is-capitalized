@@ -673,6 +673,7 @@ if __name__ == "__main__":
     parser.add_argument("-dr", "--lstmdropout", default="1e-1")
     parser.add_argument("-rdr", "--lstmrecdropout", default="1e-1")
     parser.add_argument("-s", "--hyperparamsearch", default="False", choices=["True", "False"])
+    parser.add_argument("-c", "--cudadevices", default="None")
 
 
     args = parser.parse_args()
@@ -694,6 +695,7 @@ if __name__ == "__main__":
     lstm_dropout: float = float(args.lstmdropout)
     lstm_recurrent_dropout: float = float(args.lstmrecdropout)
     hyperparameter_search: bool = args.hyperparamsearch == "True"
+    cuda_devices: str = None if args.cudadevices == "None" else args.cudadevices
 
     if log_level.value >= LogLevel.LIMITED.value:
         print("Dataset is: {}".format(dataset.name))
@@ -711,7 +713,7 @@ if __name__ == "__main__":
     pos = POS(log_level=log_level,
               data_source_word2vec=datasource_word2vec,
               data_source_glove=datasource_glove)
-    pos.set_cuda_visible_devices(devices=None)
+    pos.set_cuda_visible_devices(devices=cuda_devices)
     pos.import_data(dataset=dataset,
                     train_casetype=train_casetype,
                     test_casetype=test_casetype)
