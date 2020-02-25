@@ -25,7 +25,8 @@ class PTB:
         with open(os.path.join(os.path.dirname(__file__), "ptb_conf.json")) as config:
             self.config = json.load(config)
         # download public available subset of penn treebank data
-        nltk.download("treebank")
+        if not os.path.isfile("~/nltk_data/corpora/treebank.zip"):
+            nltk.download("treebank")
 
     @staticmethod
     def generate_file_structure(base_path):
