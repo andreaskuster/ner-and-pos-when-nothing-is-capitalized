@@ -725,7 +725,7 @@ if __name__ == "__main__":
         _MODELS = [Model.BILSTM_CRF]
         _LSTM_HIDDEN_UNITS = [1, 2, 4, 8, 32, 128, 512]
         _LSTM_DROPOUT = [0.0, 0.2, 0.4]
-        _LSTM_RECURRENT_DROPOUT = [0.0, 0.2, 0.4]
+        _LSTM_RECURRENT_DROPOUT = _LSTM_DROPOUT
         _LEARNING_RATE = [1e-1, 1e-3]
 
         for model in _MODELS:
