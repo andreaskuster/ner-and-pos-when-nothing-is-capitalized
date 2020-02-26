@@ -723,10 +723,10 @@ if __name__ == "__main__":
 
     if hyperparameter_search:
         _MODELS = [Model.BILSTM_CRF]
-        _LSTM_HIDDEN_UNITS = [8, 32, 128, 512, 1024]
-        _LSTM_DROPOUT = [0.1, 0.2, 0.3]
-        _LSTM_RECURRENT_DROPOUT = [0.1, 0.2, 0.3]
-        _LEARNING_RATE = [1e-2, 1e-3]
+        _LSTM_HIDDEN_UNITS = [1, 2, 4, 8, 32, 128, 512]
+        _LSTM_DROPOUT = [0.0, 0.2, 0.4]
+        _LSTM_RECURRENT_DROPOUT = _LSTM_DROPOUT
+        _LEARNING_RATE = [1e-1, 1e-3]
 
         for model in _MODELS:
             for lstm_hidden_units in _LSTM_HIDDEN_UNITS:
