@@ -4,7 +4,8 @@
 
     File placement:
         - add penn treebank wsj files into ~/nltk_data/corpora/treebank/combined (extracted from 00-24 structure)
-        - do once: execute generate_file_structure() over the initial ptb file setup (in folder 00,.. 24)
+        - do once: execute generate_file_structure() over the initial ptb file setup (in folder 00,.. 24) or
+          use ptb_conf.json
 
     Credits:
         - http://www.nltk.org/howto/corpus.html#parsed-corpora
