@@ -574,17 +574,17 @@ class POS:
             np.savetxt(self.model_name() + "_history_val_accuracy", history.history["val_accuracy"])
             np.savetxt(self.model_name() + "_history_accuracy", history.history["accuracy"])
 
-    def model_accuracy(self):
+    def model_accuracy(self, X_embedded, y_int, dataset:str):
         """
         TODO: add description
         :return:
         """
-        y_pred = self.model.predict(self.test_x_embedded)
+        y_pred = self.model.predict(X_embedded)
 
         total = 0
         count = 0
         pred_itr = y_pred.__iter__()
-        for sentence in self.test_y_int:
+        for sentence in y_int:
             total += len(sentence)
             pred_sentence = pred_itr.__next__()
             pred_sentence = pred_sentence.__iter__()
@@ -596,8 +596,8 @@ class POS:
                 else:
                     count += 1 if word == pred_word else 0
         accuracy = count / total
-        print("accuracy: {}".format(accuracy))
-        np.savetxt(self.model_name() + "_test_accuracy", [accuracy])
+        print("{} accuracy: {}".format(dataset, accuracy))
+        np.savetxt(self.model_name() + "_{}_accuracy".format(dataset), [accuracy])
         return accuracy
 
     def set_model_params(self,
@@ -744,9 +744,8 @@ if __name__ == "__main__":
                                 pos.create_model()
                                 pos.train_model()
                                 pos.save_model()
-                            pos.model_accuracy()
-
-
+                            pos.model_accuracy(X_embedded=pos.dev_x_embedded, y_int=pos.dev_y_int, dataset="dev")
+                            pos.model_accuracy(X_embedded=pos.test_x_embedded, y_int=pos.test_y_int, dataset="test")
     else:
         pos.set_model_params(model=model,
                              lstm_hidden_units=lstm_hidden_units,
@@ -759,7 +758,7 @@ if __name__ == "__main__":
             pos.create_model()
             pos.train_model()
             pos.save_model()
-        pos.model_accuracy()
+        pos.model_accuracy(X_embedded=pos.test_x_embedded, y_int=pos.test_y_int, dataset="test")
 
     # exit
     if pos.log_level.value >= LogLevel.LIMITED.value:
