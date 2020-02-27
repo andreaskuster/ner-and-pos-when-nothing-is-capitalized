@@ -801,8 +801,9 @@ if __name__ == "__main__":
             pos.create_model()
             pos.train_model()
             pos.save_model()
+        pos.model_accuracy(X_embedded=pos.dev_x_embedded, y_int=pos.dev_y_int, dataset="dev")
         pos.model_accuracy(X_embedded=pos.test_x_embedded, y_int=pos.test_y_int, dataset="test")
-
+        
     # exit
     if pos.log_level.value >= LogLevel.LIMITED.value:
         print("Exit.")
