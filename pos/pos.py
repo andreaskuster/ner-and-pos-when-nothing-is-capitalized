@@ -46,6 +46,8 @@ class CaseType(Enum):
     CASED = auto()
     UNCASED = auto()
     TRUECASE = auto()
+    CASED_UNCASED = auto()
+    HALF_MIXED = auto()
 
 
 class Embedding(Enum):
@@ -178,6 +180,10 @@ class POS:
                 data_x, data_y = ptb.load_data_lowercase([0])
             elif train_casetype == CaseType.TRUECASE:
                 data_x, data_y = ptb.load_data_truecase([0])
+            elif train_casetype == CaseType.CASED_UNCASED:
+                data_x, data_y = ptb.load_data_cased_and_uncased([0])
+            elif train_casetype == CaseType.HALF_MIXED:
+                data_x, data_y = ptb.load_data_half_mixed([0])
             train_x, train_y = data_x[1:5], data_y[1:5]
             # test data
             if test_casetype == CaseType.CASED:
@@ -186,6 +192,10 @@ class POS:
                 data_x, data_y = ptb.load_data_lowercase([0])
             elif test_casetype == CaseType.TRUECASE:
                 data_x, data_y = ptb.load_data_truecase([0])
+            elif test_casetype == CaseType.CASED_UNCASED:
+                data_x, data_y = ptb.load_data_cased_and_uncased([0])
+            elif test_casetype == CaseType.HALF_MIXED:
+                data_x, data_y = ptb.load_data_half_mixed([0])
             test_x, test_y = data_x[4:6], data_y[4:6]
             # dev data
             if dev_casetype == CaseType.CASED:
@@ -194,6 +204,10 @@ class POS:
                 data_x, data_y = ptb.load_data_lowercase([0])
             elif dev_casetype == CaseType.TRUECASE:
                 data_x, data_y = ptb.load_data_truecase([0])
+            elif dev_casetype == CaseType.CASED_UNCASED:
+                data_x, data_y = ptb.load_data_cased_and_uncased([0])
+            elif dev_casetype == CaseType.HALF_MIXED:
+                data_x, data_y = ptb.load_data_half_mixed([0])
             dev_x, dev_y = data_x[0:2], data_y[0:2]  # always use cased
 
         elif dataset == Dataset.PTB or dataset == Dataset.PTB_REDUCED:
@@ -214,6 +228,10 @@ class POS:
                 train_x, train_y = ptb.load_data_lowercase(train_sections)
             elif train_casetype == CaseType.TRUECASE:
                 train_x, train_y = ptb.load_data_truecase(train_sections)
+            elif train_casetype == CaseType.CASED_UNCASED:
+                train_x, train_y = ptb.load_data_cased_and_uncased(train_sections)
+            elif train_casetype == CaseType.HALF_MIXED:
+                train_x, train_y = ptb.load_data_half_mixed(train_sections)
 
             # test data
             if test_casetype == CaseType.CASED:
@@ -222,6 +240,10 @@ class POS:
                 test_x, test_y = ptb.load_data_lowercase(test_sections)
             elif test_casetype == CaseType.TRUECASE:
                 test_x, test_y = ptb.load_data_truecase(test_sections)
+            elif test_casetype == CaseType.CASED_UNCASED:
+                test_x, test_y = ptb.load_data_cased_and_uncased(test_sections)
+            elif test_casetype == CaseType.HALF_MIXED:
+                test_x, test_y = ptb.load_data_half_mixed(test_sections)
 
             # dev data
             if dev_casetype == CaseType.CASED:
@@ -230,6 +252,10 @@ class POS:
                 dev_x, dev_y = ptb.load_data_lowercase(dev_sections)
             elif dev_casetype == CaseType.TRUECASE:
                 dev_x, dev_y = ptb.load_data_truecase(dev_sections)
+            elif dev_casetype == CaseType.CASED_UNCASED:
+                dev_x, dev_y = ptb.load_data_cased_and_uncased(dev_sections)
+            elif dev_casetype == CaseType.HALF_MIXED:
+                dev_x, dev_y = ptb.load_data_half_mixed(dev_sections)
 
         elif dataset == Dataset.BROWN or dataset == Dataset.CONLL2000:
             # instantiate data loader
@@ -242,6 +268,10 @@ class POS:
                 train_x, train_y = data_loader.load_data_lowercase()
             elif train_casetype == CaseType.TRUECASE:
                 train_x, train_y = data_loader.load_data_truecase()
+            elif train_casetype == CaseType.CASED_UNCASED:
+                train_x, train_y = data_loader.load_data_cased_and_uncased()
+            elif train_casetype == CaseType.HALF_MIXED:
+                train_x, train_y = data_loader.load_data_half_mixed()
             # test data
             if test_casetype == CaseType.CASED:
                 test_x, test_y = data_loader.load_data()
@@ -249,6 +279,10 @@ class POS:
                 test_x, test_y = data_loader.load_data_lowercase()
             elif test_casetype == CaseType.TRUECASE:
                 test_x, test_y = data_loader.load_data_truecase()
+            elif test_casetype == CaseType.CASED_UNCASED:
+                test_x, test_y = data_loader.load_data_cased_and_uncased()
+            elif test_casetype == CaseType.HALF_MIXED:
+                test_x, test_y = data_loader.load_data_half_mixed()
             # dev data
             if dev_casetype == CaseType.CASED:
                 test_x, test_y = data_loader.load_data()
@@ -256,6 +290,10 @@ class POS:
                 test_x, test_y = data_loader.load_data_lowercase()
             elif dev_casetype == CaseType.TRUECASE:
                 test_x, test_y = data_loader.load_data_truecase()
+            elif dev_casetype == CaseType.CASED_UNCASED:
+                test_x, test_y = data_loader.load_data_cased_and_uncased()
+            elif dev_casetype == CaseType.HALF_MIXED:
+                test_x, test_y = data_loader.load_data_half_mixed()
             # compute train/test/dev dataset size
             total_size = len(train_x)
             start, middle0, middle1, end = 0, (1.0-test_size)*total_size,  (1.0-test_size-dev_size)*total_size, total_size
