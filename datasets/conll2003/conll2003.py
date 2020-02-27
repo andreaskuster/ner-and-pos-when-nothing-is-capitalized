@@ -34,17 +34,14 @@ class CoNLL2003:
         for line in file.readlines()[2:]:
             line = line.split()
             if len(line) == 0:
-                curr_sentence_words = list(map(text_map_func, curr_sentence_words))
-                curr_sentence_tags = list(map(tag_map_func, curr_sentence_tags))
-
                 result_words.append(curr_sentence_words)
                 result_tags.append(curr_sentence_tags)
 
                 curr_sentence_words = []
                 curr_sentence_tags = []
             else:
-                curr_sentence_words.append(line[0])
-                curr_sentence_words.append(line[1:])
+                curr_sentence_words.append(text_map_func(line[0]))
+                curr_sentence_tags.append(tag_map_func(line[1:]))
         return result_words, result_tags
 
 
