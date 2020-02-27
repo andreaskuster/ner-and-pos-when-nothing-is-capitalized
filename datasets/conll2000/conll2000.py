@@ -11,7 +11,7 @@ class CoNLL2000:
     def load_data(self, text_map_func=lambda x: x, tag_map_func=lambda x: x):
         # split text from pos tag
         text, tag = [], []
-        for tagged_sentence in nltk.corpus.brown.tagged_sents():
+        for tagged_sentence in nltk.corpus.conll2000.tagged_sents():
             sentence, tags = zip(*tagged_sentence)
             text.append(list(map(text_map_func, sentence)))
             tag.append(list(map(tag_map_func, tags)))
@@ -29,7 +29,7 @@ class CoNLL2000:
 if __name__ == "__main__":
     # instantiate class
     conll2000 = CoNLL2000()
-    # get brown data
+    # get conll2000 data
     data = conll2000.load_data()
-    # get brown data, lowercase
+    # get conll2000 data, lowercase
     data_lower = conll2000.load_data_lowercase()
