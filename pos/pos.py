@@ -696,6 +696,8 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--dataset", default=Dataset.PTB_DUMMY.name, choices=[x.name for x in Dataset])
     parser.add_argument("-ctr", "--traincasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
     parser.add_argument("-cte", "--testcasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
+    parser.add_argument("-cde", "--devcasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
+
     parser.add_argument("-v", "--loglevel", default=LogLevel.FULL.name, choices=[x.name for x in LogLevel])
     parser.add_argument("-e", "--embedding", default=Embedding.ELMO.name, choices=[x.name for x in Embedding])
     parser.add_argument("-w", "--datasource_word2vec", default=DataSourceWord2Vec.GOOGLE_NEWS_300.name,
@@ -720,6 +722,8 @@ if __name__ == "__main__":
     dataset: Dataset = Dataset[args.dataset]
     train_casetype: CaseType = CaseType[args.traincasetype]
     test_casetype: CaseType = CaseType[args.testcasetype]
+    dev_casetype: CaseType = CaseType[args.devcasetype]
+
     log_level: LogLevel = LogLevel[args.loglevel]
     embedding: Embedding = Embedding[args.embedding]
     datasource_word2vec: DataSourceWord2Vec = DataSourceWord2Vec[args.datasource_word2vec]
@@ -754,7 +758,8 @@ if __name__ == "__main__":
     pos.set_cuda_visible_devices(devices=cuda_devices)
     pos.import_data(dataset=dataset,
                     train_casetype=train_casetype,
-                    test_casetype=test_casetype)
+                    test_casetype=test_casetype,
+                    dev_casetype=dev_casetype)
     pos.pad_sequence()
     pos.embedding(embedding=embedding)
     pos.map_y()
