@@ -745,14 +745,24 @@ if __name__ == "__main__":
         print("Dataset is: {}".format(dataset.name))
         print("Casetype training data is: {}".format(train_casetype.name))
         print("Casetype test data is: {}".format(test_casetype.name))
+        print("Casetype dev data is: {}".format(dev_casetype.name))
+
         print("Log level is: {}".format(log_level.name))
         print("Embedding is: {}".format(embedding.name))
         if embedding == Embedding.WORD2VEC:
             print("Data source word2vec is: {}".format(datasource_word2vec.name))
         if embedding == Embedding.GLOVE:
             print("Data source glove is: {}".format(datasource_glove.name))
+        print("Model name is: {}".format(model.name))
+        print("Batch size is: {}".format(batch_size))
+        print("Max number of epochs is: {}".format(epochs))
+        print("Learning rate is: {}".format(learning_rate))
+        print("LSTM hidden units: {}".format(lstm_hidden_units))
+        print("LSTM dropout is: {}".format(lstm_dropout))
+        print("LSTM recurrent dropout is: {}".format(lstm_recurrent_dropout))
+        print("Hyperparameter search is: {}".format(hyperparameter_search))
+        print("Visible cuda devies: {}".format(cuda_devices))
         print("Number of GPUs is: {}".format(num_gpus))
-        # TODO: add remaining arguments
 
     pos = POS(log_level=log_level,
               data_source_word2vec=datasource_word2vec,
