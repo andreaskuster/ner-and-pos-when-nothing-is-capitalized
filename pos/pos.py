@@ -467,11 +467,12 @@ class POS:
         """
         if self.model_details is None:
             return ""
-        return "{}_{}_units_{}_dropout_{}_recdropout_{}_lr_{}_train_{}_test_{}_dev".format(self.model_details["model"].name,
+        return "{}_{}_units_{}_dropout_{}_recdropout_{}_lr_{}_dataset_{}_train_{}_test_{}_dev".format(self.model_details["model"].name,
                                                                self.model_details["lstm_hidden_units"],
                                                                self.model_details["lstm_dropout"],
                                                                self.model_details["lstm_recurrent_dropout"],
                                                                self.model_details["learning_rate"],
+                                                               self.dataset,
                                                                self.train_casetype.name,
                                                                self.test_casetype.name,
                                                                self.dev_casetype.name)
