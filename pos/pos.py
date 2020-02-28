@@ -428,11 +428,12 @@ class POS:
                          dev_x_embedded=self.dataset_x_embedded["dev_x_embedded"])
 
         else:  # glove and word2vec are sequence independent -> process one-by-one
-            for dataset in self.dataset_x:
+            for dataset in self.data_x:
                 data_x_embedded = list()
                 for sentence in self.data_x[dataset]:
                     data_x_embedded.append([preprocessor.word2vec(word) for word in sentence])
-                self.dataset_map[self.data_x[dataset]] = np.array(data_x_embedded)
+                self.dataset_x_embedded[self.dataset_map[dataset]] = np.array(data_x_embedded)
+            self.train_x_embedded, self.test_x_embedded, self.dev_x_embedded = self.dataset_x_embedded["train_x_embedded"], self.dataset_x_embedded["test_x_embedded"], self.dataset_x_embedded["dev_x_embedded"]
 
     def map_y(self):
         """
