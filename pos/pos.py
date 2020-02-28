@@ -285,18 +285,18 @@ class POS:
                 test_x, test_y = data_loader.load_data_half_mixed()
             # dev data
             if dev_casetype == CaseType.CASED:
-                test_x, test_y = data_loader.load_data()
+                dev_x, dev_y = data_loader.load_data()
             elif dev_casetype == CaseType.UNCASED:
-                test_x, test_y = data_loader.load_data_lowercase()
+                dev_x, dev_y = data_loader.load_data_lowercase()
             elif dev_casetype == CaseType.TRUECASE:
-                test_x, test_y = data_loader.load_data_truecase()
+                dev_x, dev_y = data_loader.load_data_truecase()
             elif dev_casetype == CaseType.CASED_UNCASED:
-                test_x, test_y = data_loader.load_data_cased_and_uncased()
+                dev_x, dev_y = data_loader.load_data_cased_and_uncased()
             elif dev_casetype == CaseType.HALF_MIXED:
-                test_x, test_y = data_loader.load_data_half_mixed()
+                dev_x, dev_y = data_loader.load_data_half_mixed()
             # compute train/test/dev dataset size
             total_size = len(train_x)
-            start, middle0, middle1, end = 0, (1.0-test_size)*total_size,  (1.0-test_size-dev_size)*total_size, total_size
+            start, middle0, middle1, end = 0, int((1.0-test_size-dev_size)*total_size),  int((1.0-dev_size)*total_size), total_size
             # split data
             train_x, train_y = train_x[start:middle0], train_y[start:middle0]
             test_x, test_y = test_x[middle0:middle1], test_y[middle0:middle1]
@@ -328,7 +328,7 @@ class POS:
             print("Padding sequence...")
         # update maximum sentence length
         for dataset in self.data_x:
-            self.max_sentence_length = max(self.max_sentence_length, max([len(x) for x in self.data_x[dataset]]))
+            self.max_sentence_length = max(self.max_sentence_length,  max([len(x) for x in self.data_x[dataset]]))
         # pad x
         for dataset in self.data_x:
             for i in range(len(self.data_x[dataset])):
