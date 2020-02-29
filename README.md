@@ -51,17 +51,22 @@ On wikipedia dataset which we trained truecaser on we got performence similar to
 We expect to get similar results to those described in the paper.
 
 #### Comparison
-| Experiment | Train data | Test data | accuracy | Avg | accuracy from the paper | Avg from the paper | Code |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 1.1 | Cased | Cased | 97.56 | TODO | 97.85 | - | TODO |
-| 1.2 | Cased | Uncased | TODO | TODO  | 88.66 | 93.26 | TODO |
-| 2 | Uncased | Uncased | TODO | TODO  | 97.45 | 97.45 | TODO |
-| 3.1 | Augment | Cased | TODO | TODO | 97.79 | - | TODO  |
-| 3.2 | Augment | Uncased | TODO | TODO | 97.35 | 97.57 | TODO |
-| 3.5.1 | Half Mixed | Cased | TODO  | TODO | 97.85 | - | TODO |
-| 3.5.2 | Half Mixed | Uncased | TODO | TODO | 97.36 | 97.61 | TODO |
-| 4 | Cased | Truecase | TODO | TODO | 95.21 | 95.21 | TODO |
-| 5 | Truecase | Truecase | TODO | TODO | 97.38 | 97.38 | TODO |
+| Experiment | Train Data | Test Data | Accuracy | Avg | Accuracy (Paper) | Avg (Paper) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1.1 | Cased | Cased | 97.30 | - | 97.85 | - |
+| 1.2 | Cased | Uncased | 88.29 | 92.78 | 88.66 | 93.26 |
+|  |  |  |  |  |  |  |
+| 2 | Uncased | Uncased | 96.51 | 96.51 | 97.45 | 97.45 |
+|  |  |  |  |  |  |  |
+| 3.1 | C+U | Cased | 97.51 | - | 97.79 | - |
+| 3.2 | C+U | Uncased | 96.59 | 97.05 | 97.35 | 97.57 |
+|  |  |  |  |  |  |  |
+| 3.5.1 | Half Mixed | Cased | 97.12 | - | 97.85 | - |
+| 3.5.2 | Half Mixed | Uncased | 96.19 | 96.66 | 97.36 | 97.61 |
+|  |  |  |  |  |  |  |
+| 4 | Cased | Truecase | 95.04 | 95.04 | 95.21 | 95.21 |
+|  |  |  |  |  |  |  |
+| 5 | Truecase | Truecase | 96.61 | 96.61 | 97.38 | 97.38 |
 
 #### Model Characteristics
 
@@ -95,29 +100,73 @@ We expect to get similar results to those described in the paper.
 
 #### Comparison
 POS on penn treebank reduced dataset, brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer (additional experiments)
-| Train data | Test data | accuracy w2v | accuracy w2v crf | accuracy glove | accuracy glove crf | accuracy elmo | accuracy elmo crf| Code |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| __PTB Dataset__ |  |  |  |  |  |  |  | 
-| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | 97.47 |
-| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| __PTB Reduced Dataset__ |  |  |  |  |  |  |  | 
-| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| __Brown__ |  |  |  |  |  |  |  | 
-| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| __CoNLL 2000__ |  |  |  |  |  |  |  | 
-| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
 
+| Train Data | Test Data | Accuracy Word2vec CRF | Accuracy GloVe CRF | Accuracy ELMo | Accuracy ELMo CRF (paper experiment) |
+| --- | --- | --- | --- | --- | --- | 
+| __PTB Dataset__ |  |  |  |  |  | 
+| Cased | Cased | 88.80 | 95.90 | 97.19 |  97.30 | 
+| Cased | Uncased | 78.63 | 86.11 | 88.57 | 88.29 |
+|  |  |  |  |  |  
+| Uncased | Uncased | 80.97 | 94.97 | 96.52 | 96.51 |
+|  |  |  |  |  | 
+| C+U | Cased | 85.62 | 96.88 | 97.44 | 97.51 |
+| C+U | Uncased | 86.67 | 95.84 | 96.60 | 96.59 |
+|  |  |  |  |  | 
+| Half Mixed | Cased | 87.45 | 95.79 | 97.30 |  97.12 |
+| Half Mixed | Uncased | 82.86 | 94.90 | 96.36 | 96.19 |
+|  |  |  |  |  | 
+| Cased | Truecase | 85.74 | 93.82 | 94.78 | 95.04 |
+| Truecase | Truecase | 86.64 | 95.20 | 96.56 | 96.61 |
+|  |  |  |  |  |
+
+
+| Train Data | Test Data | Accuracy ELMo CRF |
+| --- | --- | --- |
+| __PTB Reduced Dataset__ |  |  |
+| Cased | Cased | 96.35 |
+| Cased | Uncased | 88.38 |
+|  |  |  |  |  |  |  | 
+| Uncased | Uncased | 95.48 |
+|  |  |  |  |  |  |  |
+| C+U | Cased | 96.70 |
+| C+U | Uncased | 95.73 |
+|  |  |  |  |  |  |  |
+| Half Mixed | Cased | 96.34 |
+| Half Mixed  | Uncased | 95.08 |
+|  |  |  |  |  |  |  |
+| Cased | Truecase | 94.62 |
+| Truecase | Truecase | 95.35 |
+|  |  |  |  |  |  |  |
+| __Brown__ |  |  |  |  |  |  | 
+| Cased | Cased | 95.69 |
+| Cased | Uncased | 83.30 |
+|  |  |  |  |  |  |  | 
+| Uncased | Uncased | 92.91 |
+|  |  |  |  |  |  |  |
+| C+U | Cased | 97.11 |
+| C+U | Uncased | 95.83 |
+|  |  |  |  |  |  |  |
+| Half Mixed | Cased | 95.28 |
+| Half Mixed  | Uncased | 92.56 |
+|  |  |  |  |  |  |  |
+| Cased | Truecase | 92.11 |
+| Truecase | Truecase | 92.62 |
+|  |  |  |  |  |  |  |
+| __CoNLL 2000__ |  |  |  |  |  |  | 
+| Cased | Cased | 97.80 |
+| Cased | Uncased | 87.91 |
+|  |  |  |  |  |  |  | 
+| Uncased | Uncased | 96.83 |
+|  |  |  |  |  |  |  |
+| C+U | Cased | 99.00 |
+| C+U | Uncased | 99.46 |
+|  |  |  |  |  |  |  |
+| Half Mixed | Cased | 97.65 |
+| Half Mixed  | Uncased | 96.66 |
+|  |  |  |  |  |  |  |
+| Cased | Truecase | 95.40 |
+| Truecase | Truecase | 96.79 |
+|  |  |  |  |  |  |  |
 
 #### Model Characteristics
 

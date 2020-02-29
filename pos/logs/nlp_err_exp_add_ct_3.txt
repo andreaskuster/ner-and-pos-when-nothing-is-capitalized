@@ -1,0 +1,96 @@
+Using TensorFlow backend.
+WARNING:tensorflow:From /users2/kustera/uw-nlp/helper/multi_gpu.py:15: The name tf.ConfigProto is deprecated. Please use tf.compat.v1.ConfigProto instead.
+
+WARNING:tensorflow:From /users2/kustera/uw-nlp/helper/multi_gpu.py:17: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2020-02-29 05:20:04.217106: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2020-02-29 05:20:04.233748: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 1999940000 Hz
+2020-02-29 05:20:04.243029: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55d2985e4b80 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-02-29 05:20:04.243123: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-02-29 05:20:04.243539: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-02-29 05:20:04.475060: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:21:00.0
+2020-02-29 05:20:04.476765: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 1 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:71:00.0
+2020-02-29 05:20:04.476877: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-29 05:20:04.476912: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2020-02-29 05:20:04.476935: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2020-02-29 05:20:04.476956: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2020-02-29 05:20:04.482617: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2020-02-29 05:20:04.482660: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2020-02-29 05:20:04.482688: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-02-29 05:20:04.489479: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0, 1
+2020-02-29 05:20:04.489515: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-29 05:20:06.725796: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-02-29 05:20:06.725888: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 1 
+2020-02-29 05:20:06.725916: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N Y 
+2020-02-29 05:20:06.725922: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 1:   Y N 
+2020-02-29 05:20:06.733047: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 30222 MB memory) -> physical GPU (device: 0, name: Tesla V100-PCIE-32GB, pci bus id: 0000:21:00.0, compute capability: 7.0)
+2020-02-29 05:20:06.736768: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:1 with 30222 MB memory) -> physical GPU (device: 1, name: Tesla V100-PCIE-32GB, pci bus id: 0000:71:00.0, compute capability: 7.0)
+2020-02-29 05:20:06.739107: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55d2dd3f7190 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-02-29 05:20:06.739131: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Tesla V100-PCIE-32GB, Compute Capability 7.0
+2020-02-29 05:20:06.739146: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (1): Tesla V100-PCIE-32GB, Compute Capability 7.0
+[nltk_data] Downloading package treebank to
+[nltk_data]     /users/kustera/nltk_data...
+[nltk_data]   Unzipping corpora/treebank.zip.
+Predicting casing:   0%|          | 0/55 [00:00<?, ?it/s]Predicting casing:   2%|▏         | 1/55 [00:00<00:17,  3.08it/s]Predicting casing:   4%|▎         | 2/55 [00:00<00:14,  3.77it/s]Predicting casing:   5%|▌         | 3/55 [00:00<00:11,  4.47it/s]Predicting casing:   7%|▋         | 4/55 [00:00<00:09,  5.13it/s]Predicting casing:   9%|▉         | 5/55 [00:00<00:08,  5.72it/s]Predicting casing:  11%|█         | 6/55 [00:00<00:07,  6.21it/s]Predicting casing:  13%|█▎        | 7/55 [00:01<00:07,  6.60it/s]Predicting casing:  15%|█▍        | 8/55 [00:01<00:06,  6.91it/s]Predicting casing:  16%|█▋        | 9/55 [00:01<00:06,  7.14it/s]Predicting casing:  18%|█▊        | 10/55 [00:01<00:06,  7.33it/s]Predicting casing:  20%|██        | 11/55 [00:01<00:05,  7.46it/s]Predicting casing:  22%|██▏       | 12/55 [00:01<00:05,  7.57it/s]Predicting casing:  24%|██▎       | 13/55 [00:01<00:05,  7.62it/s]Predicting casing:  25%|██▌       | 14/55 [00:01<00:05,  7.67it/s]Predicting casing:  27%|██▋       | 15/55 [00:02<00:05,  7.68it/s]Predicting casing:  29%|██▉       | 16/55 [00:02<00:05,  7.71it/s]Predicting casing:  31%|███       | 17/55 [00:02<00:04,  7.73it/s]Predicting casing:  33%|███▎      | 18/55 [00:02<00:04,  7.80it/s]Predicting casing:  35%|███▍      | 19/55 [00:02<00:04,  7.78it/s]Predicting casing:  36%|███▋      | 20/55 [00:02<00:04,  7.78it/s]Predicting casing:  38%|███▊      | 21/55 [00:02<00:04,  7.78it/s]Predicting casing:  40%|████      | 22/55 [00:03<00:04,  7.81it/s]Predicting casing:  42%|████▏     | 23/55 [00:03<00:04,  7.80it/s]Predicting casing:  44%|████▎     | 24/55 [00:03<00:03,  7.82it/s]Predicting casing:  45%|████▌     | 25/55 [00:03<00:03,  7.80it/s]Predicting casing:  47%|████▋     | 26/55 [00:03<00:03,  7.79it/s]Predicting casing:  49%|████▉     | 27/55 [00:03<00:03,  7.78it/s]Predicting casing:  51%|█████     | 28/55 [00:03<00:03,  7.79it/s]Predicting casing:  53%|█████▎    | 29/55 [00:03<00:03,  7.78it/s]Predicting casing:  55%|█████▍    | 30/55 [00:04<00:03,  7.78it/s]Predicting casing:  56%|█████▋    | 31/55 [00:04<00:03,  7.77it/s]Predicting casing:  58%|█████▊    | 32/55 [00:04<00:02,  7.77it/s]Predicting casing:  60%|██████    | 33/55 [00:04<00:02,  7.79it/s]Predicting casing:  62%|██████▏   | 34/55 [00:04<00:02,  7.81it/s]Predicting casing:  64%|██████▎   | 35/55 [00:04<00:02,  7.77it/s]Predicting casing:  65%|██████▌   | 36/55 [00:04<00:02,  7.76it/s]Predicting casing:  67%|██████▋   | 37/55 [00:04<00:02,  7.75it/s]Predicting casing:  69%|██████▉   | 38/55 [00:05<00:02,  7.72it/s]Predicting casing:  71%|███████   | 39/55 [00:05<00:02,  7.72it/s]Predicting casing:  73%|███████▎  | 40/55 [00:05<00:01,  7.72it/s]Predicting casing:  75%|███████▍  | 41/55 [00:05<00:01,  7.71it/s]Predicting casing:  76%|███████▋  | 42/55 [00:05<00:01,  7.72it/s]Predicting casing:  78%|███████▊  | 43/55 [00:05<00:01,  7.70it/s]Predicting casing:  80%|████████  | 44/55 [00:05<00:01,  7.71it/s]Predicting casing:  82%|████████▏ | 45/55 [00:05<00:01,  7.71it/s]Predicting casing:  84%|████████▎ | 46/55 [00:06<00:01,  7.77it/s]Predicting casing:  85%|████████▌ | 47/55 [00:06<00:01,  7.78it/s]Predicting casing:  87%|████████▋ | 48/55 [00:06<00:00,  7.80it/s]Predicting casing:  89%|████████▉ | 49/55 [00:06<00:00,  7.79it/s]Predicting casing:  91%|█████████ | 50/55 [00:06<00:00,  7.80it/s]Predicting casing:  93%|█████████▎| 51/55 [00:06<00:00,  7.78it/s]Predicting casing:  95%|█████████▍| 52/55 [00:06<00:00,  7.80it/s]Predicting casing:  96%|█████████▋| 53/55 [00:07<00:00,  7.78it/s]Predicting casing:  98%|█████████▊| 54/55 [00:07<00:00,  7.79it/s]                                                                  WARNING:tensorflow:From /users/kustera/anaconda3/envs/dev/lib/python3.6/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+WARNING:tensorflow:From /users/kustera/anaconda3/envs/dev/lib/python3.6/site-packages/tensorflow_core/python/ops/math_grad.py:1424: where (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+2020-02-29 05:24:51.604772: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:21:00.0
+2020-02-29 05:24:51.606389: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 1 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:71:00.0
+2020-02-29 05:24:51.606465: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-29 05:24:51.606498: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2020-02-29 05:24:51.606512: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2020-02-29 05:24:51.606524: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2020-02-29 05:24:51.606552: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2020-02-29 05:24:51.606566: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2020-02-29 05:24:51.606578: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-02-29 05:24:51.612901: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0, 1
+2020-02-29 05:24:51.615194: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:21:00.0
+2020-02-29 05:24:51.616744: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 1 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:71:00.0
+2020-02-29 05:24:51.616767: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-29 05:24:51.616780: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2020-02-29 05:24:51.616792: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2020-02-29 05:24:51.616803: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2020-02-29 05:24:51.616817: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2020-02-29 05:24:51.616829: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2020-02-29 05:24:51.616848: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-02-29 05:24:51.623338: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0, 1
+2020-02-29 05:24:51.623435: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-02-29 05:24:51.623444: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 1 
+2020-02-29 05:24:51.623449: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N Y 
+2020-02-29 05:24:51.623454: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 1:   Y N 
+2020-02-29 05:24:51.628388: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 30222 MB memory) -> physical GPU (device: 0, name: Tesla V100-PCIE-32GB, pci bus id: 0000:21:00.0, compute capability: 7.0)
+2020-02-29 05:24:51.629998: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:1 with 30222 MB memory) -> physical GPU (device: 1, name: Tesla V100-PCIE-32GB, pci bus id: 0000:71:00.0, compute capability: 7.0)
+WARNING:tensorflow:From /users/kustera/.local/lib/python3.6/site-packages/keras/backend/tensorflow_backend.py:422: The name tf.global_variables is deprecated. Please use tf.compat.v1.global_variables instead.
+
+2020-02-29 05:24:55.617980: E tensorflow/core/grappler/optimizers/dependency_optimizer.cc:697] Iteration = 0, topological sort failed with message: The graph couldn't be sorted in topological order.
+2020-02-29 05:24:55.625150: E tensorflow/core/grappler/optimizers/dependency_optimizer.cc:697] Iteration = 1, topological sort failed with message: The graph couldn't be sorted in topological order.
+2020-02-29 05:24:55.636446: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:533] layout failed: Invalid argument: The graph couldn't be sorted in topological order.
+2020-02-29 05:24:55.656257: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:533] model_pruner failed: Invalid argument: MutableGraphView::MutableGraphView error: node 'loss/concatenate_1_loss/categorical_crossentropy/weighted_loss/concat' has self cycle fanin 'loss/concatenate_1_loss/categorical_crossentropy/weighted_loss/concat'.
+2020-02-29 05:24:55.700916: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:533] remapper failed: Invalid argument: MutableGraphView::MutableGraphView error: node 'loss/concatenate_1_loss/categorical_crossentropy/weighted_loss/concat' has self cycle fanin 'loss/concatenate_1_loss/categorical_crossentropy/weighted_loss/concat'.
+2020-02-29 05:24:55.708919: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:533] arithmetic_optimizer failed: Invalid argument: The graph couldn't be sorted in topological order.
+2020-02-29 05:24:55.716298: E tensorflow/core/grappler/optimizers/dependency_optimizer.cc:697] Iteration = 0, topological sort failed with message: The graph couldn't be sorted in topological order.
+2020-02-29 05:24:55.722326: E tensorflow/core/grappler/optimizers/dependency_optimizer.cc:697] Iteration = 1, topological sort failed with message: The graph couldn't be sorted in topological order.
+2020-02-29 05:24:55.952933: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2020-02-29 05:27:42.226576: E tensorflow/core/grappler/optimizers/dependency_optimizer.cc:697] Iteration = 0, topological sort failed with message: The graph couldn't be sorted in topological order.
+2020-02-29 05:27:42.228515: E tensorflow/core/grappler/optimizers/dependency_optimizer.cc:697] Iteration = 1, topological sort failed with message: The graph couldn't be sorted in topological order.
+2020-02-29 05:27:42.230267: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:533] layout failed: Invalid argument: The graph couldn't be sorted in topological order.
+2020-02-29 05:27:42.235067: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:533] model_pruner failed: Invalid argument: MutableGraphView::MutableGraphView error: node 'loss/concatenate_1_loss/categorical_crossentropy/weighted_loss/concat' has self cycle fanin 'loss/concatenate_1_loss/categorical_crossentropy/weighted_loss/concat'.
+2020-02-29 05:27:42.242910: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:533] remapper failed: Invalid argument: MutableGraphView::MutableGraphView error: node 'loss/concatenate_1_loss/categorical_crossentropy/weighted_loss/concat' has self cycle fanin 'loss/concatenate_1_loss/categorical_crossentropy/weighted_loss/concat'.
+2020-02-29 05:27:42.244397: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:533] arithmetic_optimizer failed: Invalid argument: The graph couldn't be sorted in topological order.
+2020-02-29 05:27:42.245771: E tensorflow/core/grappler/optimizers/dependency_optimizer.cc:697] Iteration = 0, topological sort failed with message: The graph couldn't be sorted in topological order.
+2020-02-29 05:27:42.247073: E tensorflow/core/grappler/optimizers/dependency_optimizer.cc:697] Iteration = 1, topological sort failed with message: The graph couldn't be sorted in topological order.

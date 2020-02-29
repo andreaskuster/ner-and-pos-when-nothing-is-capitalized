@@ -1,0 +1,481 @@
+DEVICE USED: cuda
+Dataset is: CONLL2000
+Casetype training data is: HALF_MIXED
+Casetype test data is: CASED
+Casetype dev data is: HALF_MIXED
+Log level is: FULL
+Embedding is: ELMO
+Model name is: BILSTM_CRF
+Batch size is: 1024
+Max number of epochs is: 40
+Learning rate is: 0.001
+LSTM hidden units: 512
+LSTM dropout is: 0.0
+LSTM recurrent dropout is: 0.0
+Hyperparameter search is: False
+Visible cuda devies: None
+Number of GPUs is: 2
+Set visible cuda devices...
+Importing data...
+Padding sequence...
+Embedding data...
+Add label to int mapping...
+Model: "sequential_1"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+bidirectional_1 (Bidirection (None, 78, 1024)          6295552   
+_________________________________________________________________
+time_distributed_1 (TimeDist (None, 78, 45)            46125     
+_________________________________________________________________
+crf_1 (CRF)                  (None, 78, 45)            4185      
+=================================================================
+Total params: 6,345,862
+Trainable params: 6,345,862
+Non-trainable params: 0
+_________________________________________________________________
+Train on 8758 samples, validate on 1095 samples
+Epoch 1/40
+
+1024/8758 [==>...........................] - ETA: 12s - loss: 4.0462 - crf_viterbi_accuracy: 0.0042
+2048/8758 [======>.......................] - ETA: 7s - loss: 2.9562 - crf_viterbi_accuracy: 0.3496 
+3072/8758 [=========>....................] - ETA: 5s - loss: 2.4021 - crf_viterbi_accuracy: 0.4639
+4096/8758 [=============>................] - ETA: 3s - loss: 2.1391 - crf_viterbi_accuracy: 0.5238
+5120/8758 [================>.............] - ETA: 2s - loss: 1.9623 - crf_viterbi_accuracy: 0.5611
+6144/8758 [====================>.........] - ETA: 1s - loss: 1.8286 - crf_viterbi_accuracy: 0.5871
+7168/8758 [=======================>......] - ETA: 1s - loss: 1.7190 - crf_viterbi_accuracy: 0.6084
+8192/8758 [===========================>..] - ETA: 0s - loss: 1.6349 - crf_viterbi_accuracy: 0.6244
+8758/8758 [==============================] - 7s 791us/step - loss: 1.5974 - crf_viterbi_accuracy: 0.6362 - val_loss: 1.0312 - val_crf_viterbi_accuracy: 0.7371
+Epoch 2/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 1.0442 - crf_viterbi_accuracy: 0.7319
+2048/8758 [======>.......................] - ETA: 3s - loss: 1.0273 - crf_viterbi_accuracy: 0.7347
+3072/8758 [=========>....................] - ETA: 3s - loss: 1.0153 - crf_viterbi_accuracy: 0.7358
+4096/8758 [=============>................] - ETA: 2s - loss: 1.0016 - crf_viterbi_accuracy: 0.7383
+5120/8758 [================>.............] - ETA: 2s - loss: 0.9888 - crf_viterbi_accuracy: 0.7406
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.9759 - crf_viterbi_accuracy: 0.7419
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.9632 - crf_viterbi_accuracy: 0.7431
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.9567 - crf_viterbi_accuracy: 0.7423
+8758/8758 [==============================] - 6s 659us/step - loss: 0.9509 - crf_viterbi_accuracy: 0.7431 - val_loss: 0.8545 - val_crf_viterbi_accuracy: 0.7569
+Epoch 3/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.8621 - crf_viterbi_accuracy: 0.7534
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.8501 - crf_viterbi_accuracy: 0.7596
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.8366 - crf_viterbi_accuracy: 0.7654
+4096/8758 [=============>................] - ETA: 2s - loss: 0.8256 - crf_viterbi_accuracy: 0.7697
+5120/8758 [================>.............] - ETA: 2s - loss: 0.8127 - crf_viterbi_accuracy: 0.7739
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.8041 - crf_viterbi_accuracy: 0.7764
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.7928 - crf_viterbi_accuracy: 0.7795
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.7807 - crf_viterbi_accuracy: 0.7840
+8758/8758 [==============================] - 6s 630us/step - loss: 0.7743 - crf_viterbi_accuracy: 0.7891 - val_loss: 0.6612 - val_crf_viterbi_accuracy: 0.8424
+Epoch 4/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.6642 - crf_viterbi_accuracy: 0.8391
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.6495 - crf_viterbi_accuracy: 0.8445
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.6363 - crf_viterbi_accuracy: 0.8477
+4096/8758 [=============>................] - ETA: 2s - loss: 0.6291 - crf_viterbi_accuracy: 0.8486
+5120/8758 [================>.............] - ETA: 2s - loss: 0.6199 - crf_viterbi_accuracy: 0.8498
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.6122 - crf_viterbi_accuracy: 0.8507
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.6006 - crf_viterbi_accuracy: 0.8529
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.5910 - crf_viterbi_accuracy: 0.8549
+8758/8758 [==============================] - 6s 645us/step - loss: 0.5867 - crf_viterbi_accuracy: 0.8570 - val_loss: 0.4863 - val_crf_viterbi_accuracy: 0.8850
+Epoch 5/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.4925 - crf_viterbi_accuracy: 0.8817
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.4742 - crf_viterbi_accuracy: 0.8858
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.4700 - crf_viterbi_accuracy: 0.8870
+4096/8758 [=============>................] - ETA: 2s - loss: 0.4597 - crf_viterbi_accuracy: 0.8897
+5120/8758 [================>.............] - ETA: 2s - loss: 0.4529 - crf_viterbi_accuracy: 0.8918
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.4441 - crf_viterbi_accuracy: 0.8947
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.4364 - crf_viterbi_accuracy: 0.8975
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.4304 - crf_viterbi_accuracy: 0.8999
+8758/8758 [==============================] - 6s 632us/step - loss: 0.4257 - crf_viterbi_accuracy: 0.9024 - val_loss: 0.3479 - val_crf_viterbi_accuracy: 0.9296
+Epoch 6/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.3544 - crf_viterbi_accuracy: 0.9250
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.3480 - crf_viterbi_accuracy: 0.9258
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.3387 - crf_viterbi_accuracy: 0.9279
+4096/8758 [=============>................] - ETA: 2s - loss: 0.3315 - crf_viterbi_accuracy: 0.9298
+5120/8758 [================>.............] - ETA: 2s - loss: 0.3239 - crf_viterbi_accuracy: 0.9316
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.3187 - crf_viterbi_accuracy: 0.9330
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.3118 - crf_viterbi_accuracy: 0.9346
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.3054 - crf_viterbi_accuracy: 0.9359
+8758/8758 [==============================] - 6s 636us/step - loss: 0.3025 - crf_viterbi_accuracy: 0.9371 - val_loss: 0.2483 - val_crf_viterbi_accuracy: 0.9521
+Epoch 7/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.2546 - crf_viterbi_accuracy: 0.9483
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.2446 - crf_viterbi_accuracy: 0.9494
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.2388 - crf_viterbi_accuracy: 0.9505
+4096/8758 [=============>................] - ETA: 2s - loss: 0.2338 - crf_viterbi_accuracy: 0.9514
+5120/8758 [================>.............] - ETA: 2s - loss: 0.2281 - crf_viterbi_accuracy: 0.9529
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.2251 - crf_viterbi_accuracy: 0.9535
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.2223 - crf_viterbi_accuracy: 0.9541
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.2193 - crf_viterbi_accuracy: 0.9548
+8758/8758 [==============================] - 5s 625us/step - loss: 0.2170 - crf_viterbi_accuracy: 0.9556 - val_loss: 0.1831 - val_crf_viterbi_accuracy: 0.9642
+Epoch 8/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.1815 - crf_viterbi_accuracy: 0.9618
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.1762 - crf_viterbi_accuracy: 0.9630
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.1752 - crf_viterbi_accuracy: 0.9631
+4096/8758 [=============>................] - ETA: 2s - loss: 0.1730 - crf_viterbi_accuracy: 0.9634
+5120/8758 [================>.............] - ETA: 2s - loss: 0.1705 - crf_viterbi_accuracy: 0.9640
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.1676 - crf_viterbi_accuracy: 0.9646
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.1655 - crf_viterbi_accuracy: 0.9650
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.1634 - crf_viterbi_accuracy: 0.9652
+8758/8758 [==============================] - 5s 620us/step - loss: 0.1622 - crf_viterbi_accuracy: 0.9656 - val_loss: 0.1429 - val_crf_viterbi_accuracy: 0.9692
+Epoch 9/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.1436 - crf_viterbi_accuracy: 0.9685
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.1412 - crf_viterbi_accuracy: 0.9690
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.1387 - crf_viterbi_accuracy: 0.9694
+4096/8758 [=============>................] - ETA: 2s - loss: 0.1364 - crf_viterbi_accuracy: 0.9699
+5120/8758 [================>.............] - ETA: 2s - loss: 0.1345 - crf_viterbi_accuracy: 0.9703
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.1329 - crf_viterbi_accuracy: 0.9708
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.1306 - crf_viterbi_accuracy: 0.9712
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.1294 - crf_viterbi_accuracy: 0.9715
+8758/8758 [==============================] - 5s 625us/step - loss: 0.1284 - crf_viterbi_accuracy: 0.9719 - val_loss: 0.1168 - val_crf_viterbi_accuracy: 0.9741
+Epoch 10/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.1151 - crf_viterbi_accuracy: 0.9744
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.1145 - crf_viterbi_accuracy: 0.9743
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.1117 - crf_viterbi_accuracy: 0.9748
+4096/8758 [=============>................] - ETA: 2s - loss: 0.1101 - crf_viterbi_accuracy: 0.9753
+5120/8758 [================>.............] - ETA: 2s - loss: 0.1087 - crf_viterbi_accuracy: 0.9756
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.1082 - crf_viterbi_accuracy: 0.9757
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.1073 - crf_viterbi_accuracy: 0.9758
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.1066 - crf_viterbi_accuracy: 0.9760
+8758/8758 [==============================] - 5s 621us/step - loss: 0.1059 - crf_viterbi_accuracy: 0.9762 - val_loss: 0.0992 - val_crf_viterbi_accuracy: 0.9771
+Epoch 11/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0960 - crf_viterbi_accuracy: 0.9782
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0947 - crf_viterbi_accuracy: 0.9781
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0942 - crf_viterbi_accuracy: 0.9780
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0940 - crf_viterbi_accuracy: 0.9781
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0932 - crf_viterbi_accuracy: 0.9784
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0924 - crf_viterbi_accuracy: 0.9786
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0916 - crf_viterbi_accuracy: 0.9788
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0910 - crf_viterbi_accuracy: 0.9790
+8758/8758 [==============================] - 5s 622us/step - loss: 0.0907 - crf_viterbi_accuracy: 0.9791 - val_loss: 0.0866 - val_crf_viterbi_accuracy: 0.9791
+Epoch 12/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0869 - crf_viterbi_accuracy: 0.9799
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0842 - crf_viterbi_accuracy: 0.9805
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0834 - crf_viterbi_accuracy: 0.9807
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0825 - crf_viterbi_accuracy: 0.9808
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0816 - crf_viterbi_accuracy: 0.9811
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0814 - crf_viterbi_accuracy: 0.9811
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0808 - crf_viterbi_accuracy: 0.9813
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0798 - crf_viterbi_accuracy: 0.9814
+8758/8758 [==============================] - 5s 619us/step - loss: 0.0797 - crf_viterbi_accuracy: 0.9815 - val_loss: 0.0772 - val_crf_viterbi_accuracy: 0.9805
+Epoch 13/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0739 - crf_viterbi_accuracy: 0.9825
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0728 - crf_viterbi_accuracy: 0.9829
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0734 - crf_viterbi_accuracy: 0.9827
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0735 - crf_viterbi_accuracy: 0.9826
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0727 - crf_viterbi_accuracy: 0.9829
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0719 - crf_viterbi_accuracy: 0.9832
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0715 - crf_viterbi_accuracy: 0.9832
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0713 - crf_viterbi_accuracy: 0.9832
+8758/8758 [==============================] - 5s 617us/step - loss: 0.0711 - crf_viterbi_accuracy: 0.9833 - val_loss: 0.0699 - val_crf_viterbi_accuracy: 0.9821
+Epoch 14/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0659 - crf_viterbi_accuracy: 0.9847
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0660 - crf_viterbi_accuracy: 0.9847
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0665 - crf_viterbi_accuracy: 0.9846
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0658 - crf_viterbi_accuracy: 0.9847
+5120/8758 [================>.............] - ETA: 1s - loss: 0.0649 - crf_viterbi_accuracy: 0.9849
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0648 - crf_viterbi_accuracy: 0.9849
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0647 - crf_viterbi_accuracy: 0.9849
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0644 - crf_viterbi_accuracy: 0.9849
+8758/8758 [==============================] - 5s 610us/step - loss: 0.0643 - crf_viterbi_accuracy: 0.9848 - val_loss: 0.0640 - val_crf_viterbi_accuracy: 0.9835
+Epoch 15/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0623 - crf_viterbi_accuracy: 0.9850
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0605 - crf_viterbi_accuracy: 0.9856
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0605 - crf_viterbi_accuracy: 0.9857
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0596 - crf_viterbi_accuracy: 0.9860
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0592 - crf_viterbi_accuracy: 0.9861
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0588 - crf_viterbi_accuracy: 0.9862
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0586 - crf_viterbi_accuracy: 0.9863
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0590 - crf_viterbi_accuracy: 0.9862
+8758/8758 [==============================] - 5s 618us/step - loss: 0.0588 - crf_viterbi_accuracy: 0.9863 - val_loss: 0.0594 - val_crf_viterbi_accuracy: 0.9843
+Epoch 16/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0571 - crf_viterbi_accuracy: 0.9868
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0560 - crf_viterbi_accuracy: 0.9869
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0553 - crf_viterbi_accuracy: 0.9870
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0551 - crf_viterbi_accuracy: 0.9869
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0548 - crf_viterbi_accuracy: 0.9869
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0549 - crf_viterbi_accuracy: 0.9869
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0548 - crf_viterbi_accuracy: 0.9870
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0545 - crf_viterbi_accuracy: 0.9870
+8758/8758 [==============================] - 5s 614us/step - loss: 0.0542 - crf_viterbi_accuracy: 0.9872 - val_loss: 0.0555 - val_crf_viterbi_accuracy: 0.9853
+Epoch 17/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0534 - crf_viterbi_accuracy: 0.9878
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0537 - crf_viterbi_accuracy: 0.9876
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0530 - crf_viterbi_accuracy: 0.9877
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0521 - crf_viterbi_accuracy: 0.9878
+5120/8758 [================>.............] - ETA: 1s - loss: 0.0518 - crf_viterbi_accuracy: 0.9878
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0517 - crf_viterbi_accuracy: 0.9877
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0512 - crf_viterbi_accuracy: 0.9878
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0507 - crf_viterbi_accuracy: 0.9878
+8758/8758 [==============================] - 5s 610us/step - loss: 0.0503 - crf_viterbi_accuracy: 0.9880 - val_loss: 0.0524 - val_crf_viterbi_accuracy: 0.9856
+Epoch 18/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0470 - crf_viterbi_accuracy: 0.9885
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0473 - crf_viterbi_accuracy: 0.9883
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0476 - crf_viterbi_accuracy: 0.9884
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0481 - crf_viterbi_accuracy: 0.9883
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0475 - crf_viterbi_accuracy: 0.9884
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0471 - crf_viterbi_accuracy: 0.9886
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0471 - crf_viterbi_accuracy: 0.9885
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0474 - crf_viterbi_accuracy: 0.9885
+8758/8758 [==============================] - 5s 613us/step - loss: 0.0471 - crf_viterbi_accuracy: 0.9886 - val_loss: 0.0495 - val_crf_viterbi_accuracy: 0.9867
+Epoch 19/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0448 - crf_viterbi_accuracy: 0.9891
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0453 - crf_viterbi_accuracy: 0.9888
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0451 - crf_viterbi_accuracy: 0.9888
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0444 - crf_viterbi_accuracy: 0.9891
+5120/8758 [================>.............] - ETA: 1s - loss: 0.0445 - crf_viterbi_accuracy: 0.9889
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0443 - crf_viterbi_accuracy: 0.9890
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0441 - crf_viterbi_accuracy: 0.9891
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0440 - crf_viterbi_accuracy: 0.9891
+8758/8758 [==============================] - 5s 610us/step - loss: 0.0441 - crf_viterbi_accuracy: 0.9890 - val_loss: 0.0474 - val_crf_viterbi_accuracy: 0.9867
+Epoch 20/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0424 - crf_viterbi_accuracy: 0.9896
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0415 - crf_viterbi_accuracy: 0.9899
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0417 - crf_viterbi_accuracy: 0.9898
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0422 - crf_viterbi_accuracy: 0.9896
+5120/8758 [================>.............] - ETA: 1s - loss: 0.0420 - crf_viterbi_accuracy: 0.9896
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0418 - crf_viterbi_accuracy: 0.9896
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0415 - crf_viterbi_accuracy: 0.9897
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0414 - crf_viterbi_accuracy: 0.9896
+8758/8758 [==============================] - 5s 600us/step - loss: 0.0415 - crf_viterbi_accuracy: 0.9896 - val_loss: 0.0451 - val_crf_viterbi_accuracy: 0.9877
+Epoch 21/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0386 - crf_viterbi_accuracy: 0.9899
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0390 - crf_viterbi_accuracy: 0.9900
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0393 - crf_viterbi_accuracy: 0.9900
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0393 - crf_viterbi_accuracy: 0.9901
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0390 - crf_viterbi_accuracy: 0.9902
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0391 - crf_viterbi_accuracy: 0.9902
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0393 - crf_viterbi_accuracy: 0.9901
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0393 - crf_viterbi_accuracy: 0.9901
+8758/8758 [==============================] - 5s 613us/step - loss: 0.0392 - crf_viterbi_accuracy: 0.9901 - val_loss: 0.0436 - val_crf_viterbi_accuracy: 0.9878
+Epoch 22/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0365 - crf_viterbi_accuracy: 0.9908
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0376 - crf_viterbi_accuracy: 0.9905
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0372 - crf_viterbi_accuracy: 0.9905
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0374 - crf_viterbi_accuracy: 0.9905
+5120/8758 [================>.............] - ETA: 1s - loss: 0.0372 - crf_viterbi_accuracy: 0.9905
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0373 - crf_viterbi_accuracy: 0.9905
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0373 - crf_viterbi_accuracy: 0.9905
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0373 - crf_viterbi_accuracy: 0.9905
+8758/8758 [==============================] - 5s 607us/step - loss: 0.0373 - crf_viterbi_accuracy: 0.9905 - val_loss: 0.0419 - val_crf_viterbi_accuracy: 0.9888
+Epoch 23/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0370 - crf_viterbi_accuracy: 0.9910
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0363 - crf_viterbi_accuracy: 0.9910
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0366 - crf_viterbi_accuracy: 0.9908
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0361 - crf_viterbi_accuracy: 0.9908
+5120/8758 [================>.............] - ETA: 1s - loss: 0.0360 - crf_viterbi_accuracy: 0.9908
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0360 - crf_viterbi_accuracy: 0.9908
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0357 - crf_viterbi_accuracy: 0.9909
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0354 - crf_viterbi_accuracy: 0.9909
+8758/8758 [==============================] - 5s 610us/step - loss: 0.0353 - crf_viterbi_accuracy: 0.9910 - val_loss: 0.0405 - val_crf_viterbi_accuracy: 0.9888
+Epoch 24/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0372 - crf_viterbi_accuracy: 0.9906
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0353 - crf_viterbi_accuracy: 0.9909
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0349 - crf_viterbi_accuracy: 0.9909
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0344 - crf_viterbi_accuracy: 0.9911
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0344 - crf_viterbi_accuracy: 0.9911
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0344 - crf_viterbi_accuracy: 0.9911
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0342 - crf_viterbi_accuracy: 0.9911
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0339 - crf_viterbi_accuracy: 0.9912
+8758/8758 [==============================] - 5s 611us/step - loss: 0.0336 - crf_viterbi_accuracy: 0.9913 - val_loss: 0.0391 - val_crf_viterbi_accuracy: 0.9892
+Epoch 25/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0315 - crf_viterbi_accuracy: 0.9918
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0310 - crf_viterbi_accuracy: 0.9919
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0318 - crf_viterbi_accuracy: 0.9917
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0319 - crf_viterbi_accuracy: 0.9916
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0319 - crf_viterbi_accuracy: 0.9917
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0319 - crf_viterbi_accuracy: 0.9917
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0319 - crf_viterbi_accuracy: 0.9917
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0320 - crf_viterbi_accuracy: 0.9916
+8758/8758 [==============================] - 5s 611us/step - loss: 0.0319 - crf_viterbi_accuracy: 0.9917 - val_loss: 0.0383 - val_crf_viterbi_accuracy: 0.9891
+Epoch 26/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0310 - crf_viterbi_accuracy: 0.9916
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0313 - crf_viterbi_accuracy: 0.9918
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0309 - crf_viterbi_accuracy: 0.9919
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0306 - crf_viterbi_accuracy: 0.9920
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0306 - crf_viterbi_accuracy: 0.9920
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0306 - crf_viterbi_accuracy: 0.9920
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0305 - crf_viterbi_accuracy: 0.9920
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0304 - crf_viterbi_accuracy: 0.9920
+8758/8758 [==============================] - 5s 618us/step - loss: 0.0304 - crf_viterbi_accuracy: 0.9920 - val_loss: 0.0371 - val_crf_viterbi_accuracy: 0.9897
+Epoch 27/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0293 - crf_viterbi_accuracy: 0.9919
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0297 - crf_viterbi_accuracy: 0.9920
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0294 - crf_viterbi_accuracy: 0.9922
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0290 - crf_viterbi_accuracy: 0.9923
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0289 - crf_viterbi_accuracy: 0.9923
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0290 - crf_viterbi_accuracy: 0.9923
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0289 - crf_viterbi_accuracy: 0.9923
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0290 - crf_viterbi_accuracy: 0.9923
+8758/8758 [==============================] - 5s 615us/step - loss: 0.0290 - crf_viterbi_accuracy: 0.9923 - val_loss: 0.0364 - val_crf_viterbi_accuracy: 0.9899
+Epoch 28/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0280 - crf_viterbi_accuracy: 0.9929
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0284 - crf_viterbi_accuracy: 0.9926
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0284 - crf_viterbi_accuracy: 0.9925
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0281 - crf_viterbi_accuracy: 0.9926
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0278 - crf_viterbi_accuracy: 0.9926
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0277 - crf_viterbi_accuracy: 0.9927
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0278 - crf_viterbi_accuracy: 0.9926
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0277 - crf_viterbi_accuracy: 0.9927
+8758/8758 [==============================] - 5s 620us/step - loss: 0.0277 - crf_viterbi_accuracy: 0.9926 - val_loss: 0.0355 - val_crf_viterbi_accuracy: 0.9903
+Epoch 29/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0266 - crf_viterbi_accuracy: 0.9930
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0276 - crf_viterbi_accuracy: 0.9926
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0266 - crf_viterbi_accuracy: 0.9930
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0265 - crf_viterbi_accuracy: 0.9930
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0266 - crf_viterbi_accuracy: 0.9930
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0265 - crf_viterbi_accuracy: 0.9930
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0265 - crf_viterbi_accuracy: 0.9930
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0265 - crf_viterbi_accuracy: 0.9929
+8758/8758 [==============================] - 5s 619us/step - loss: 0.0266 - crf_viterbi_accuracy: 0.9929 - val_loss: 0.0351 - val_crf_viterbi_accuracy: 0.9902
+Epoch 30/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0254 - crf_viterbi_accuracy: 0.9933
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0264 - crf_viterbi_accuracy: 0.9929
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0253 - crf_viterbi_accuracy: 0.9933
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0254 - crf_viterbi_accuracy: 0.9933
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0254 - crf_viterbi_accuracy: 0.9932
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0254 - crf_viterbi_accuracy: 0.9933
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0255 - crf_viterbi_accuracy: 0.9932
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0253 - crf_viterbi_accuracy: 0.9933
+8758/8758 [==============================] - 5s 619us/step - loss: 0.0252 - crf_viterbi_accuracy: 0.9934 - val_loss: 0.0341 - val_crf_viterbi_accuracy: 0.9903
+Epoch 31/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0244 - crf_viterbi_accuracy: 0.9936
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0246 - crf_viterbi_accuracy: 0.9934
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0244 - crf_viterbi_accuracy: 0.9936
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0241 - crf_viterbi_accuracy: 0.9937
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0242 - crf_viterbi_accuracy: 0.9937
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0243 - crf_viterbi_accuracy: 0.9937
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0242 - crf_viterbi_accuracy: 0.9937
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0241 - crf_viterbi_accuracy: 0.9937
+8758/8758 [==============================] - 5s 618us/step - loss: 0.0242 - crf_viterbi_accuracy: 0.9936 - val_loss: 0.0341 - val_crf_viterbi_accuracy: 0.9904
+Epoch 32/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0237 - crf_viterbi_accuracy: 0.9934
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0233 - crf_viterbi_accuracy: 0.9938
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0230 - crf_viterbi_accuracy: 0.9939
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0235 - crf_viterbi_accuracy: 0.9938
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0236 - crf_viterbi_accuracy: 0.9937
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0236 - crf_viterbi_accuracy: 0.9937
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0234 - crf_viterbi_accuracy: 0.9938
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0233 - crf_viterbi_accuracy: 0.9938
+8758/8758 [==============================] - 5s 611us/step - loss: 0.0232 - crf_viterbi_accuracy: 0.9938 - val_loss: 0.0336 - val_crf_viterbi_accuracy: 0.9909
+Epoch 33/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0227 - crf_viterbi_accuracy: 0.9942
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0224 - crf_viterbi_accuracy: 0.9941
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0223 - crf_viterbi_accuracy: 0.9940
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0225 - crf_viterbi_accuracy: 0.9940
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0223 - crf_viterbi_accuracy: 0.9941
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0223 - crf_viterbi_accuracy: 0.9940
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0223 - crf_viterbi_accuracy: 0.9941
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0219 - crf_viterbi_accuracy: 0.9942
+8758/8758 [==============================] - 5s 612us/step - loss: 0.0219 - crf_viterbi_accuracy: 0.9942 - val_loss: 0.0327 - val_crf_viterbi_accuracy: 0.9905
+Epoch 34/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0197 - crf_viterbi_accuracy: 0.9947
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0198 - crf_viterbi_accuracy: 0.9947
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0204 - crf_viterbi_accuracy: 0.9946
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0209 - crf_viterbi_accuracy: 0.9945
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0210 - crf_viterbi_accuracy: 0.9945
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0211 - crf_viterbi_accuracy: 0.9944
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0211 - crf_viterbi_accuracy: 0.9945
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0208 - crf_viterbi_accuracy: 0.9946
+8758/8758 [==============================] - 5s 614us/step - loss: 0.0207 - crf_viterbi_accuracy: 0.9946 - val_loss: 0.0322 - val_crf_viterbi_accuracy: 0.9905
+Epoch 35/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0211 - crf_viterbi_accuracy: 0.9945
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0207 - crf_viterbi_accuracy: 0.9947
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0204 - crf_viterbi_accuracy: 0.9948
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0200 - crf_viterbi_accuracy: 0.9948
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0197 - crf_viterbi_accuracy: 0.9949
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0196 - crf_viterbi_accuracy: 0.9950
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0195 - crf_viterbi_accuracy: 0.9950
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0196 - crf_viterbi_accuracy: 0.9950
+8758/8758 [==============================] - 5s 618us/step - loss: 0.0198 - crf_viterbi_accuracy: 0.9949 - val_loss: 0.0320 - val_crf_viterbi_accuracy: 0.9906
+Epoch 36/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0177 - crf_viterbi_accuracy: 0.9953
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0181 - crf_viterbi_accuracy: 0.9952
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0186 - crf_viterbi_accuracy: 0.9952
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0187 - crf_viterbi_accuracy: 0.9952
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0188 - crf_viterbi_accuracy: 0.9952
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0188 - crf_viterbi_accuracy: 0.9952
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0188 - crf_viterbi_accuracy: 0.9952
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0189 - crf_viterbi_accuracy: 0.9951
+8758/8758 [==============================] - 5s 620us/step - loss: 0.0188 - crf_viterbi_accuracy: 0.9952 - val_loss: 0.0319 - val_crf_viterbi_accuracy: 0.9909
+Epoch 37/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0185 - crf_viterbi_accuracy: 0.9955
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0186 - crf_viterbi_accuracy: 0.9952
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0181 - crf_viterbi_accuracy: 0.9954
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0182 - crf_viterbi_accuracy: 0.9954
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0180 - crf_viterbi_accuracy: 0.9954
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0180 - crf_viterbi_accuracy: 0.9954
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0179 - crf_viterbi_accuracy: 0.9955
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0179 - crf_viterbi_accuracy: 0.9955
+8758/8758 [==============================] - 5s 623us/step - loss: 0.0180 - crf_viterbi_accuracy: 0.9954 - val_loss: 0.0318 - val_crf_viterbi_accuracy: 0.9910
+Epoch 38/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0166 - crf_viterbi_accuracy: 0.9957
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0169 - crf_viterbi_accuracy: 0.9959
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0177 - crf_viterbi_accuracy: 0.9956
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0174 - crf_viterbi_accuracy: 0.9956
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0171 - crf_viterbi_accuracy: 0.9957
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0172 - crf_viterbi_accuracy: 0.9956
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0171 - crf_viterbi_accuracy: 0.9957
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0171 - crf_viterbi_accuracy: 0.9957
+8758/8758 [==============================] - 5s 610us/step - loss: 0.0170 - crf_viterbi_accuracy: 0.9957 - val_loss: 0.0310 - val_crf_viterbi_accuracy: 0.9906
+Epoch 39/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0154 - crf_viterbi_accuracy: 0.9961
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0161 - crf_viterbi_accuracy: 0.9959
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0161 - crf_viterbi_accuracy: 0.9958
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0161 - crf_viterbi_accuracy: 0.9959
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0161 - crf_viterbi_accuracy: 0.9959
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0160 - crf_viterbi_accuracy: 0.9960
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0160 - crf_viterbi_accuracy: 0.9960
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0160 - crf_viterbi_accuracy: 0.9960
+8758/8758 [==============================] - 5s 626us/step - loss: 0.0159 - crf_viterbi_accuracy: 0.9960 - val_loss: 0.0319 - val_crf_viterbi_accuracy: 0.9905
+Epoch 40/40
+
+1024/8758 [==>...........................] - ETA: 4s - loss: 0.0169 - crf_viterbi_accuracy: 0.9954
+2048/8758 [======>.......................] - ETA: 3s - loss: 0.0163 - crf_viterbi_accuracy: 0.9957
+3072/8758 [=========>....................] - ETA: 3s - loss: 0.0160 - crf_viterbi_accuracy: 0.9958
+4096/8758 [=============>................] - ETA: 2s - loss: 0.0156 - crf_viterbi_accuracy: 0.9959
+5120/8758 [================>.............] - ETA: 2s - loss: 0.0157 - crf_viterbi_accuracy: 0.9960
+6144/8758 [====================>.........] - ETA: 1s - loss: 0.0155 - crf_viterbi_accuracy: 0.9960
+7168/8758 [=======================>......] - ETA: 0s - loss: 0.0154 - crf_viterbi_accuracy: 0.9961
+8192/8758 [===========================>..] - ETA: 0s - loss: 0.0154 - crf_viterbi_accuracy: 0.9961
+8758/8758 [==============================] - 5s 620us/step - loss: 0.0154 - crf_viterbi_accuracy: 0.9961 - val_loss: 0.0308 - val_crf_viterbi_accuracy: 0.9907
+Save model to file...
+dev accuracy: 0.9704205823447851
+test accuracy: 0.9765107100433
+Exit.
