@@ -51,17 +51,22 @@ On wikipedia dataset which we trained truecaser on we got performence similar to
 We expect to get similar results to those described in the paper.
 
 #### Comparison
-| Experiment | Train data | Test data | accuracy | Avg | accuracy from the paper | Avg from the paper | Code |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 1.1 | Cased | Cased | 97.56 | TODO | 97.85 | - | TODO |
-| 1.2 | Cased | Uncased | TODO | TODO  | 88.66 | 93.26 | TODO |
-| 2 | Uncased | Uncased | TODO | TODO  | 97.45 | 97.45 | TODO |
-| 3.1 | Augment | Cased | TODO | TODO | 97.79 | - | TODO  |
-| 3.2 | Augment | Uncased | TODO | TODO | 97.35 | 97.57 | TODO |
-| 3.5.1 | Half Mixed | Cased | TODO  | TODO | 97.85 | - | TODO |
-| 3.5.2 | Half Mixed | Uncased | TODO | TODO | 97.36 | 97.61 | TODO |
-| 4 | Cased | Truecase | TODO | TODO | 95.21 | 95.21 | TODO |
-| 5 | Truecase | Truecase | TODO | TODO | 97.38 | 97.38 | TODO |
+| Experiment | Train Data | Test Data | Accuracy | Avg | Accuracy (Paper) | Avg (Paper) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1.1 | Cased | Cased | 97.30 | - | 97.85 | - |
+| 1.2 | Cased | Uncased | 88.29 | 92.78 | 88.66 | 93.26 |
+|  |  |  |  |  |  |  |
+| 2 | Uncased | Uncased | 96.51 | 96.51 | 97.45 | 97.45 |
+|  |  |  |  |  |  |  |
+| 3.1 | C+U | Cased | 97.51 | - | 97.79 | - |
+| 3.2 | C+U | Uncased | 96.59 | 97.05 | 97.35 | 97.57 |
+|  |  |  |  |  |  |  |
+| 3.5.1 | Half Mixed | Cased | 97.12 | - | 97.85 | - |
+| 3.5.2 | Half Mixed | Uncased | 96.19 | 96.66 | 97.36 | 97.61 |
+|  |  |  |  |  |  |  |
+| 4 | Cased | Truecase | 95.04 | 95.04 | 95.21 | 95.21 |
+|  |  |  |  |  |  |  |
+| 5 | Truecase | Truecase | 96.61 | 96.61 | 97.38 | 97.38 |
 
 #### Model Characteristics
 
