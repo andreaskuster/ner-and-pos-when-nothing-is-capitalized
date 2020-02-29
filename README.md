@@ -120,6 +120,54 @@ POS on penn treebank reduced dataset, brown and CoNLL2000 dataset, word2vec, glo
 |  |  |  |  |  |
 
 
+| Train Data | Test Data | Accuracy ELMo CRF |
+| --- | --- | --- |
+| __PTB Reduced Dataset__ |  |  |
+| Cased | Cased | 96.35 |
+| Cased | Uncased | 88.38 |
+|  |  |  |  |  |  |  | 
+| Uncased | Uncased | 95.48 |
+|  |  |  |  |  |  |  |
+| C+U | Cased | 96.70 |
+| C+U | Uncased | 95.73 |
+|  |  |  |  |  |  |  |
+| Half Mixed | Cased | 96.34 |
+| Half Mixed  | Uncased | 95.08 |
+|  |  |  |  |  |  |  |
+| Cased | Truecase | 94.62 |
+| Truecase | Truecase | 95.35 |
+|  |  |  |  |  |  |  |
+| __Brown__ |  |  |  |  |  |  | 
+| Cased | Cased | 95.69 |
+| Cased | Uncased | 83.30 |
+|  |  |  |  |  |  |  | 
+| Uncased | Uncased | 92.91 |
+|  |  |  |  |  |  |  |
+| C+U | Cased | 97.11 |
+| C+U | Uncased | 95.83 |
+|  |  |  |  |  |  |  |
+| Half Mixed | Cased | 95.28 |
+| Half Mixed  | Uncased | 92.56 |
+|  |  |  |  |  |  |  |
+| Cased | Truecase | 92.11 |
+| Truecase | Truecase | 92.62 |
+|  |  |  |  |  |  |  |
+| __CoNLL 2000__ |  |  |  |  |  |  | 
+| Cased | Cased | 97.80 |
+| Cased | Uncased | 87.91 |
+|  |  |  |  |  |  |  | 
+| Uncased | Uncased | 96.83 |
+|  |  |  |  |  |  |  |
+| C+U | Cased | 99.00 |
+| C+U | Uncased | 99.46 |
+|  |  |  |  |  |  |  |
+| Half Mixed | Cased | 97.65 |
+| Half Mixed  | Uncased | 96.66 |
+|  |  |  |  |  |  |  |
+| Cased | Truecase | 95.40 |
+| Truecase | Truecase | 96.79 |
+|  |  |  |  |  |  |  |
+
 #### Model Characteristics
 
 Train/Test/Dev data: TODO
