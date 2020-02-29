@@ -100,28 +100,24 @@ We expect to get similar results to those described in the paper.
 
 #### Comparison
 POS on penn treebank reduced dataset, brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer (additional experiments)
-| Train data | Test data | accuracy w2v | accuracy w2v crf | accuracy glove | accuracy glove crf | accuracy elmo | accuracy elmo crf| Code |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| __PTB Dataset__ |  |  |  |  |  |  |  | 
-| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | 97.47 |
-| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| __PTB Reduced Dataset__ |  |  |  |  |  |  |  | 
-| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| __Brown__ |  |  |  |  |  |  |  | 
-| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| __CoNLL 2000__ |  |  |  |  |  |  |  | 
-| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
+
+| Train Data | Test Data | Accuracy Word2vec CRF | Accuracy GloVe CRF | Accuracy ELMo | Accuracy ELMo CRF (paper experiment) |
+| --- | --- | --- | --- | --- | --- | 
+| __PTB Dataset__ |  |  |  |  |  | 
+| Cased | Cased | 88.80 | 95.90 | 97.19 |  97.27 | 
+| Cased | Uncased | 78.63 | 86.11 | 88.57 | 88.29 |
+|  |  |  |  |  |  
+| Uncased | Uncased | 80.97 | 94.97 | 96.52 | 96.51 |
+|  |  |  |  |  | 
+| C+U | Cased | 85.62 | 96.88 | 97.44 | 97.51 |
+| C+U | Uncased | 86.67 | 95.84 | 96.60 | 96.60 |
+|  |  |  |  |  | 
+| Half Mixed | Cased | 87.45 | 95.79 | 97.30 |  97.23 |
+| Half Mixed | Uncased | 82.86 | 94.90 | 96.36 | 96.19 |
+|  |  |  |  |  | 
+| Cased | Truecase | 85.74 | 93.82 | 94.78 | 95.04 |
+| Truecase | Truecase | 86.64 | 95.20 | 96.56 | 96.61 |
+|  |  |  |  |  |
 
 
 #### Model Characteristics
