@@ -296,11 +296,11 @@ class POS:
                 dev_x, dev_y = data_loader.load_data_half_mixed()
             # compute train/test/dev dataset size
             total_size = len(train_x)
-            start, middle0, middle1, end = 0, int((1.0-test_size-dev_size)*total_size),  int((1.0-dev_size)*total_size), total_size
+            start, middle0, middle1, end = 0, int(test_size*total_size),  int((test_size + dev_size)*total_size), total_size
             # split data
-            train_x, train_y = train_x[start:middle0], train_y[start:middle0]
-            test_x, test_y = test_x[middle0:middle1], test_y[middle0:middle1]
-            dev_x, dev_y = dev_x[middle1:end], dev_y[middle1:end]
+            train_x, train_y = train_x[middle1:end], train_y[middle1:end]
+            test_x, test_y = test_x[start:middle0], test_y[start:middle0]
+            dev_x, dev_y = dev_x[middle0:middle1], dev_y[middle0:middle1]
         else:
             raise RuntimeError("Unknown dataset.")
         # store dataset internally
