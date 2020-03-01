@@ -43,31 +43,6 @@ optional arguments:
   -c CUDADEVICES, --cudadevices CUDADEVICES
 ```
 
-### Data Import
-
-
-### Sequence Padding
-
-
-### Embedding
-
-
-### Label Mapping
-
-### Model
-
-
-
-### Misc
-
-#### Early Stopping
-
-#### Hyperparameter Search
-
-#### True Accuracy Report
-
-#### Save / Load Model
-
 
 ## Hyperparameter Search
 We performed hyperparameter grid search over the following parameters and values:
