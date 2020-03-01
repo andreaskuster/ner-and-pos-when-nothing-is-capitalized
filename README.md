@@ -209,7 +209,9 @@ In order to compare the outcome from the additional experiments to those from th
 Computational Requirements: HW / average runtime, #trials, #GPU hours
 
 #### Conclusion
-TODO
+1. ELMo indeed outperforms word2vec by ~10% and GloVe by ~2%.
+2. The accuracy with and without CRF layer are rougly the same (+/-0.3% depending on the testcase). Considering the extra effort of addin the (non-standard) keras layer, the lack of multi gpu support, we conclude that we could would probably be better off withouth the CRF layer.
+3.The hypothesis (1.,2.,3.) from the paper hold true (relative accuracy difference) for the reduced ptb dastaset, as well as the other datasets (brown and conll2000). Depending on the dataset, the absolute accuracy values differ i.e. the performance of the pos tagger for CoNLL2000 reaches >99% for the C+U experiment.
 
 
 ## NER experiment
