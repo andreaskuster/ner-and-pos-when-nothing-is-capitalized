@@ -118,9 +118,21 @@ We used the following compute infrastructure to run the experiments:
 \* the CRF layer does not have multi GPU support yet
 
 ## Runtime
+The runtime for a single experiment on the compute infrastructure descibed above 
+* data import
+ * data loading: <5min
+ * sequence padding: <5min
+ * embedding:
+   * glove: <5min
+   * word2vec: <5min
+   * elmo: >1h and huge memory consumption (to reduce this, we implemented batch-wise elmo embedding (parameter: batch_size_embedding) and load/store functionality to re-use the embedding for different experiments)
+ * y mapping: <5min
+* training:
+  * model initialization: <5min
+  * epoch: up to 3min, usually around 1.5-2min per epoch, maximum 40 epochs
+* prediction and evaluation: <5min
 
-### Data Preprocessing
-
+__Total: 0.3-3h__
 
 
 ## Work Hours
