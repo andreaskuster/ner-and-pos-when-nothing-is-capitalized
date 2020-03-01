@@ -117,7 +117,7 @@ __Note__: All the hyperparameters reported above are a result of the hyperparame
 
 
 #### Conclusion
-Even though we haven't seen any implementation details (except those described in the paper text), we reported the exact same accuracy scores (+/- 0.5%) and can confirm the hypothesis (1., 2., 3.) described above.
+Even though we haven't seen any implementation details (except those described in the paper text), we reported the exact same accuracy scores (+/- 0.8%) and can confirm the hypothesis (1., 2., 3.) described above.
 
 
 
