@@ -43,7 +43,7 @@ On wikipedia dataset which we trained truecaser on we got performence similar to
 
 <b>TODO</b>: Summarize for other datasets.
 
-## POS experiment
+## POS Experiment
 
 ### Paper Reproduction (BiLSTM-CRF+POS+ELMo on PTB)
 
@@ -93,7 +93,9 @@ TODO
 
 
 ### Additional Experiments
-The goal of the additional experiments is to find out if the hypothesis from the paper is more generally applicable on different datasets, embeddings and LSTM models. Therefore, we run the tests on the brown and CoNLL2000 corpus, using word2vec, glove and elmo embeddings, and different LSTM models.
+The aim of the additional experiments is to find out if the hypothesis from the paper is more generally applicable. Therefore, we run the same experiments on LSTM models with different word embeddings (word2vec, glove, elmo) and without the CRF layer.
+Furthermore, we extended the tests to different datasets, namely the Brown corpus, the CoNLL2000 corpus and a subset of the PTB corpus (train: section 0-4, dev: section 5-6, test: section 7-8). 
+
 
 #### Hypothesis
 We expect to get similar results to those described in the paper.
