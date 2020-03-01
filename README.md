@@ -48,7 +48,12 @@ On wikipedia dataset which we trained truecaser on we got performence similar to
 ### Paper Reproduction (BiLSTM-CRF+POS+ELMo on PTB)
 
 #### Hypothesis
-We expect to get similar results to those described in the paper.
+
+1. Training on cased data does not perform well on uncased data, while training on uncased data performs well on uncased data.
+2. Training on a concatenated dataset of uncased and cased data performs well on cased and uncased data. It does so, not due to the larger dataset, but rather works as good if we (randomly) lowercase 50% of the dataset.
+3. Trying to solve the problem of (1) by truecasing the lowercased test data does not perform well, but it does perform well if the training data has been lowercased and truecased too.
+
+We expected to get similar results to those described in the paper.
 
 #### Comparison
 | Experiment | Train Data | Test Data | Accuracy | Avg | Accuracy (Paper) | Avg (Paper) |
