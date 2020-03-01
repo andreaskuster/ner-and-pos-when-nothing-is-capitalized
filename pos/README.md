@@ -99,6 +99,16 @@ TODO
 TODO
 
 
+## Computing Infrastructure
+We used the following compute infrastructure to run the experiments:
+
+  * __CPU__: AMD EPYC 7501 (64 cores / 128 threads)
+  * __GPU__: 2x Nvidia V100 (32GB PCIe) \*
+  * __Memory__: 512GB
+
+\* the CRF layer does not have multi GPU support yet
+
+
 ## Evaluation
 
 example command for the "Validation Accuracy over Time" plot:
