@@ -46,6 +46,8 @@ class CaseType(Enum):
     CASED = auto()
     UNCASED = auto()
     TRUECASE = auto()
+    CASED_UNCASED = auto()
+    HALF_MIXED = auto()
 
 
 class Embedding(Enum):
@@ -178,6 +180,10 @@ class POS:
                 data_x, data_y = ptb.load_data_lowercase([0])
             elif train_casetype == CaseType.TRUECASE:
                 data_x, data_y = ptb.load_data_truecase([0])
+            elif train_casetype == CaseType.CASED_UNCASED:
+                data_x, data_y = ptb.load_data_cased_and_uncased([0])
+            elif train_casetype == CaseType.HALF_MIXED:
+                data_x, data_y = ptb.load_data_half_mixed([0])
             train_x, train_y = data_x[1:5], data_y[1:5]
             # test data
             if test_casetype == CaseType.CASED:
@@ -186,6 +192,10 @@ class POS:
                 data_x, data_y = ptb.load_data_lowercase([0])
             elif test_casetype == CaseType.TRUECASE:
                 data_x, data_y = ptb.load_data_truecase([0])
+            elif test_casetype == CaseType.CASED_UNCASED:
+                data_x, data_y = ptb.load_data_cased_and_uncased([0])
+            elif test_casetype == CaseType.HALF_MIXED:
+                data_x, data_y = ptb.load_data_half_mixed([0])
             test_x, test_y = data_x[4:6], data_y[4:6]
             # dev data
             if dev_casetype == CaseType.CASED:
@@ -194,6 +204,10 @@ class POS:
                 data_x, data_y = ptb.load_data_lowercase([0])
             elif dev_casetype == CaseType.TRUECASE:
                 data_x, data_y = ptb.load_data_truecase([0])
+            elif dev_casetype == CaseType.CASED_UNCASED:
+                data_x, data_y = ptb.load_data_cased_and_uncased([0])
+            elif dev_casetype == CaseType.HALF_MIXED:
+                data_x, data_y = ptb.load_data_half_mixed([0])
             dev_x, dev_y = data_x[0:2], data_y[0:2]  # always use cased
 
         elif dataset == Dataset.PTB or dataset == Dataset.PTB_REDUCED:
@@ -214,6 +228,10 @@ class POS:
                 train_x, train_y = ptb.load_data_lowercase(train_sections)
             elif train_casetype == CaseType.TRUECASE:
                 train_x, train_y = ptb.load_data_truecase(train_sections)
+            elif train_casetype == CaseType.CASED_UNCASED:
+                train_x, train_y = ptb.load_data_cased_and_uncased(train_sections)
+            elif train_casetype == CaseType.HALF_MIXED:
+                train_x, train_y = ptb.load_data_half_mixed(train_sections)
 
             # test data
             if test_casetype == CaseType.CASED:
@@ -222,6 +240,10 @@ class POS:
                 test_x, test_y = ptb.load_data_lowercase(test_sections)
             elif test_casetype == CaseType.TRUECASE:
                 test_x, test_y = ptb.load_data_truecase(test_sections)
+            elif test_casetype == CaseType.CASED_UNCASED:
+                test_x, test_y = ptb.load_data_cased_and_uncased(test_sections)
+            elif test_casetype == CaseType.HALF_MIXED:
+                test_x, test_y = ptb.load_data_half_mixed(test_sections)
 
             # dev data
             if dev_casetype == CaseType.CASED:
@@ -230,6 +252,10 @@ class POS:
                 dev_x, dev_y = ptb.load_data_lowercase(dev_sections)
             elif dev_casetype == CaseType.TRUECASE:
                 dev_x, dev_y = ptb.load_data_truecase(dev_sections)
+            elif dev_casetype == CaseType.CASED_UNCASED:
+                dev_x, dev_y = ptb.load_data_cased_and_uncased(dev_sections)
+            elif dev_casetype == CaseType.HALF_MIXED:
+                dev_x, dev_y = ptb.load_data_half_mixed(dev_sections)
 
         elif dataset == Dataset.BROWN or dataset == Dataset.CONLL2000:
             # instantiate data loader
@@ -242,6 +268,10 @@ class POS:
                 train_x, train_y = data_loader.load_data_lowercase()
             elif train_casetype == CaseType.TRUECASE:
                 train_x, train_y = data_loader.load_data_truecase()
+            elif train_casetype == CaseType.CASED_UNCASED:
+                train_x, train_y = data_loader.load_data_cased_and_uncased()
+            elif train_casetype == CaseType.HALF_MIXED:
+                train_x, train_y = data_loader.load_data_half_mixed()
             # test data
             if test_casetype == CaseType.CASED:
                 test_x, test_y = data_loader.load_data()
@@ -249,20 +279,28 @@ class POS:
                 test_x, test_y = data_loader.load_data_lowercase()
             elif test_casetype == CaseType.TRUECASE:
                 test_x, test_y = data_loader.load_data_truecase()
+            elif test_casetype == CaseType.CASED_UNCASED:
+                test_x, test_y = data_loader.load_data_cased_and_uncased()
+            elif test_casetype == CaseType.HALF_MIXED:
+                test_x, test_y = data_loader.load_data_half_mixed()
             # dev data
             if dev_casetype == CaseType.CASED:
-                test_x, test_y = data_loader.load_data()
+                dev_x, dev_y = data_loader.load_data()
             elif dev_casetype == CaseType.UNCASED:
-                test_x, test_y = data_loader.load_data_lowercase()
+                dev_x, dev_y = data_loader.load_data_lowercase()
             elif dev_casetype == CaseType.TRUECASE:
-                test_x, test_y = data_loader.load_data_truecase()
+                dev_x, dev_y = data_loader.load_data_truecase()
+            elif dev_casetype == CaseType.CASED_UNCASED:
+                dev_x, dev_y = data_loader.load_data_cased_and_uncased()
+            elif dev_casetype == CaseType.HALF_MIXED:
+                dev_x, dev_y = data_loader.load_data_half_mixed()
             # compute train/test/dev dataset size
             total_size = len(train_x)
-            start, middle0, middle1, end = 0, (1.0-test_size)*total_size,  (1.0-test_size-dev_size)*total_size, total_size
+            start, middle0, middle1, end = 0, int(test_size*total_size),  int((test_size + dev_size)*total_size), total_size
             # split data
-            train_x, train_y = train_x[start:middle0], train_y[start:middle0]
-            test_x, test_y = test_x[middle0:middle1], test_y[middle0:middle1]
-            dev_x, dev_y = dev_x[middle1:end], dev_y[middle1:end]
+            train_x, train_y = train_x[middle1:end], train_y[middle1:end]
+            test_x, test_y = test_x[start:middle0], test_y[start:middle0]
+            dev_x, dev_y = dev_x[middle0:middle1], dev_y[middle0:middle1]
         else:
             raise RuntimeError("Unknown dataset.")
         # store dataset internally
@@ -290,7 +328,7 @@ class POS:
             print("Padding sequence...")
         # update maximum sentence length
         for dataset in self.data_x:
-            self.max_sentence_length = max(self.max_sentence_length, max([len(x) for x in self.data_x[dataset]]))
+            self.max_sentence_length = max(self.max_sentence_length,  max([len(x) for x in self.data_x[dataset]]))
         # pad x
         for dataset in self.data_x:
             for i in range(len(self.data_x[dataset])):
@@ -390,11 +428,12 @@ class POS:
                          dev_x_embedded=self.dataset_x_embedded["dev_x_embedded"])
 
         else:  # glove and word2vec are sequence independent -> process one-by-one
-            for dataset in self.dataset_x:
+            for dataset in self.data_x:
                 data_x_embedded = list()
                 for sentence in self.data_x[dataset]:
                     data_x_embedded.append([preprocessor.word2vec(word) for word in sentence])
-                self.dataset_map[self.data_x[dataset]] = np.array(data_x_embedded)
+                self.dataset_x_embedded[self.dataset_map[dataset]] = np.array(data_x_embedded)
+            self.train_x_embedded, self.test_x_embedded, self.dev_x_embedded = self.dataset_x_embedded["train_x_embedded"], self.dataset_x_embedded["test_x_embedded"], self.dataset_x_embedded["dev_x_embedded"]
 
     def map_y(self):
         """
@@ -428,11 +467,12 @@ class POS:
         """
         if self.model_details is None:
             return ""
-        return "{}_{}_units_{}_dropout_{}_recdropout_{}_lr_{}_train_{}_test_{}_dev".format(self.model_details["model"].name,
+        return "{}_{}_units_{}_dropout_{}_recdropout_{}_lr_{}_dataset_{}_train_{}_test_{}_dev".format(self.model_details["model"].name,
                                                                self.model_details["lstm_hidden_units"],
                                                                self.model_details["lstm_dropout"],
                                                                self.model_details["lstm_recurrent_dropout"],
                                                                self.model_details["learning_rate"],
+                                                               self.dataset,
                                                                self.train_casetype.name,
                                                                self.test_casetype.name,
                                                                self.dev_casetype.name)
@@ -574,17 +614,17 @@ class POS:
             np.savetxt(self.model_name() + "_history_val_accuracy", history.history["val_accuracy"])
             np.savetxt(self.model_name() + "_history_accuracy", history.history["accuracy"])
 
-    def model_accuracy(self):
+    def model_accuracy(self, X_embedded, y_int, dataset:str):
         """
         TODO: add description
         :return:
         """
-        y_pred = self.model.predict(self.test_x_embedded)
+        y_pred = self.model.predict(X_embedded)
 
         total = 0
         count = 0
         pred_itr = y_pred.__iter__()
-        for sentence in self.test_y_int:
+        for sentence in y_int:
             total += len(sentence)
             pred_sentence = pred_itr.__next__()
             pred_sentence = pred_sentence.__iter__()
@@ -596,8 +636,8 @@ class POS:
                 else:
                     count += 1 if word == pred_word else 0
         accuracy = count / total
-        print("accuracy: {}".format(accuracy))
-        np.savetxt(self.model_name() + "_test_accuracy", [accuracy])
+        print("{} accuracy: {}".format(dataset, accuracy))
+        np.savetxt(self.model_name() + "_{}_accuracy".format(dataset), [accuracy])
         return accuracy
 
     def set_model_params(self,
@@ -658,6 +698,8 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--dataset", default=Dataset.PTB_DUMMY.name, choices=[x.name for x in Dataset])
     parser.add_argument("-ctr", "--traincasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
     parser.add_argument("-cte", "--testcasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
+    parser.add_argument("-cde", "--devcasetype", default=CaseType.CASED.name, choices=[x.name for x in CaseType])
+
     parser.add_argument("-v", "--loglevel", default=LogLevel.FULL.name, choices=[x.name for x in LogLevel])
     parser.add_argument("-e", "--embedding", default=Embedding.ELMO.name, choices=[x.name for x in Embedding])
     parser.add_argument("-w", "--datasource_word2vec", default=DataSourceWord2Vec.GOOGLE_NEWS_300.name,
@@ -682,6 +724,8 @@ if __name__ == "__main__":
     dataset: Dataset = Dataset[args.dataset]
     train_casetype: CaseType = CaseType[args.traincasetype]
     test_casetype: CaseType = CaseType[args.testcasetype]
+    dev_casetype: CaseType = CaseType[args.devcasetype]
+
     log_level: LogLevel = LogLevel[args.loglevel]
     embedding: Embedding = Embedding[args.embedding]
     datasource_word2vec: DataSourceWord2Vec = DataSourceWord2Vec[args.datasource_word2vec]
@@ -701,14 +745,24 @@ if __name__ == "__main__":
         print("Dataset is: {}".format(dataset.name))
         print("Casetype training data is: {}".format(train_casetype.name))
         print("Casetype test data is: {}".format(test_casetype.name))
+        print("Casetype dev data is: {}".format(dev_casetype.name))
+
         print("Log level is: {}".format(log_level.name))
         print("Embedding is: {}".format(embedding.name))
         if embedding == Embedding.WORD2VEC:
             print("Data source word2vec is: {}".format(datasource_word2vec.name))
         if embedding == Embedding.GLOVE:
             print("Data source glove is: {}".format(datasource_glove.name))
+        print("Model name is: {}".format(model.name))
+        print("Batch size is: {}".format(batch_size))
+        print("Max number of epochs is: {}".format(epochs))
+        print("Learning rate is: {}".format(learning_rate))
+        print("LSTM hidden units: {}".format(lstm_hidden_units))
+        print("LSTM dropout is: {}".format(lstm_dropout))
+        print("LSTM recurrent dropout is: {}".format(lstm_recurrent_dropout))
+        print("Hyperparameter search is: {}".format(hyperparameter_search))
+        print("Visible cuda devies: {}".format(cuda_devices))
         print("Number of GPUs is: {}".format(num_gpus))
-        # TODO: add remaining arguments
 
     pos = POS(log_level=log_level,
               data_source_word2vec=datasource_word2vec,
@@ -716,17 +770,18 @@ if __name__ == "__main__":
     pos.set_cuda_visible_devices(devices=cuda_devices)
     pos.import_data(dataset=dataset,
                     train_casetype=train_casetype,
-                    test_casetype=test_casetype)
+                    test_casetype=test_casetype,
+                    dev_casetype=dev_casetype)
     pos.pad_sequence()
     pos.embedding(embedding=embedding)
     pos.map_y()
 
     if hyperparameter_search:
         _MODELS = [Model.BILSTM_CRF]
-        _LSTM_HIDDEN_UNITS = [16, 32, 64, 128, 256, 512, 1024]
-        _LSTM_DROPOUT = [0.1, 0.2, 0.3]
-        _LSTM_RECURRENT_DROPOUT = [0.1, 0.2, 0.3]
-        _LEARNING_RATE = [1e-2, 1e-3]
+        _LSTM_HIDDEN_UNITS = [1, 2, 4, 8, 32, 128, 512]
+        _LSTM_DROPOUT = [0.0, 0.2, 0.4]
+        _LSTM_RECURRENT_DROPOUT = _LSTM_DROPOUT
+        _LEARNING_RATE = [1e-1, 1e-3]
 
         for model in _MODELS:
             for lstm_hidden_units in _LSTM_HIDDEN_UNITS:
@@ -744,9 +799,8 @@ if __name__ == "__main__":
                                 pos.create_model()
                                 pos.train_model()
                                 pos.save_model()
-                            pos.model_accuracy()
-
-
+                            pos.model_accuracy(X_embedded=pos.dev_x_embedded, y_int=pos.dev_y_int, dataset="dev")
+                            pos.model_accuracy(X_embedded=pos.test_x_embedded, y_int=pos.test_y_int, dataset="test")
     else:
         pos.set_model_params(model=model,
                              lstm_hidden_units=lstm_hidden_units,
@@ -759,8 +813,9 @@ if __name__ == "__main__":
             pos.create_model()
             pos.train_model()
             pos.save_model()
-        pos.model_accuracy()
-
+        pos.model_accuracy(X_embedded=pos.dev_x_embedded, y_int=pos.dev_y_int, dataset="dev")
+        pos.model_accuracy(X_embedded=pos.test_x_embedded, y_int=pos.test_y_int, dataset="test")
+        
     # exit
     if pos.log_level.value >= LogLevel.LIMITED.value:
         print("Exit.")

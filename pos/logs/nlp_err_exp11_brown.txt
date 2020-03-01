@@ -1,0 +1,111 @@
+Using TensorFlow backend.
+WARNING:tensorflow:From /users2/kustera/uw-nlp/helper/multi_gpu.py:15: The name tf.ConfigProto is deprecated. Please use tf.compat.v1.ConfigProto instead.
+
+WARNING:tensorflow:From /users2/kustera/uw-nlp/helper/multi_gpu.py:17: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2020-02-29 07:11:58.520828: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2020-02-29 07:11:58.533747: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2300000000 Hz
+2020-02-29 07:11:58.540199: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5561bd9339f0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-02-29 07:11:58.540239: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-02-29 07:11:58.540788: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-02-29 07:11:59.100882: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:1c:00.0
+2020-02-29 07:11:59.101987: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 1 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:1d:00.0
+2020-02-29 07:11:59.103041: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 2 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:3f:00.0
+2020-02-29 07:11:59.104066: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 3 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:40:00.0
+2020-02-29 07:11:59.104211: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-29 07:11:59.104237: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2020-02-29 07:11:59.104253: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2020-02-29 07:11:59.104269: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2020-02-29 07:11:59.109059: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2020-02-29 07:11:59.109130: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2020-02-29 07:11:59.109150: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-02-29 07:11:59.118276: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0, 1, 2, 3
+2020-02-29 07:11:59.118307: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-29 07:12:03.933295: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-02-29 07:12:03.933341: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 1 2 3 
+2020-02-29 07:12:03.933360: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N Y Y Y 
+2020-02-29 07:12:03.933365: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 1:   Y N Y Y 
+2020-02-29 07:12:03.933370: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 2:   Y Y N Y 
+2020-02-29 07:12:03.933375: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 3:   Y Y Y N 
+2020-02-29 07:12:03.940218: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 30222 MB memory) -> physical GPU (device: 0, name: Tesla V100-PCIE-32GB, pci bus id: 0000:1c:00.0, compute capability: 7.0)
+2020-02-29 07:12:03.943262: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:1 with 30222 MB memory) -> physical GPU (device: 1, name: Tesla V100-PCIE-32GB, pci bus id: 0000:1d:00.0, compute capability: 7.0)
+2020-02-29 07:12:03.945713: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:2 with 30222 MB memory) -> physical GPU (device: 2, name: Tesla V100-PCIE-32GB, pci bus id: 0000:3f:00.0, compute capability: 7.0)
+2020-02-29 07:12:03.948032: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:3 with 30222 MB memory) -> physical GPU (device: 3, name: Tesla V100-PCIE-32GB, pci bus id: 0000:40:00.0, compute capability: 7.0)
+2020-02-29 07:12:03.951954: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55622129e020 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-02-29 07:12:03.951972: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Tesla V100-PCIE-32GB, Compute Capability 7.0
+2020-02-29 07:12:03.951978: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (1): Tesla V100-PCIE-32GB, Compute Capability 7.0
+2020-02-29 07:12:03.951984: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (2): Tesla V100-PCIE-32GB, Compute Capability 7.0
+2020-02-29 07:12:03.951989: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (3): Tesla V100-PCIE-32GB, Compute Capability 7.0
+[nltk_data] Downloading package brown to /users/kustera/nltk_data...
+[nltk_data]   Package brown is already up-to-date!
+WARNING:tensorflow:From /users/kustera/anaconda3/envs/dev/lib/python3.6/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+/users/kustera/.local/lib/python3.6/site-packages/keras_contrib/layers/crf.py:346: UserWarning: CRF.loss_function is deprecated and it might be removed in the future. Please use losses.crf_loss instead.
+  warnings.warn('CRF.loss_function is deprecated '
+/users/kustera/.local/lib/python3.6/site-packages/keras_contrib/layers/crf.py:353: UserWarning: CRF.accuracy is deprecated and it might be removed in the future. Please use metrics.crf_accuracy
+  warnings.warn('CRF.accuracy is deprecated and it '
+WARNING:tensorflow:From /users/kustera/anaconda3/envs/dev/lib/python3.6/site-packages/tensorflow_core/python/ops/math_ops.py:2509: where (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+2020-02-29 07:13:19.716098: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:1c:00.0
+2020-02-29 07:13:19.717199: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 1 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:1d:00.0
+2020-02-29 07:13:19.718250: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 2 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:3f:00.0
+2020-02-29 07:13:19.719293: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 3 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:40:00.0
+2020-02-29 07:13:19.719361: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-29 07:13:19.719391: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2020-02-29 07:13:19.719407: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2020-02-29 07:13:19.719417: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2020-02-29 07:13:19.719439: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2020-02-29 07:13:19.719449: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2020-02-29 07:13:19.719459: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-02-29 07:13:19.727633: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0, 1, 2, 3
+2020-02-29 07:13:19.729245: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:1c:00.0
+2020-02-29 07:13:19.730297: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 1 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:1d:00.0
+2020-02-29 07:13:19.731318: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 2 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:3f:00.0
+2020-02-29 07:13:19.732335: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 3 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:40:00.0
+2020-02-29 07:13:19.732360: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-29 07:13:19.732371: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2020-02-29 07:13:19.732381: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2020-02-29 07:13:19.732390: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2020-02-29 07:13:19.732403: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2020-02-29 07:13:19.732412: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2020-02-29 07:13:19.732422: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-02-29 07:13:19.740513: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0, 1, 2, 3
+2020-02-29 07:13:19.741202: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-02-29 07:13:19.741214: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 1 2 3 
+2020-02-29 07:13:19.741220: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N Y Y Y 
+2020-02-29 07:13:19.741224: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 1:   Y N Y Y 
+2020-02-29 07:13:19.741229: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 2:   Y Y N Y 
+2020-02-29 07:13:19.741234: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 3:   Y Y Y N 
+2020-02-29 07:13:19.746470: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 30222 MB memory) -> physical GPU (device: 0, name: Tesla V100-PCIE-32GB, pci bus id: 0000:1c:00.0, compute capability: 7.0)
+2020-02-29 07:13:19.747539: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:1 with 30222 MB memory) -> physical GPU (device: 1, name: Tesla V100-PCIE-32GB, pci bus id: 0000:1d:00.0, compute capability: 7.0)
+2020-02-29 07:13:19.748595: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:2 with 30222 MB memory) -> physical GPU (device: 2, name: Tesla V100-PCIE-32GB, pci bus id: 0000:3f:00.0, compute capability: 7.0)
+2020-02-29 07:13:19.749662: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:3 with 30222 MB memory) -> physical GPU (device: 3, name: Tesla V100-PCIE-32GB, pci bus id: 0000:40:00.0, compute capability: 7.0)
+WARNING:tensorflow:From /users/kustera/.local/lib/python3.6/site-packages/keras/backend/tensorflow_backend.py:422: The name tf.global_variables is deprecated. Please use tf.compat.v1.global_variables instead.
+
+2020-02-29 07:13:22.065053: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0

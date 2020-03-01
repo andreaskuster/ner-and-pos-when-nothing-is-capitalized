@@ -1,0 +1,84 @@
+Using TensorFlow backend.
+WARNING:tensorflow:From /users2/kustera/uw-nlp/helper/multi_gpu.py:15: The name tf.ConfigProto is deprecated. Please use tf.compat.v1.ConfigProto instead.
+
+WARNING:tensorflow:From /users2/kustera/uw-nlp/helper/multi_gpu.py:17: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2020-02-28 22:48:40.860311: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2020-02-28 22:48:40.876105: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2000020000 Hz
+2020-02-28 22:48:40.887378: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x558d089527d0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-02-28 22:48:40.887443: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-02-28 22:48:40.887628: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-02-28 22:48:41.069921: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:21:00.0
+2020-02-28 22:48:41.071611: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 1 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:71:00.0
+2020-02-28 22:48:41.071704: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-28 22:48:41.071736: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2020-02-28 22:48:41.071758: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2020-02-28 22:48:41.071779: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2020-02-28 22:48:41.076759: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2020-02-28 22:48:41.076842: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2020-02-28 22:48:41.076874: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-02-28 22:48:41.084316: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0, 1
+2020-02-28 22:48:41.084347: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-28 22:48:43.325173: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-02-28 22:48:43.325240: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 1 
+2020-02-28 22:48:43.325257: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N Y 
+2020-02-28 22:48:43.325262: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 1:   Y N 
+2020-02-28 22:48:43.332662: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 30222 MB memory) -> physical GPU (device: 0, name: Tesla V100-PCIE-32GB, pci bus id: 0000:21:00.0, compute capability: 7.0)
+2020-02-28 22:48:43.336689: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:1 with 30222 MB memory) -> physical GPU (device: 1, name: Tesla V100-PCIE-32GB, pci bus id: 0000:71:00.0, compute capability: 7.0)
+2020-02-28 22:48:43.340533: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x558d47ed6c40 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-02-28 22:48:43.340575: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Tesla V100-PCIE-32GB, Compute Capability 7.0
+2020-02-28 22:48:43.340588: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (1): Tesla V100-PCIE-32GB, Compute Capability 7.0
+[nltk_data] Downloading package conll2000 to
+[nltk_data]     /users/kustera/nltk_data...
+[nltk_data]   Package conll2000 is already up-to-date!
+Predicting casing:   0%|          | 0/110 [00:00<?, ?it/s]Predicting casing:   1%|          | 1/110 [00:00<00:29,  3.75it/s]Predicting casing:   3%|▎         | 3/110 [00:00<00:22,  4.69it/s]Predicting casing:   5%|▍         | 5/110 [00:00<00:18,  5.74it/s]Predicting casing:   6%|▋         | 7/110 [00:00<00:15,  6.78it/s]Predicting casing:   8%|▊         | 9/110 [00:00<00:12,  7.79it/s]Predicting casing:  10%|█         | 11/110 [00:01<00:11,  8.69it/s]Predicting casing:  12%|█▏        | 13/110 [00:01<00:10,  9.47it/s]Predicting casing:  14%|█▎        | 15/110 [00:01<00:09, 10.10it/s]Predicting casing:  15%|█▌        | 17/110 [00:01<00:08, 10.60it/s]Predicting casing:  17%|█▋        | 19/110 [00:01<00:08, 10.99it/s]Predicting casing:  19%|█▉        | 21/110 [00:01<00:07, 11.21it/s]Predicting casing:  21%|██        | 23/110 [00:02<00:07, 11.44it/s]Predicting casing:  23%|██▎       | 25/110 [00:02<00:07, 11.58it/s]Predicting casing:  25%|██▍       | 27/110 [00:02<00:07, 11.69it/s]Predicting casing:  26%|██▋       | 29/110 [00:02<00:06, 11.76it/s]Predicting casing:  28%|██▊       | 31/110 [00:02<00:06, 11.81it/s]Predicting casing:  30%|███       | 33/110 [00:02<00:06, 11.87it/s]Predicting casing:  32%|███▏      | 35/110 [00:03<00:06, 11.91it/s]Predicting casing:  34%|███▎      | 37/110 [00:03<00:06, 11.95it/s]Predicting casing:  35%|███▌      | 39/110 [00:03<00:05, 11.96it/s]Predicting casing:  37%|███▋      | 41/110 [00:03<00:05, 11.97it/s]Predicting casing:  39%|███▉      | 43/110 [00:03<00:05, 11.98it/s]Predicting casing:  41%|████      | 45/110 [00:03<00:05, 11.97it/s]Predicting casing:  43%|████▎     | 47/110 [00:04<00:05, 11.96it/s]Predicting casing:  45%|████▍     | 49/110 [00:04<00:05, 11.91it/s]Predicting casing:  46%|████▋     | 51/110 [00:04<00:04, 11.88it/s]Predicting casing:  48%|████▊     | 53/110 [00:04<00:04, 11.91it/s]Predicting casing:  50%|█████     | 55/110 [00:04<00:04, 11.94it/s]Predicting casing:  52%|█████▏    | 57/110 [00:04<00:04, 11.90it/s]Predicting casing:  54%|█████▎    | 59/110 [00:05<00:04, 11.94it/s]Predicting casing:  55%|█████▌    | 61/110 [00:05<00:04, 11.98it/s]Predicting casing:  57%|█████▋    | 63/110 [00:05<00:03, 12.01it/s]Predicting casing:  59%|█████▉    | 65/110 [00:05<00:03, 12.01it/s]Predicting casing:  61%|██████    | 67/110 [00:05<00:03, 11.94it/s]Predicting casing:  63%|██████▎   | 69/110 [00:05<00:03, 11.95it/s]Predicting casing:  65%|██████▍   | 71/110 [00:06<00:03, 11.94it/s]Predicting casing:  66%|██████▋   | 73/110 [00:06<00:03, 11.96it/s]Predicting casing:  68%|██████▊   | 75/110 [00:06<00:02, 11.96it/s]Predicting casing:  70%|███████   | 77/110 [00:06<00:02, 11.95it/s]Predicting casing:  72%|███████▏  | 79/110 [00:06<00:02, 11.96it/s]Predicting casing:  74%|███████▎  | 81/110 [00:06<00:02, 11.96it/s]Predicting casing:  75%|███████▌  | 83/110 [00:07<00:02, 11.98it/s]Predicting casing:  77%|███████▋  | 85/110 [00:07<00:02, 11.99it/s]Predicting casing:  79%|███████▉  | 87/110 [00:07<00:01, 12.01it/s]Predicting casing:  81%|████████  | 89/110 [00:07<00:01, 11.99it/s]Predicting casing:  83%|████████▎ | 91/110 [00:07<00:01, 11.97it/s]Predicting casing:  85%|████████▍ | 93/110 [00:07<00:01, 11.89it/s]Predicting casing:  86%|████████▋ | 95/110 [00:08<00:01, 11.94it/s]Predicting casing:  88%|████████▊ | 97/110 [00:08<00:01, 11.96it/s]Predicting casing:  90%|█████████ | 99/110 [00:08<00:00, 11.97it/s]Predicting casing:  92%|█████████▏| 101/110 [00:08<00:00, 11.96it/s]Predicting casing:  94%|█████████▎| 103/110 [00:08<00:00, 11.94it/s]Predicting casing:  95%|█████████▌| 105/110 [00:08<00:00, 11.96it/s]Predicting casing:  97%|█████████▋| 107/110 [00:09<00:00, 11.98it/s]Predicting casing:  99%|█████████▉| 109/110 [00:09<00:00, 11.99it/s]                                                                    WARNING:tensorflow:From /users/kustera/anaconda3/envs/dev/lib/python3.6/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+/users/kustera/.local/lib/python3.6/site-packages/keras_contrib/layers/crf.py:346: UserWarning: CRF.loss_function is deprecated and it might be removed in the future. Please use losses.crf_loss instead.
+  warnings.warn('CRF.loss_function is deprecated '
+/users/kustera/.local/lib/python3.6/site-packages/keras_contrib/layers/crf.py:353: UserWarning: CRF.accuracy is deprecated and it might be removed in the future. Please use metrics.crf_accuracy
+  warnings.warn('CRF.accuracy is deprecated and it '
+WARNING:tensorflow:From /users/kustera/anaconda3/envs/dev/lib/python3.6/site-packages/tensorflow_core/python/ops/math_ops.py:2509: where (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+2020-02-28 22:55:34.509819: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:21:00.0
+2020-02-28 22:55:34.511457: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 1 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:71:00.0
+2020-02-28 22:55:34.511533: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-28 22:55:34.511563: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2020-02-28 22:55:34.511578: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2020-02-28 22:55:34.511590: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2020-02-28 22:55:34.511714: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2020-02-28 22:55:34.511730: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2020-02-28 22:55:34.511743: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-02-28 22:55:34.518268: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0, 1
+2020-02-28 22:55:34.520832: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:21:00.0
+2020-02-28 22:55:34.522402: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 1 with properties: 
+name: Tesla V100-PCIE-32GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:71:00.0
+2020-02-28 22:55:34.522433: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-28 22:55:34.522447: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2020-02-28 22:55:34.522464: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2020-02-28 22:55:34.522476: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2020-02-28 22:55:34.522498: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2020-02-28 22:55:34.522510: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2020-02-28 22:55:34.522522: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-02-28 22:55:34.529009: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0, 1
+2020-02-28 22:55:34.529100: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-02-28 22:55:34.529109: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 1 
+2020-02-28 22:55:34.529114: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N Y 
+2020-02-28 22:55:34.529119: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 1:   Y N 
+2020-02-28 22:55:34.534158: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 30222 MB memory) -> physical GPU (device: 0, name: Tesla V100-PCIE-32GB, pci bus id: 0000:21:00.0, compute capability: 7.0)
+2020-02-28 22:55:34.535829: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:1 with 30222 MB memory) -> physical GPU (device: 1, name: Tesla V100-PCIE-32GB, pci bus id: 0000:71:00.0, compute capability: 7.0)
+WARNING:tensorflow:From /users/kustera/.local/lib/python3.6/site-packages/keras/backend/tensorflow_backend.py:422: The name tf.global_variables is deprecated. Please use tf.compat.v1.global_variables instead.
+
+2020-02-28 22:55:36.633598: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
