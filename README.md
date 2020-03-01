@@ -87,24 +87,24 @@ We used keras for the neural network implementation with the following configura
 * __Sequential Model__:
  * __Input Layer__: 
    * BiLSTM Layer:
-    * input shape: (max_sentence_lengt, 1024)
-    * hidden units: 512
-    * lstm dropout: 0.0
-    * lstm recurrent dropout: 0.0
+     * input shape: (max_sentence_lengt, 1024)
+     * hidden units: 512
+     * lstm dropout: 0.0
+     * lstm recurrent dropout: 0.0
  * __Hidden Layer(s)__:
    * TimeDistributed Dense Layer
-    * shape: num_labels
-    * activation function: rectified linear unit
+     * shape: num_labels
+     * activation function: rectified linear unit
  * __Output Layer__:
    * CRF Layer:
-    * shape: num_labels
+     * shape: num_labels
 * __Training__:
   * __Solver__:
-   * Adam
-   * learning rate: 0.001
+    * Adam
+    * learning rate: 0.001
   * __Epochs__:
-   * max: 40 epochs
-   * early stopping: stopps after the validation accuracy did not increase by more than 0.001 over 4 conecutive epochs
+    * max: 40 epochs
+    * early stopping: stopps after the validation accuracy did not increase by more than 0.001 over 4 conecutive epochs
    
 __Evaluation__: After training, we predicted the label of the test set using the trained model, removed the padding and computed the accuracy (number of correctly predicted labels / number of labels).
 
