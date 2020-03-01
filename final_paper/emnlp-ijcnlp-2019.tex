@@ -1,0 +1,121 @@
+%
+% File emnlp2019.tex
+%
+%% Based on the style files for ACL 2019, which were
+%% Based on the style files for EMNLP 2018, which were
+%% Based on the style files for ACL 2018, which were
+%% Based on the style files for ACL-2015, with some improvements
+%%  taken from the NAACL-2016 style
+%% Based on the style files for ACL-2014, which were, in turn,
+%% based on ACL-2013, ACL-2012, ACL-2011, ACL-2010, ACL-IJCNLP-2009,
+%% EACL-2009, IJCNLP-2008...
+%% Based on the style files for EACL 2006 by 
+%%e.agirre@ehu.es or Sergi.Balari@uab.es
+%% and that of ACL 08 by Joakim Nivre and Noah Smith
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[hyperref]{emnlp-ijcnlp-2019}
+\usepackage{times}
+\usepackage{latexsym}
+
+%\usepackage{url}
+
+\aclfinalcopy % Uncomment this line for the final submission
+
+%\setlength\titlebox{5cm}
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
+
+\newcommand\BibTeX{B{\sc ib}\TeX}
+\newcommand\confname{EMNLP-IJCNLP 2019}
+\newcommand\conforg{SIGDAT}
+
+\title{reproducing "ner and pos when nothing is capitalized"}
+
+\author{Andreas Kuster \\
+    {\tt kustera@student.ethz} \\\And
+    Jakub Filipek \\
+    {\tt balbok@uw} \\\And
+    Viswa Virinchi Muppirala \\
+    {\tt virinchi@uw}}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+    Capitalization is an important feature in many NLP tasks such as Named Entity Recognition (NER) or Part of Speech Tagging (POS). We are trying to reproduce results of paper which shows how to mitigate a significant performance drop when casing is mismatched between training and testing data. In particular we show that mixing cased and uncased dataset provides the best performance, matching the claims of the original paper. We also show that we got slightly lower performance in almost all experiments we have tried to reproduce, suggesting, that the orginal paper did not fully disclose all of the experimental setup.
+\end{abstract}
+
+\section{Introduction}
+Previous works have shown that there is a significant performance drop when applying models trained on cased data to uncased data and vice-versa \textcolor{red}{(citation needed)}. Since capitalization is not always available due to real world constraints, there have been some methods trying to use casing prediction (called \textit{truecasing}) to battle this trade-off.
+
+The work we reproduce tries to battle this issue in two popular NLP tasks by mixing both cased and uncased datasets.
+
+\section{Contributions}
+In this section the scientific contributions of this work will be outlined, including the hypotheses tested in this reproduction. 
+A hypothesis is usually one sentence, \emph{maybe} two. A hypothesis is something that can be supported or rejected by data, and is precise enough you can understand what experiments would support it directly from the hypothesis itself. 
+Make sure this is true of each of your hypotheses.
+
+An example of something that's \emph{not} a hypothesis: ``Contextual embedding models have shown strong performance on a number of tasks across NLP. We will run experiments evaluating two types of contextual embedding models on datasets X, Y, and Z.''
+
+An example of a hypothesis: 
+``Finetuning Pretrained BERT on SST-2 will have higher accuracy than an LSTM trained with GloVe embeddings."
+
+
+\subsection{Hypotheses from original paper}
+\label{sec:original_hypotheses}
+A list of the hypotheses from the original paper.
+\begin{itemize}
+    \item Hypothesis 1
+    \item Hypothesis 2
+\end{itemize}
+
+\subsection{Hypotheses addressed in this work}
+\label{sec:current_hypotheses}
+A list of the hypotheses addressed in this work. Some of these will be the same as in Section~\ref{sec:original_hypotheses}, but some will related to the additional experiments you will run.
+
+
+\begin{itemize}
+    \item Hypothesis 1
+    \item Hypothesis 2
+\end{itemize}
+
+
+\subsection{Experiments}
+Here every experiment is listed briefly.
+\textbf{Every} hypothesis in Section~\ref{sec:current_hypotheses} should be listed and supported by at least one experiment, plot, table, or other type of data. 
+Every piece of data should be listed here, with the hypothesis it supports.
+
+\section{Code}
+Put a link to your code or the original authors' code here. Read instructions in the syllabus.
+
+\section{Experimental setup and results}
+
+\subsection{Model description}
+See syllabus. If you had to implement the model, record how long each part took.
+
+\subsection{Datasets}
+See syllabus. Include link to download dataset.
+
+\subsection{Hyperparameters}
+See syllabus. Describe what you can.
+
+\subsection{Results}
+Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.
+
+\section{Experiments beyond the original paper}
+See syllabus.
+
+\section{Computational requirements}
+This is required for every report. Include every item listed in the syllabus, plus any other relevant statistics (e.g. if you have multiple model sizes, report info for each).
+Include the information listed in the syllabus, including the \textbf{total} number of GPU hours used for all experiments, and the number of GPU hours for \textbf{each} experiment.
+
+\section{Discussion and recommendations}
+Conclude the report, and summarize which hypotheses from the original paper were reproducible. Include suggestions for future researchers -- what was hard? What worked easily? 
+
+\bibliography{emnlp-ijcnlp-2019}
+\bibliographystyle{acl_natbib}
+
+\end{document}
