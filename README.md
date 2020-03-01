@@ -196,20 +196,7 @@ POS on penn treebank reduced dataset, brown and CoNLL2000 dataset, word2vec, glo
 
 #### Model Characteristics
 
-Train/Test/Dev data: TODO
-
-Pre-Processing: TODO
-
-Padding: TODO
-
-Embedding: TODO
-
-LSTM Model:
-* description of layers: TODO
-* hyperparameters (#units, batch size, epochs, solver,..) including hyperparameter search (and graph of it) : TODO
-* graphs: learning rate for different hyperparemeters
-
-Evaluation: TODO
+In order to compare the outcome from the additional experiments to those from the paper reproduction, we used the exact same model, except the component specified in the table (i.e. ELMo embedding replaced with GloVe embedding).
 
 Computational Requirements: HW / average runtime, #trials, #GPU hours
 
