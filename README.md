@@ -127,7 +127,10 @@ Furthermore, we extended the tests to different datasets, namely the Brown corpu
 
 
 #### Hypothesis
-We expect to get similar results to those described in the paper.
+
+1. For the coparison of the different embeddings (word2vec, glove, elmo) we expect elmo to perform better than the other two. Firstly, because of the better perfomance we concluded during the lecture (for a well trained elmo model) and secondly because it was the choice for this paper.
+2. We expect the ELMo model with CRF layer to outperform the one without due to the findings from the paper linked below.
+3. We expect to be able to conclude the hypothesis from the original experiments for the reduced ptb dastaset, as well as the other datasets (brown and conll2000).
 
 #### Comparison
 POS on penn treebank reduced dataset, brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer (additional experiments)
