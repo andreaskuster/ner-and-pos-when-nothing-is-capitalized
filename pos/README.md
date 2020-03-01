@@ -1,5 +1,11 @@
 # Part-of-speech Tagging (POS) - Experiments
 
+## Table of content
+* [Code](#code)
+    * [pos.py](#pos.py)
+    * [evaluation.py](#ealuation.py)
+    
+
 ## Code
 
 ### Usage
@@ -108,6 +114,32 @@ We used the following compute infrastructure to run the experiments:
 
 \* the CRF layer does not have multi GPU support yet
 
+## Runtime
+
+### Data Preprocessing
+
+
+
+## Work Hours
+
+* Preparation (reading paper, studying lstm, crf, word2vec, glove, elmo, ptb, ..): 10h
+* Initial code implementation
+  * dataset ptb: 5h
+  * dataset brown: 3h
+  * dataset conll200: 0.5h
+  * embedding glove: 3h
+  * embedding word2vec: 3h
+  * embedding elmo: 6h
+  * pos (import, y padding, y mapping, keras lstm crf model, eval function): 30h
+   * rewrite from flat code block to class (incl argparse): 9h
+   * add execution time reduction functionality (load/store embeddings, early stopping): 2h 
+* Run experiments from paper (including bug fixes during this process): 5h
+* Run additional experiments: 10h
+* Write report: 15h
+* Clean up code (add comments, function descriptions,..): 4h  
+
+__Total: 100h__
+
 
 ## Evaluation
 
@@ -127,3 +159,8 @@ optional arguments:
   -p {LSTM_HIDDEN_UNITS_SERIES,LSTM_HIDDEN_UNITS_SERIES_COMBINED,EPOCH_SERIES,EPOCH_SERIES_COMBINED,LEARNING_RATE_SERIES,LSTM_DROPOUT_SERIES}, --plot {LSTM_HIDDEN_UNITS_SERIES,LSTM_HIDDEN_UNITS_SERIES_COMBINED,EPOCH_SERIES,EPOCH_SERIES_COMBINED,LEARNING_RATE_SERIES,LSTM_DROPOUT_SERIES}
 
 ```
+
+## Known Issues
+
+1. Load/Save model: In order to lift the burden of re-training the model for a prediction task, we added the functionality of storing and loading the keras model from/to disk, including the trained weights. Unfortunately, this seems to be a known issue (see https://github.com/keras-team/keras/issues/4875) that the model weight are not loaded correctly. Therefore, and until this is fixed in the keras codebase, we have to re-train the model every time we want to perform predictions.
+
