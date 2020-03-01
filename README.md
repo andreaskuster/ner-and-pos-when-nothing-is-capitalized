@@ -104,7 +104,7 @@ We used keras for the neural network implementation with the following configura
     * learning rate: 0.001
   * __Epochs__:
     * max: 40 epochs
-    * early stopping: stopps after the validation accuracy did not increase by more than 0.001 over 4 conecutive epochs
+    * early stopping: stops after the validation accuracy did not increase by more than 0.001 over 4 conecutive epochs
    
 __Evaluation__: After training, we predicted the label of the test set using the trained model, removed the padding and computed the accuracy (number of correctly predicted labels / number of labels).
 
