@@ -70,22 +70,46 @@ We expect to get similar results to those described in the paper.
 
 #### Model Characteristics
 
-Train/Test/Dev data: TODO
+Train/Test/Dev data:
+* Train: Penn Treebank section 0-18 (usage: training)
+* Dev: Penn TreeBank section 19-21 (usage: validation, i.e. early stopping and hyperparameter search)
+* Test: Penn TreeBank section 22-24 (usage: reporting accuracy)
 
-Pre-Processing: TODO
+Pre-Processing: Depending on the experiment, we either used the imported data as-is (cased), lower-cased it (lowercase) or lower-cased it and then true-case predicted it (truecase). Furthermore, we also combinded the lowercased and cased dataset (C+U) and randomly lowercased 50% of the dataset (half mixed).
 
-Padding: TODO
+Padding: Pad all sentence to the lenght of the longest sentence using "NULL" charakters. (Note: The reported accuracy values are true accuracies, i.e. with padding removed. If we would not do this and the dataset contains very short and very long sentences, the accuracy of a prediction with only "NULL" characters for the whole sequence of the short sentence would be very high, even though the predictor is very bad.)
 
-Embedding: TODO
+Embedding: ELMo word embedding, vector size: 1024
 
 LSTM Model:
-* description of layers: TODO
-* hyperparameters (#units, batch size, epochs, solver,..) including hyperparameter search (and graph of it) : TODO
-* graphs: learning rate for different hyperparemeters
+We used keras for the neural network implementation with the following configuration:
 
-Evaluation: TODO
+* Sequential Model:
+ * Input Layer: 
+   * BiLSTM Layer:
+    * input shape: (max_sentence_lengt, 1024)
+    * hidden units: 512
+    * lstm dropout: 0.0
+    * lstm recurrent dropout: 0.0
+ * Hidden Layer:
+   * TimeDistributed Dense Layer
+    * shape: num_labels
+    * activation function: rectified linear unit
+ * Output Layer:
+   * CRF Layer:
+    * shape: num_labels
+* Training:
+  * Solver:
+   * Adam
+   * learning rate: 0.001
+  * Epochs:
+   * max: 40 epochs
+   * early stopping: stopps after the validation accuracy did not increase by more than 0.001 over 4 conecutive epochs
+   
+Evaluation: After training, we predicted the label of the test set using the trained model, removed the padding and computed the accuracy (number of correctly predicted labels / number of labels).
 
-Computational Requirements: HW / average runtime, #trials, #GPU hours
+Note: All the hyperparameters reported above are a result of the hyperparameter grid-search done previous to this experiment evaluation. Details about this and additional information about the code usage can be found here:
+
 
 #### Conclusion
 TODO
