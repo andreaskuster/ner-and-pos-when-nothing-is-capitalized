@@ -70,45 +70,45 @@ We expect to get similar results to those described in the paper.
 
 #### Model Characteristics
 
-Train/Test/Dev data:
+__Train/Test/Dev data__:
 * Train: Penn Treebank section 0-18 (usage: training)
 * Dev: Penn TreeBank section 19-21 (usage: validation, i.e. early stopping and hyperparameter search)
 * Test: Penn TreeBank section 22-24 (usage: reporting accuracy)
 
-Pre-Processing: Depending on the experiment, we either used the imported data as-is (cased), lower-cased it (lowercase) or lower-cased it and then true-case predicted it (truecase). Furthermore, we also combinded the lowercased and cased dataset (C+U) and randomly lowercased 50% of the dataset (half mixed).
+__Pre-Processing__: Depending on the experiment, we either used the imported data as-is (cased), lower-cased it (lowercase) or lower-cased it and then true-case predicted it (truecase). Furthermore, we also combinded the lowercased and cased dataset (C+U) and randomly lowercased 50% of the dataset (half mixed).
 
-Padding: Pad all sentence to the lenght of the longest sentence using "NULL" charakters. (Note: The reported accuracy values are true accuracies, i.e. with padding removed. If we would not do this and the dataset contains very short and very long sentences, the accuracy of a prediction with only "NULL" characters for the whole sequence of the short sentence would be very high, even though the predictor is very bad.)
+__Padding__: Pad all sentence to the lenght of the longest sentence using "NULL" charakters. (Note: The reported accuracy values are true accuracies, i.e. with padding removed. If we would not do this and the dataset contains very short and very long sentences, the accuracy of a prediction with only "NULL" characters for the whole sequence of the short sentence would be very high, even though the predictor is very bad.)
 
-Embedding: ELMo word embedding, vector size: 1024
+__Embedding__: ELMo word embedding, vector size: 1024
 
-LSTM Model:
+__LSTM Model__:
 We used keras for the neural network implementation with the following configuration:
 
-* Sequential Model:
- * Input Layer: 
+* __Sequential Model__:
+ * __Input Layer__: 
    * BiLSTM Layer:
     * input shape: (max_sentence_lengt, 1024)
     * hidden units: 512
     * lstm dropout: 0.0
     * lstm recurrent dropout: 0.0
- * Hidden Layer:
+ * __Hidden Layer(s)__:
    * TimeDistributed Dense Layer
     * shape: num_labels
     * activation function: rectified linear unit
- * Output Layer:
+ * __Output Layer__:
    * CRF Layer:
     * shape: num_labels
-* Training:
-  * Solver:
+* __Training__:
+  * __Solver__:
    * Adam
    * learning rate: 0.001
-  * Epochs:
+  * __Epochs__:
    * max: 40 epochs
    * early stopping: stopps after the validation accuracy did not increase by more than 0.001 over 4 conecutive epochs
    
-Evaluation: After training, we predicted the label of the test set using the trained model, removed the padding and computed the accuracy (number of correctly predicted labels / number of labels).
+__Evaluation__: After training, we predicted the label of the test set using the trained model, removed the padding and computed the accuracy (number of correctly predicted labels / number of labels).
 
-Note: All the hyperparameters reported above are a result of the hyperparameter grid-search done previous to this experiment evaluation. Details about this and additional information about the code usage can be found here:
+__Note__: All the hyperparameters reported above are a result of the hyperparameter grid-search done previous to this experiment evaluation. Details about this and additional information about the code usage can be found [here](pos/README.md).
 
 
 #### Conclusion
