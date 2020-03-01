@@ -113,11 +113,11 @@ We used keras for the neural network implementation with the following configura
    
 __Evaluation__: After training, we predicted the label of the test set using the trained model, removed the padding and computed the accuracy (number of correctly predicted labels / number of labels).
 
-__Note__: All the hyperparameters reported above are a result of the hyperparameter grid-search done previous to this experiment evaluation. Details about this and additional information about the code usage can be found [here](pos/README.md).
+__Note__: All the hyperparameters reported above are a result of the hyperparameter grid-search done previous to this experiment evaluation. Details about this and additional information about the code usage can be found [__here__](pos/README.md).
 
 
 #### Conclusion
-TODO
+Even though we haven't seen any implementation details (except those described in the paper text), we reported the exact same accuracy scores (+/- 0.5%) and can confirm the hypothesis (1., 2., 3.) described above.
 
 
 
