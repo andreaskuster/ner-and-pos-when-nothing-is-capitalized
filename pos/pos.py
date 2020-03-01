@@ -285,22 +285,22 @@ class POS:
                 test_x, test_y = data_loader.load_data_half_mixed()
             # dev data
             if dev_casetype == CaseType.CASED:
-                test_x, test_y = data_loader.load_data()
+                dev_x, dev_y = data_loader.load_data()
             elif dev_casetype == CaseType.UNCASED:
-                test_x, test_y = data_loader.load_data_lowercase()
+                dev_x, dev_y = data_loader.load_data_lowercase()
             elif dev_casetype == CaseType.TRUECASE:
-                test_x, test_y = data_loader.load_data_truecase()
+                dev_x, dev_y = data_loader.load_data_truecase()
             elif dev_casetype == CaseType.CASED_UNCASED:
-                test_x, test_y = data_loader.load_data_cased_and_uncased()
+                dev_x, dev_y = data_loader.load_data_cased_and_uncased()
             elif dev_casetype == CaseType.HALF_MIXED:
-                test_x, test_y = data_loader.load_data_half_mixed()
+                dev_x, dev_y = data_loader.load_data_half_mixed()
             # compute train/test/dev dataset size
             total_size = len(train_x)
-            start, middle0, middle1, end = 0, (1.0-test_size)*total_size,  (1.0-test_size-dev_size)*total_size, total_size
+            start, middle0, middle1, end = 0, int(test_size*total_size),  int((test_size + dev_size)*total_size), total_size
             # split data
-            train_x, train_y = train_x[start:middle0], train_y[start:middle0]
-            test_x, test_y = test_x[middle0:middle1], test_y[middle0:middle1]
-            dev_x, dev_y = dev_x[middle1:end], dev_y[middle1:end]
+            train_x, train_y = train_x[middle1:end], train_y[middle1:end]
+            test_x, test_y = test_x[start:middle0], test_y[start:middle0]
+            dev_x, dev_y = dev_x[middle0:middle1], dev_y[middle0:middle1]
         else:
             raise RuntimeError("Unknown dataset.")
         # store dataset internally
@@ -328,7 +328,7 @@ class POS:
             print("Padding sequence...")
         # update maximum sentence length
         for dataset in self.data_x:
-            self.max_sentence_length = max(self.max_sentence_length, max([len(x) for x in self.data_x[dataset]]))
+            self.max_sentence_length = max(self.max_sentence_length,  max([len(x) for x in self.data_x[dataset]]))
         # pad x
         for dataset in self.data_x:
             for i in range(len(self.data_x[dataset])):
@@ -428,11 +428,12 @@ class POS:
                          dev_x_embedded=self.dataset_x_embedded["dev_x_embedded"])
 
         else:  # glove and word2vec are sequence independent -> process one-by-one
-            for dataset in self.dataset_x:
+            for dataset in self.data_x:
                 data_x_embedded = list()
                 for sentence in self.data_x[dataset]:
                     data_x_embedded.append([preprocessor.word2vec(word) for word in sentence])
-                self.dataset_map[self.data_x[dataset]] = np.array(data_x_embedded)
+                self.dataset_x_embedded[self.dataset_map[dataset]] = np.array(data_x_embedded)
+            self.train_x_embedded, self.test_x_embedded, self.dev_x_embedded = self.dataset_x_embedded["train_x_embedded"], self.dataset_x_embedded["test_x_embedded"], self.dataset_x_embedded["dev_x_embedded"]
 
     def map_y(self):
         """
@@ -466,11 +467,12 @@ class POS:
         """
         if self.model_details is None:
             return ""
-        return "{}_{}_units_{}_dropout_{}_recdropout_{}_lr_{}_train_{}_test_{}_dev".format(self.model_details["model"].name,
+        return "{}_{}_units_{}_dropout_{}_recdropout_{}_lr_{}_dataset_{}_train_{}_test_{}_dev".format(self.model_details["model"].name,
                                                                self.model_details["lstm_hidden_units"],
                                                                self.model_details["lstm_dropout"],
                                                                self.model_details["lstm_recurrent_dropout"],
                                                                self.model_details["learning_rate"],
+                                                               self.dataset,
                                                                self.train_casetype.name,
                                                                self.test_casetype.name,
                                                                self.dev_casetype.name)
@@ -743,14 +745,24 @@ if __name__ == "__main__":
         print("Dataset is: {}".format(dataset.name))
         print("Casetype training data is: {}".format(train_casetype.name))
         print("Casetype test data is: {}".format(test_casetype.name))
+        print("Casetype dev data is: {}".format(dev_casetype.name))
+
         print("Log level is: {}".format(log_level.name))
         print("Embedding is: {}".format(embedding.name))
         if embedding == Embedding.WORD2VEC:
             print("Data source word2vec is: {}".format(datasource_word2vec.name))
         if embedding == Embedding.GLOVE:
             print("Data source glove is: {}".format(datasource_glove.name))
+        print("Model name is: {}".format(model.name))
+        print("Batch size is: {}".format(batch_size))
+        print("Max number of epochs is: {}".format(epochs))
+        print("Learning rate is: {}".format(learning_rate))
+        print("LSTM hidden units: {}".format(lstm_hidden_units))
+        print("LSTM dropout is: {}".format(lstm_dropout))
+        print("LSTM recurrent dropout is: {}".format(lstm_recurrent_dropout))
+        print("Hyperparameter search is: {}".format(hyperparameter_search))
+        print("Visible cuda devies: {}".format(cuda_devices))
         print("Number of GPUs is: {}".format(num_gpus))
-        # TODO: add remaining arguments
 
     pos = POS(log_level=log_level,
               data_source_word2vec=datasource_word2vec,
@@ -801,8 +813,9 @@ if __name__ == "__main__":
             pos.create_model()
             pos.train_model()
             pos.save_model()
+        pos.model_accuracy(X_embedded=pos.dev_x_embedded, y_int=pos.dev_y_int, dataset="dev")
         pos.model_accuracy(X_embedded=pos.test_x_embedded, y_int=pos.test_y_int, dataset="test")
-
+        
     # exit
     if pos.log_level.value >= LogLevel.LIMITED.value:
         print("Exit.")

@@ -43,104 +43,178 @@ On wikipedia dataset which we trained truecaser on we got performence similar to
 
 <b>TODO</b>: Summarize for other datasets.
 
-## POS experiment
+## POS Experiment
 
 ### Paper Reproduction (BiLSTM-CRF+POS+ELMo on PTB)
 
 #### Hypothesis
-We expect to get similar results to those described in the paper.
+
+1. Training on cased data does not perform well on uncased data, while training on uncased data performs well on uncased data.
+2. Training on a concatenated dataset of uncased and cased data performs well on cased and uncased data. It does so, not due to the larger dataset, but rather works as good if we (randomly) lowercase 50% of the dataset.
+3. Trying to solve the problem of (1) by truecasing the lowercased test data does not perform well, but it does perform well if the training data has been lowercased and truecased too.
+
+We expected to get similar results to those described in the paper.
 
 #### Comparison
-| Experiment | Train data | Test data | accuracy | Avg | accuracy from the paper | Avg from the paper | Code |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 1.1 | Cased | Cased | 97.56 | TODO | 97.85 | - | TODO |
-| 1.2 | Cased | Uncased | TODO | TODO  | 88.66 | 93.26 | TODO |
-| 2 | Uncased | Uncased | TODO | TODO  | 97.45 | 97.45 | TODO |
-| 3.1 | Augment | Cased | TODO | TODO | 97.79 | - | TODO  |
-| 3.2 | Augment | Uncased | TODO | TODO | 97.35 | 97.57 | TODO |
-| 3.5.1 | Half Mixed | Cased | TODO  | TODO | 97.85 | - | TODO |
-| 3.5.2 | Half Mixed | Uncased | TODO | TODO | 97.36 | 97.61 | TODO |
-| 4 | Cased | Truecase | TODO | TODO | 95.21 | 95.21 | TODO |
-| 5 | Truecase | Truecase | TODO | TODO | 97.38 | 97.38 | TODO |
+| Experiment | Train Data | Test Data | Accuracy | Avg | Accuracy (Paper) | Avg (Paper) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1.1 | Cased | Cased | __97.30__ | - | __97.85__ | - |
+| 1.2 | Cased | Uncased | 88.29 | 92.78 | 88.66 | 93.26 |
+|  |  |  |  |  |  |  |
+| 2 | Uncased | Uncased | __96.51__ | 96.51 | __97.45__ | 97.45 |
+|  |  |  |  |  |  |  |
+| 3.1 | C+U | Cased | 97.51 | - | 97.79 | - |
+| 3.2 | C+U | Uncased | 96.59 | 97.05 | 97.35 | 97.57 |
+|  |  |  |  |  |  |  |
+| 3.5.1 | Half Mixed | Cased | __97.12__ | - | __97.85__ | - |
+| 3.5.2 | Half Mixed | Uncased | 96.19 | __96.66__ | 97.36 | __97.61__ |
+|  |  |  |  |  |  |  |
+| 4 | Cased | Truecase | 95.04 | 95.04 | 95.21 | 95.21 |
+|  |  |  |  |  |  |  |
+| 5 | Truecase | Truecase | 96.61 | 96.61 | 97.38 | 97.38 |
 
 #### Model Characteristics
 
-Train/Test/Dev data: TODO
+__Train/Test/Dev data__:
+* Train: Penn Treebank section 0-18 (usage: training)
+* Dev: Penn TreeBank section 19-21 (usage: validation, i.e. early stopping and hyperparameter search)
+* Test: Penn TreeBank section 22-24 (usage: reporting accuracy)
 
-Pre-Processing: TODO
+__Pre-Processing__: Depending on the experiment, we either used the imported data as-is (cased), lower-cased it (lowercase) or lower-cased it and then true-case predicted it (truecase). Furthermore, we also combinded the lowercased and cased dataset (C+U) and randomly lowercased 50% of the dataset (half mixed).
 
-Padding: TODO
+__Padding__: Pad all sentence to the lenght of the longest sentence using "NULL" charakters. (Note: The reported accuracy values are true accuracies, i.e. with padding removed. If we would not do this and the dataset contains very short and very long sentences, the accuracy of a prediction with only "NULL" characters for the whole sequence of the short sentence would be very high, even though the predictor is very bad.)
 
-Embedding: TODO
+__Embedding__: ELMo word embedding, vector size: 1024
 
-LSTM Model:
-* description of layers: TODO
-* hyperparameters (#units, batch size, epochs, solver,..) including hyperparameter search (and graph of it) : TODO
-* graphs: learning rate for different hyperparemeters
+__LSTM Model__:
+We used keras for the neural network implementation with the following configuration:
 
-Evaluation: TODO
+* __Sequential Model__:
+ * __Input Layer__: 
+   * BiLSTM Layer:
+     * input shape: (max_sentence_lengt, 1024)
+     * hidden units: 512
+     * lstm dropout: 0.0
+     * lstm recurrent dropout: 0.0
+ * __Hidden Layer(s)__:
+   * TimeDistributed Dense Layer
+     * shape: num_labels
+     * activation function: rectified linear unit
+ * __Output Layer__:
+   * CRF Layer:
+     * shape: num_labels
+* __Training__:
+  * __Solver__:
+    * Adam
+    * learning rate: 0.001
+  * __Epochs__:
+    * max: 40 epochs
+    * early stopping: stops after the validation accuracy did not increase by more than 0.001 over 4 conecutive epochs
+   
+__Evaluation__: After training, we predicted the label of the test set using the trained model, removed the padding and computed the accuracy (number of correctly predicted labels / number of labels).
 
-Computational Requirements: HW / average runtime, #trials, #GPU hours
+__Note__: All the hyperparameters reported above are a result of the hyperparameter grid-search done previous to this experiment evaluation. Details about this and additional information about the code usage can be found [__here__](pos/README.md).
+
 
 #### Conclusion
-TODO
+Even though we haven't seen any implementation details (except those described in the paper text), we reported the exact same accuracy scores (+/- 0.8%) and can confirm the hypothesis (1., 2., 3.) described above.
 
 
 
 ### Additional Experiments
-The goal of the additional experiments is to find out if the hypothesis from the paper is more generally applicable on different datasets, embeddings and LSTM models. Therefore, we run the tests on the brown and CoNLL2000 corpus, using word2vec, glove and elmo embeddings, and different LSTM models.
+The aim of the additional experiments is to find out if the hypothesis from the paper is more generally applicable. Therefore, we run the same experiments on LSTM models with different word embeddings (word2vec, glove, elmo) and without the CRF layer.
+Furthermore, we extended the tests to different datasets, namely the Brown corpus, the CoNLL2000 corpus and a subset of the PTB corpus (train: section 0-4, dev: section 5-6, test: section 7-8). 
+
 
 #### Hypothesis
-We expect to get similar results to those described in the paper.
+
+1. For the coparison of the different embeddings (word2vec, glove, elmo) we expect elmo to perform better than the other two. Firstly, because of the better perfomance we concluded during the lecture (for a well trained elmo model) and secondly because it was the choice for this paper.
+2. We expect the ELMo model with CRF layer to outperform the one without due to the findings from the paper linked below.
+3. We expect to be able to conclude the hypothesis from the original experiments for the reduced ptb dastaset, as well as the other datasets (brown and conll2000).
 
 #### Comparison
 POS on penn treebank reduced dataset, brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer (additional experiments)
-| Train data | Test data | accuracy w2v | accuracy w2v crf | accuracy glove | accuracy glove crf | accuracy elmo | accuracy elmo crf| Code |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| __PTB Dataset__ |  |  |  |  |  |  |  | 
-| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | 97.47 |
-| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| __PTB Reduced Dataset__ |  |  |  |  |  |  |  | 
-| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| __Brown__ |  |  |  |  |  |  |  | 
-| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| __CoNLL 2000__ |  |  |  |  |  |  |  | 
-| Cased | Cased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Uncased | Uncased | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
-| Cased | Truecase | TODO | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
 
+| Train Data | Test Data | Accuracy Word2vec CRF | Accuracy GloVe CRF | Accuracy ELMo | Accuracy ELMo CRF (paper experiment) |
+| --- | --- | --- | --- | --- | --- | 
+| __PTB Dataset__ |  |  |  |  |  | 
+| Cased | Cased | 88.80 | 95.90 | 97.19 |  97.30 | 
+| Cased | Uncased | 78.63 | 86.11 | 88.57 | 88.29 |
+|  |  |  |  |  |  
+| Uncased | Uncased | 80.97 | 94.97 | 96.52 | 96.51 |
+|  |  |  |  |  | 
+| C+U | Cased | 85.62 | 96.88 | 97.44 | 97.51 |
+| C+U | Uncased | 86.67 | 95.84 | 96.60 | 96.59 |
+|  |  |  |  |  | 
+| Half Mixed | Cased | 87.45 | 95.79 | 97.30 |  97.12 |
+| Half Mixed | Uncased | 82.86 | 94.90 | 96.36 | 96.19 |
+|  |  |  |  |  | 
+| Cased | Truecase | 85.74 | 93.82 | 94.78 | 95.04 |
+| Truecase | Truecase | 86.64 | 95.20 | 96.56 | 96.61 |
+|  |  |  |  |  |
+
+
+| Train Data | Test Data | Accuracy ELMo CRF |
+| --- | --- | --- |
+| __PTB Reduced Dataset__ |  |  |
+| Cased | Cased | 96.35 |
+| Cased | Uncased | 88.38 |
+|  |  |  |  |  |  |  | 
+| Uncased | Uncased | 95.48 |
+|  |  |  |  |  |  |  |
+| C+U | Cased | 96.70 |
+| C+U | Uncased | 95.73 |
+|  |  |  |  |  |  |  |
+| Half Mixed | Cased | 96.34 |
+| Half Mixed  | Uncased | 95.08 |
+|  |  |  |  |  |  |  |
+| Cased | Truecase | 94.62 |
+| Truecase | Truecase | 95.35 |
+|  |  |  |  |  |  |  |
+| __Brown__ |  |  |  |  |  |  | 
+| Cased | Cased | 95.69 |
+| Cased | Uncased | 83.30 |
+|  |  |  |  |  |  |  | 
+| Uncased | Uncased | 92.91 |
+|  |  |  |  |  |  |  |
+| C+U | Cased | 97.11 |
+| C+U | Uncased | 95.83 |
+|  |  |  |  |  |  |  |
+| Half Mixed | Cased | 95.28 |
+| Half Mixed  | Uncased | 92.56 |
+|  |  |  |  |  |  |  |
+| Cased | Truecase | 92.11 |
+| Truecase | Truecase | 92.62 |
+|  |  |  |  |  |  |  |
+| __CoNLL 2000__ |  |  |  |  |  |  | 
+| Cased | Cased | 97.80 |
+| Cased | Uncased | 87.91 |
+|  |  |  |  |  |  |  | 
+| Uncased | Uncased | 96.83 |
+|  |  |  |  |  |  |  |
+| C+U | Cased | 99.00 |
+| C+U | Uncased | 99.46 |
+|  |  |  |  |  |  |  |
+| Half Mixed | Cased | 97.65 |
+| Half Mixed  | Uncased | 96.66 |
+|  |  |  |  |  |  |  |
+| Cased | Truecase | 95.40 |
+| Truecase | Truecase | 96.79 |
+|  |  |  |  |  |  |  |
 
 #### Model Characteristics
 
-Train/Test/Dev data: TODO
-
-Pre-Processing: TODO
-
-Padding: TODO
-
-Embedding: TODO
-
-LSTM Model:
-* description of layers: TODO
-* hyperparameters (#units, batch size, epochs, solver,..) including hyperparameter search (and graph of it) : TODO
-* graphs: learning rate for different hyperparemeters
-
-Evaluation: TODO
+In order to compare the outcome from the additional experiments to those from the paper reproduction, we used the exact same model, except the component specified in the table (i.e. ELMo embedding replaced with GloVe embedding).
 
 Computational Requirements: HW / average runtime, #trials, #GPU hours
 
 #### Conclusion
-TODO
+1. ELMo indeed outperforms word2vec by ~10% and GloVe by ~2%.
+2. The accuracy with and without CRF layer are rougly the same (+/-0.3% depending on the testcase). Considering the extra effort of addin the (non-standard) keras layer, the lack of multi gpu support, we conclude that we could would probably be better off withouth the CRF layer.
+3.The hypothesis (1.,2.,3.) from the paper hold true (relative accuracy difference) for the reduced ptb dastaset, as well as the other datasets (brown and conll2000). Depending on the dataset, the absolute accuracy values differ i.e. the performance of the pos tagger for CoNLL2000 reaches >99% for the C+U experiment.
 
+### Implementation details
+Additional details about the part-of-speech tagging part of the paper can be found in the separate [__pos/README.md__](pos/README.md).
 
 ## NER experiment
 BiLSTM-CRF using ELMo + Glove + character embeddings trained on CoNLL
