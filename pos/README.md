@@ -106,11 +106,8 @@ Dropout can prevent the model from overfitting. Interestingly, against our intui
 
 __Note__: Some of the plots already end after a few epochs. This is due to the early stopping feature implemented (training is stopped after accuracy improvement of less than 0.001 over 4 epochs).
 
-## Paper Experiments Reproduction
-TODO
-
-## Additional Experiments
-TODO
+## Paper & Additional Experiments Reproduction
+Detail about the execution (i.e. all detailed parameters) can be found in the ![__SLURM script folder__](scripts). The stdout and stderr output of the executions can be found in the ![__logs__](logs) folder. The compiled and trained models can be found in the ![__models__](models) folder.  Furthermore, the reported accuracy and loss data can be found in the ![__results__](results) folder. 
 
 
 ## Computing Infrastructure
