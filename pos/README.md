@@ -1,11 +1,5 @@
 # Part-of-speech Tagging (POS) - Experiments
 
-## Table of content
-* [Code](#code)
-    * [pos.py](#pos.py)
-    * [evaluation.py](#ealuation.py)
-    
-
 ## Code
 
 ### Usage
@@ -76,7 +70,15 @@ optional arguments:
 
 
 ## Hyperparameter Search
-TODO
+We performed hyperparameter grid search over the following parameters and values:
+
+* LSTM hidden units: [1, 2, 4, 8, 32, 128, 512] (best:512)
+* LSTM dropout: [0.0, 0.2, 0.4] (best: 0.0)
+* LSTM recurrent dropout: [0.0, 0.2, 0.4] (best: 0.0)
+* learning rate: [1e-1, 1e-3] (best: 1e-3)
+
+The evaluation of the findings are discussed below.
+
 
 ### Dataset Split
 
@@ -94,6 +96,7 @@ TODO
 ![Plot: Validation Accuracy over Time (512 LSTM Hidden Units)](plots/LEARNING_RATE_SERIES_HISTORY_VAL_ACCURACY.png "Validation Accuracy over Time (512 LSTM Hidden Units)")
 
 #### Dropout
+
 
 ![Plot: Validation Accuracy over Time](plots/LSTM_DROPOUT_SERIES_HISTORY_VAL_ACCURACY.png "Validation Accuracy over Time")
 
