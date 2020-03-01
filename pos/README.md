@@ -81,25 +81,30 @@ The evaluation of the findings are discussed below.
 
 
 ### Dataset Split
-
+We split all the dataset into training, development and testing data. The training data is used to train the model. For ptb, we used the sections described in the paper. For the other corpus, we used 80% of the data for training. The development data is used for evaluation during training and early stopping. Furthermore, it is used for the hyperparameter search. We used 10% of the data for development. The test dataset is never touched until the very last point, were we use it to compute the accuracy of our model with fresh data. It consists of the remaining 10% of data.
 
 ### Parameters
 
 #### LSTM Hidden Units
+We expected that the model will perform better (higher accuracy, lower loss) if we increase the number of lstm hidden units. As we can see in the two plots below, this hypothesis holds true. We therefore used the largest number of hidden units that we could efficiently run on our hardware. Furthermore, it is interesting that already very few units are capable (with enough training epochs) to reach a very high accuracy score.
+
 ![Plot: Validation Loss over Time](plots/EPOCH_SERIES_COMBINED_HISTORY_VAL_LOSS.png "Validation Loss over Time")
 
 ![Plot: Validation Accuracy over Time](plots/EPOCH_SERIES_COMBINED_HISTORY_VAL_ACCURACY.png "Validation Accuracy over Time")
 
 #### Learning Rate
+We expect that a small learning rate can (potentially) end up at a higher accuracy score, but is much slower in terms of convergence. The evaluation confirms this hypothesis. For better illustration, we added the plot for 8 hidden units (first one) with slower convergence too. 
+
 ![Plot: Validation Accuracy over Time (8 LSTM Hidden Units)](plots/LEARNING_RATE_SERIES_HISTORY_VAL_ACCURACY_8.png "Validation Accuracy over Time (8 LSTM Hidden Units)")
 
 ![Plot: Validation Accuracy over Time (512 LSTM Hidden Units)](plots/LEARNING_RATE_SERIES_HISTORY_VAL_ACCURACY.png "Validation Accuracy over Time (512 LSTM Hidden Units)")
 
 #### Dropout
-
-
+Dropout can prevent the model from overfitting. Interestingly, against our intuition, zero dropout performed best. It could be the case that LSTM networks do not overfit as fast as conventional neural networks.
 ![Plot: Validation Accuracy over Time](plots/LSTM_DROPOUT_SERIES_HISTORY_VAL_ACCURACY.png "Validation Accuracy over Time")
 
+
+__Note__: Some of the plots already end after a few epochs. This is due to the early stopping feature implemented (training is stopped after accuracy improvement of less than 0.001 over 4 epochs).
 
 ## Paper Experiments Reproduction
 TODO
@@ -132,7 +137,7 @@ The runtime for a single experiment on the compute infrastructure descibed above
   * epoch: up to 3min, usually around 1.5-2min per epoch, maximum 40 epochs
 * prediction and evaluation: <5min
 
-__Total: 0.3-3h__
+__Total: 0.3-3h per experiment__
 
 
 ## Work Hours
