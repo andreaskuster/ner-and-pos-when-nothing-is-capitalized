@@ -53,16 +53,16 @@ We expect to get similar results to those described in the paper.
 #### Comparison
 | Experiment | Train Data | Test Data | Accuracy | Avg | Accuracy (Paper) | Avg (Paper) |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1.1 | Cased | Cased | 97.30 | - | 97.85 | - |
+| 1.1 | Cased | Cased | __97.30__ | - | __97.85__ | - |
 | 1.2 | Cased | Uncased | 88.29 | 92.78 | 88.66 | 93.26 |
 |  |  |  |  |  |  |  |
-| 2 | Uncased | Uncased | 96.51 | 96.51 | 97.45 | 97.45 |
+| 2 | Uncased | Uncased | __96.51__ | 96.51 | __97.45__ | 97.45 |
 |  |  |  |  |  |  |  |
 | 3.1 | C+U | Cased | 97.51 | - | 97.79 | - |
 | 3.2 | C+U | Uncased | 96.59 | 97.05 | 97.35 | 97.57 |
 |  |  |  |  |  |  |  |
-| 3.5.1 | Half Mixed | Cased | 97.12 | - | 97.85 | - |
-| 3.5.2 | Half Mixed | Uncased | 96.19 | 96.66 | 97.36 | 97.61 |
+| 3.5.1 | Half Mixed | Cased | __97.12__ | - | __97.85__ | - |
+| 3.5.2 | Half Mixed | Uncased | 96.19 | __96.66__ | 97.36 | __97.61__ |
 |  |  |  |  |  |  |  |
 | 4 | Cased | Truecase | 95.04 | 95.04 | 95.21 | 95.21 |
 |  |  |  |  |  |  |  |
