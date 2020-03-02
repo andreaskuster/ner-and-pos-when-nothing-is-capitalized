@@ -31,6 +31,7 @@ class Word2Vec:
 
     def __init__(self):
         self.model = None
+        self.dim = 300
 
     def import_pre_trained_data(self, datasource):
         print("Downloading and importing {}, this might take a while...".format(datasource))
@@ -68,7 +69,7 @@ class Word2Vec:
 if __name__ == "__main__":
     _DATA_SOURCE = "word2vec-google-news-300"
     # instantiate preprocessor
-    preprocessor = Word2VecPreprocessor()
+    preprocessor = Word2Vec()
     # download pre-trained data
     preprocessor.import_pre_trained_data(_DATA_SOURCE)
     # get embedding for "Hello World"

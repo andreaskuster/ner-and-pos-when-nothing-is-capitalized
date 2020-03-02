@@ -1,3 +1,9 @@
+## IDE specific
+.vscode
+
+## Project Specific
+truecase/models
+
 ## LATEX
 ## Core latex/pdflatex auxiliary files:
 *.aux
