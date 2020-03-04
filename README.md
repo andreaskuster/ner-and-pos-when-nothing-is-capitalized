@@ -206,8 +206,6 @@ POS on penn treebank reduced dataset, brown and CoNLL2000 dataset, word2vec, glo
 
 In order to compare the outcome from the additional experiments to those from the paper reproduction, we used the exact same model, except the component specified in the table (i.e. ELMo embedding replaced with GloVe embedding).
 
-Computational Requirements: HW / average runtime, #trials, #GPU hours
-
 #### Conclusion
 1. ELMo indeed outperforms word2vec by ~10% and GloVe by ~2%.
 2. The accuracy with and without CRF layer are rougly the same (+/-0.3% depending on the testcase). Considering the extra effort of addin the (non-standard) keras layer, the lack of multi gpu support, we conclude that we could would probably be better off withouth the CRF layer.
