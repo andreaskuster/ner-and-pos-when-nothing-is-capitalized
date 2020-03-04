@@ -1,5 +1,5 @@
-from .truecase_model import TrueCaser
-from .singlechar_dataset import TrueCaseDataset
+from truecase_model import TrueCaser
+from singlechar_dataset import TrueCaseDataset, TrueCaseDatasetImproved
 
 import matplotlib.pyplot as plt
 
@@ -144,18 +144,19 @@ def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
 
 
 def main(train_path, val_path, test_path):
+    dataset_type = TrueCaseDatasetImproved
     # Load data
-    train_dataset = TrueCaseDataset(
+    train_dataset = dataset_type(
         train_path,
         train=True,
         OOV_rate=OOV_RATE
     )
-    val_dataset = TrueCaseDataset(
+    val_dataset = dataset_type(
         val_path,
         token_dict=train_dataset.token_to_idx,
         train=False
     )
-    test_dataset = TrueCaseDataset(
+    test_dataset = dataset_type(
         test_path,
         token_dict=train_dataset.token_to_idx,
         train=False
