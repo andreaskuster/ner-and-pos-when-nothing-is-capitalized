@@ -45,20 +45,26 @@ class Brown:
         return text, tag
 
     def load_data_lowercase(self):
+        # apply lowercase function to the dataset
         return self.load_data(text_map_func=str.lower)
 
     def load_data_truecase(self):
+        # fetch lowercase dataset and truecase it
         lower_sentence, tag = self.load_data_lowercase()
         return predict_truecasing(lower_sentence), tag
 
     def load_data_cased_and_uncased(self):
+        # fetch cased and uncased dataset and concatenate them
         sentence_c, tag_c = self.load_data()
         sentence_u, tag_u = self.load_data_lowercase()
         return sentence_c + sentence_u, tag_c + tag_u
 
     def load_data_half_mixed(self):
+        # fetch cased dataset
         sentence, tag = self.load_data()
+        # generate 50% random indices from 0..len(sentence)-1
         rand_samples = random.sample(range(0, len(sentence)), int(0.5 * len(sentence)))
+        # lowercase the elements at the address of the indices
         for index in rand_samples:
             sentence[index] = list(map(str.lower, sentence[index]))
         return sentence, tag
