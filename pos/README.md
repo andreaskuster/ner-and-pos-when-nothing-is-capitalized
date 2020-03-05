@@ -128,9 +128,9 @@ __Total: 0.3-3h per experiment__
 * Run experiments from paper (including bug fixes during this process): 5h
 * Run additional experiments: 10h
 * Write report: 15h
-* Clean up code (add comments, function descriptions,..): 4h  
+* Clean up code (add comments, function descriptions,..): 4.5h  
 
-__Total: 100h__
+__Total: 106h__
 
 
 ## Evaluation
