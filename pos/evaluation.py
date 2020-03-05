@@ -1,6 +1,28 @@
-import os.path
+#!/usr/bin/env python3
+# encoding: utf-8
 
-import numpy as np
+"""
+    Copyright (C) 2020  Andreas Kuster
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+__author__ = "Andreas Kuster"
+__copyright__ = "Copyright 2020"
+__license__ = "GPL"
+
+import os.path
 
 from enum import Enum, auto
 from argparse import ArgumentParser
@@ -186,7 +208,6 @@ if __name__ == "__main__":
                                   casetype_test=_CASETYPE_TEST,
                                   casetype_dev=_CASETYPE_DEV)
 
-
         from matplotlib import pyplot as plt
 
         plt.figure(num=None, figsize=(12, 4), dpi=300)
@@ -195,7 +216,6 @@ if __name__ == "__main__":
 
         for i in range(len(epoch)):
             plt.plot(epoch[i], value[i], label="{}_{}_HIDDEN_UNITS".format(dataset.name, _LSTM_HIDDEN_UNITS[i]))
-
 
         plt.title(plot.name)
         plt.ylabel("Accuracy")
@@ -223,7 +243,6 @@ if __name__ == "__main__":
                                   casetype_test=_CASETYPE_TEST,
                                   casetype_dev=_CASETYPE_DEV)
 
-
         from matplotlib import pyplot as plt
 
         plt.figure(num=None, figsize=(12, 4), dpi=300)
@@ -233,12 +252,10 @@ if __name__ == "__main__":
         for i in range(len(epoch)):
             plt.plot(epoch[i], value[i], label="{}_{}_LEARNING_RATE".format(dataset.name, _LEARNING_RATE[i]))
 
-
         plt.title(plot.name)
         plt.ylabel("Accuracy")
         plt.xlabel("Epochs")
         plt.xticks(range(len(max_epoch)), range(len(max_epoch)))  # rotation="vertical")
-
 
         plt.legend()
 
@@ -251,11 +268,10 @@ if __name__ == "__main__":
                                   model_list=_MODELS,
                                   lstm_hidden_units_list=[512],  # use best param
                                   lstm_dropout_list=_LSTM_DROPOUT,
-                                  learning_rate_list=[1e-3], # use best param
+                                  learning_rate_list=[1e-3],  # use best param
                                   casetype_train=_CASETYPE_TRAIN,
                                   casetype_test=_CASETYPE_TEST,
                                   casetype_dev=_CASETYPE_DEV)
-
 
         from matplotlib import pyplot as plt
 
@@ -266,12 +282,10 @@ if __name__ == "__main__":
         for i in range(len(epoch)):
             plt.plot(epoch[i], value[i], label="{}_{}_LSTM_DROPOUT".format(dataset.name, _LSTM_DROPOUT[i]))
 
-
         plt.title(plot.name)
         plt.ylabel("Accuracy")
         plt.xlabel("Epochs")
         plt.xticks(range(len(max_epoch)), range(len(max_epoch)))  # rotation="vertical")
-
 
         plt.legend()
 
