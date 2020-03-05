@@ -22,6 +22,13 @@ __author__ = "Andreas Kuster"
 __copyright__ = "Copyright 2020"
 __license__ = "GPL"
 
+import os
+import json
+import nltk
+import random
+
+from truecase.external_utils import predict_truecasing
+
 """
 
     Penn TreeBank
@@ -36,13 +43,6 @@ __license__ = "GPL"
         - https://www.sketchengine.eu/penn-treebank-tagset/
 
 """
-
-import os
-import json
-import nltk
-import random
-
-from truecase.external_utils import predict_truecasing
 
 
 class PTB:
