@@ -1,9 +1,33 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+
+"""
+    Copyright (C) 2020  Andreas Kuster
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+__author__ = "Andreas Kuster"
+__copyright__ = "Copyright 2020"
+__license__ = "GPL"
+
 """
 
     Penn TreeBank
 
     File placement:
-        - add penn treebank wsj files into ~/nltk_data/corpora/treebank/combined (extracted from 00-24 structure)
+        - add all penn treebank .wsj files into ~/nltk_data/corpora/treebank/combined (extracted from 00-24 structure)
         - do once: execute generate_file_structure() over the initial ptb file setup (in folder 00,.. 24) or
           use ptb_conf.json
 
@@ -38,7 +62,7 @@ class PTB:
             train_files = [item for item in os.listdir(os.path.join("{}/wsj/{:02}".format(base_path, i)))]
             print("\"{}\":{},".format(i, train_files))
 
-    def load_data(self, sections, text_map_func=lambda x: x, tag_map_func=lambda x: x):
+    def load_data(self, sections=list(range(25)), text_map_func=lambda x: x, tag_map_func=lambda x: x):
         # get all files
         files = list()
         for i in sections:
@@ -53,21 +77,27 @@ class PTB:
         return text, tag
 
     def load_data_lowercase(self, sections):
+        # apply lowercase function to the dataset
         return self.load_data(sections=sections,
                               text_map_func=str.lower)
 
     def load_data_truecase(self, sections):
+        # fetch lowercase dataset and truecase it
         lower_sentence, tag = self.load_data_lowercase(sections)
         return predict_truecasing(lower_sentence), tag
 
     def load_data_cased_and_uncased(self, sections):
+        # fetch cased and uncased dataset and concatenate them
         sentence_c, tag_c = self.load_data(sections=sections)
         sentence_u, tag_u = self.load_data_lowercase(sections=sections)
         return sentence_c + sentence_u, tag_c + tag_u
 
     def load_data_half_mixed(self, sections):
+        # fetch cased dataset
         sentence, tag = self.load_data(sections=sections)
-        rand_samples = random.sample(range(0, len(sentence)), int(0.5*len(sentence)))
+        # generate 50% random indices from 0..len(sentence)-1
+        rand_samples = random.sample(range(0, len(sentence)), int(0.5 * len(sentence)))
+        # lowercase the elements at the address of the indices
         for index in rand_samples:
             sentence[index] = list(map(str.lower, sentence[index]))
         return sentence, tag
@@ -80,3 +110,9 @@ if __name__ == "__main__":
     ptb01 = ptb.load_data([0, 1])
     # get ptb section 7 and 10, lowercase
     ptb710_lower = ptb.load_data_lowercase([7, 10])
+    # get full ptb dataset, truecase
+    data_truecase = ptb.load_data_truecase()
+    # get c+u ptb data (full dataset cased and uncased)
+    data_cu = ptb.load_data_cased_and_uncased()
+    # get hm ptb data (50% randomly lowercase)
+    data_hm = ptb.load_data_half_mixed()
