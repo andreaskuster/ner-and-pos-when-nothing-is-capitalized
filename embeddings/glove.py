@@ -1,16 +1,36 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+
+"""
+    Copyright (C) 2020  Andreas Kuster
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+__author__ = "Andreas Kuster"
+__copyright__ = "Copyright 2020"
+__license__ = "GPL"
+
+import glove
+import zipfile
+import urllib.request
+import os
+
+import numpy as np
+
 """
     GloVe: Global Vectors for Word Representation
-
-    Functionality:
-        - read pre-trained vectors from file
-        - generate vectors from text
-        - provide functionality to convert words to vectors and vice versa
-
-    Ideas for improvements:
-        - use specific text source for training
-        - use different pre-trained source
-
-    Author: Andreas
 
     Credits:
         - https://nlp.stanford.edu/projects/glove/
@@ -40,16 +60,11 @@
             }
 """
 
-import glove
-import zipfile
-import urllib.request
-import os
-import numpy as np
-
 
 class GloVe:
 
     def __init__(self):
+        # source definitions
         self.data_sources = {
             "wikipedia2014_gigaword5_6b_uncased": {
                 "url": "http://nlp.stanford.edu/data/glove.6B.zip",
@@ -94,15 +109,15 @@ class GloVe:
                 }
             }
         }
-        self.base_path = "data"
-        self.embeddings = dict()
-        self.co_occur = dict()
-        self.word2no = dict()
-        self.no2word = list()
-        self.counter = 0
-        self.model = None
-        self.pre_trained = None
-        self.dim = 0
+        self.base_path = "data"  # base path for data load/store
+        self.embeddings = dict()   #
+        self.co_occur = dict()  # co-occurrence matrix
+        self.word2no = dict()  # word to number
+        self.no2word = list()  # index to word
+        self.counter = 0  # word2no max index counter
+        self.model = None  # glove model instance
+        self.pre_trained = None  # flag indicating load pre-trained embedding or manual training
+        self.dim = -1  # embedding vector dimension
 
     def import_pre_trained_data(self, datasource, dataset):
         print("Importing pre-trained data, this might take a while...")
@@ -128,16 +143,21 @@ class GloVe:
                                    os.path.join(self.base_path, "{}.zip".format(datasource)))
 
     def unzip_data(self, datasource, dataset):
+        # open zip
         zip_ref = zipfile.ZipFile(os.path.join(self.base_path, "{}.zip".format(datasource)), "r")
+        # create director
         os.mkdir(os.path.join(self.base_path, datasource))
         print("Unzip {}, this might take a while...".format(datasource))
+        # unzip data
         zip_ref.extractall(os.path.join(self.base_path, datasource))
+        # close file handler
         zip_ref.close()
 
     def import_pre_trained(self, datasource, dataset):
         # set embedding vector dimensionality
         self.dim = self.data_sources[datasource][dataset]["dim"]
         print("Importing embedding {}, this might take a while...".format(dataset))
+        # add embeddings from file, data is of form NAME, VECTOR[0]...VECTOR[N-1]
         self.embeddings = dict()
         with open(os.path.join(self.base_path, datasource, dataset), "r") as f:
             for line in f:
@@ -145,27 +165,35 @@ class GloVe:
                 word = values[0]
                 vector = np.asarray(values[1:], "float32")
                 self.embeddings[word] = vector
+        # set pre-trained flag
         self.pre_trained = True
 
     def token_iter(self, path):
+        # iterate over the tokens, without reading the whole file at once (for memory efficiency)
         with open(path, "r") as file:
             for line in file:
                 yield line.split()
 
     def word_to_no(self, word):
+        # check if word is already in the dictionary
         if word in self.word2no:
+            # return the assigned index
             return self.word2no[word]
         else:
+            # add word, assign new unused index
             self.word2no[word] = self.counter
             self.no2word.append(word)
             self.counter += 1
             return self.word2no[word]
 
     def create_co_occurrence_matrix(self, path, sliding_window_size=3):
+        # create sliding window
         window = list()
+        # get token iterator
         iter = self.token_iter(path)
+        # initialize co-occurrence matrix
         self.co_occur = dict()
-        # fill initial window
+        # fill initial sliding window
         for i in range(sliding_window_size):
             window.append(iter.__next__())
         # process all windows
@@ -181,15 +209,21 @@ class GloVe:
             window = window[1:].append(item)
 
     def train_model(self):
+        # set embedding vector dimension
         self.dim = 50
+        # init glove
         self.model = glove.Glove(self.co_occur, d=self.dim, alpha=0.75, x_max=100.0)
+        # train model
         for epoch in range(100):
             err = self.model.train(batch_size=200, workers=8)
             print("epoch %d, error %.3f" % (epoch, err), flush=True)
+        # set flag to self-trained
         self.pre_trained = False
 
     def word2vec(self, word):
+        # check whether model is self-trained or not
         if self.pre_trained:
+            # return vector if word present, else return the zero vector
             if word in self.embeddings:
                 return self.embeddings[word]
             else:
@@ -211,4 +245,5 @@ if __name__ == "__main__":
     # prepare pre-trained data
     preprocessor.import_pre_trained_data(_DATA_SOURCE, _DATA_SET)
     # get embedding for "Hello World"
-    print("embedding for \"Hello World\" is {}".format([preprocessor.word2vec(word) for word in ["Hello", "World"]]))
+    sentences = ["Hello", "World"]
+    print("embedding for \"Hello World\" is {}".format([preprocessor.word2vec(word) for word in sentences]))
