@@ -15,6 +15,7 @@
 
 \documentclass[11pt,a4paper]{article}
 \usepackage[hyperref]{emnlp-ijcnlp-2019}
+\usepackage{hyperref}
 \usepackage{times}
 \usepackage{latexsym}
 
@@ -42,6 +43,13 @@
     {\tt virinchi@uw}}
 \date{}
 
+\makeatletter
+\def\endthebibliography{%
+	\def\@noitemerr{\@latex@warning{Empty `thebibliography' environment}}%
+	\endlist
+}
+\makeatother
+
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -54,19 +62,13 @@ Previous works have shown that there is a significant performance drop when appl
 The work we reproduce tries to battle this issue in two popular NLP tasks by mixing both cased and uncased datasets.
 
 \section{Contributions}
-In this section the scientific contributions of this work will be outlined, including the hypotheses tested in this reproduction. 
-A hypothesis is usually one sentence, \emph{maybe} two. A hypothesis is something that can be supported or rejected by data, and is precise enough you can understand what experiments would support it directly from the hypothesis itself. 
-Make sure this is true of each of your hypotheses.
-
-An example of something that's \emph{not} a hypothesis: ``Contextual embedding models have shown strong performance on a number of tasks across NLP. We will run experiments evaluating two types of contextual embedding models on datasets X, Y, and Z.''
-
-An example of a hypothesis: 
-``Finetuning Pretrained BERT on SST-2 will have higher accuracy than an LSTM trained with GloVe embeddings."
-
+This paper effectively shows how well work from \cite{ner-and-pos-original} can be reproducede and how well it applies to a few other settings.\\
+Original paper does show how casing issue in NLP can be effectively solved through a method which requires close to none overhead in terms of development time, and no additional overhead in runtime, especially when compared to methods such as truecasing.\\
+It also serves as a reproducing work to show that truecasing can be reproduced. We show that while truecasing experiment can be reproduced on the same experiment, but claims on applicability to other datasets fail to reproduce.
 
 \subsection{Hypotheses from original paper}
 \label{sec:original_hypotheses}
-A list of the hypotheses from the original paper.
+Original paper proposes following hypotheses:
 \begin{itemize}
     \item Truecasing fits strongly to data it is presented leading to performance drops on different datasets.
     \item Mixing cased and uncased data provides the best performance in NER task on CoNLL 2003 dataset.
@@ -76,12 +78,9 @@ A list of the hypotheses from the original paper.
 
 \subsection{Hypotheses addressed in this work}
 \label{sec:current_hypotheses}
-A list of the hypotheses addressed in this work. Some of these will be the same as in Section~\ref{sec:original_hypotheses}, but some will related to the additional experiments you will run.
-
-
+In addition to hypotheses tested in Section~\ref{sec:original_hypotheses} we also tested:
 \begin{itemize}
-    \item Hypothesis 1
-    \item Hypothesis 2
+    \item \textcolor{red}{Any experiments beyond original paper go here}
 \end{itemize}
 
 
@@ -91,6 +90,9 @@ Here every experiment is listed briefly.
 Every piece of data should be listed here, with the hypothesis it supports.
 
 \section{Code}
+There are no public repos which do mention the project in their READMEs. However, authors of this papers do have repositories which names and descriptions suggest that they are related to this project.
+
+In case of truecasing, primary author of \cite{ner-and-pos-original} has two repositories: \href{https://github.com/mayhewsw/truecaser}{truecaser} and \href{https://github.com/mayhewsw/pytorch-truecaser}{python-truecaser}. The former one refers to the original implementation from \cite{susanto-etal-2016-learning}, while the python one is a port to python. However, to validate results and test ease of application we decided to not use either of these resources and focus on custom implementation.
 Put a link to your code or the original authors' code here. Read instructions in the syllabus.
 
 \section{Experimental setup and results}
@@ -117,7 +119,7 @@ Include the information listed in the syllabus, including the \textbf{total} num
 \section{Discussion and recommendations}
 Conclude the report, and summarize which hypotheses from the original paper were reproducible. Include suggestions for future researchers -- what was hard? What worked easily? 
 
-\bibliography{emnlp-ijcnlp-2019}
 \bibliographystyle{acl_natbib}
+\bibliography{emnlp-ijcnlp-2019}
 
 \end{document}
