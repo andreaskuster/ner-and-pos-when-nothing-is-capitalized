@@ -24,7 +24,7 @@ MODEL_SAVE_PATH = 'models/'
 HIDDEN_SIZE = 300
 
 EPOCHS = 30
-BATCH_SIZE = 100
+BATCH_SIZE = 50
 OOV_RATE = 0.005
 
 # AUTO FLAGS
@@ -177,9 +177,9 @@ def main(train_path, val_path, test_path):
 
     # Call train function
     # ! COMMENT OUT IF ALREADY TRAINED
-    model = train(model, optimizer, criterion, train_loader, val_loader)
-    with open('token_to_idx.pkl', mode='wb') as f:
-        pkl.dump(train_dataset.token_to_idx, f)
+    # model = train(model, optimizer, criterion, train_loader, val_loader)
+    # with open('token_to_idx.pkl', mode='wb') as f:
+    #     pkl.dump(train_dataset.token_to_idx, f)
 
     # Load model with lowest validation error
     val_losses = np.load(f'{MODEL_SAVE_PATH}/val_losses.npy')

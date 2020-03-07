@@ -22,17 +22,16 @@
 """
 
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Bidirectional, Activation
+from keras.layers import Activation
 from keras.optimizers import Adam
-from keras.models import Model, Input
-from keras.layers import LSTM, Embedding, Dense, TimeDistributed, Dropout, Bidirectional
+from keras.layers import LSTM, Dense, Bidirectional
 from keras_contrib.layers import CRF
 from keras_contrib.metrics.crf_accuracies import _get_accuracy
 import numpy as np
 from datasets.ptb.penn_treebank import PTB
-from embeddings.word2vec import Word2Vec
-from embeddings.elmov2 import ELMo
-from embeddings.glove import GloVe
+from embeddings.word2vec.word2vec import Word2Vec
+from embeddings.elmo.elmov2 import ELMo
+from embeddings.glove.glove import GloVe
 from helper.multi_gpu import to_multi_gpu
 from numpy import save, load
 

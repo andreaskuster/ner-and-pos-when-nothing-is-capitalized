@@ -22,13 +22,13 @@ For those languages which use it, capitalization is an important signal for the 
 We expect to get similar results to those described in the paper.
 
 #### Comparsion
-| Test Set   | F1 Score from our code | F1 Score from the paper |
-|:--         |:-:                     |:-:                      |
-| Wikipedia  | 92.65                  | 93.01                   |
-| ConLL Train| 66.03                  | 78.85                   |
-| ConLL Test | 63.49                  | 77.35                   |
-| PTB 01-18  | 78.53                  | 86.91                   |
-| PTB 22-24  | 78.47                  | 86.22                   |
+| Test Set   | F1 Score (OOV when creating dictionary) | F1 Score (OOV at read) | F1 Score from the paper |
+|:--         | :-:                                     |:-:                     |:-:                      |
+| Wikipedia  | 92.71                                   | 92.65                  | 93.01                   |
+| ConLL Train| 65.32                                   | 66.03                  | 78.85                   |
+| ConLL Test | 63.28                                   | 63.49                  | 77.35                   |
+| PTB 01-18  | 78.73                                   | 78.53                  | 86.91                   |
+| PTB 22-24  | 78.69                                   | 78.47                  | 86.22                   |
 
 While the paper does not provide a lot of detail on implementation, we were able to reproduce results shown in it closely enough to be confident in our implementation.
 
@@ -205,8 +205,6 @@ POS on penn treebank reduced dataset, brown and CoNLL2000 dataset, word2vec, glo
 #### Model Characteristics
 
 In order to compare the outcome from the additional experiments to those from the paper reproduction, we used the exact same model, except the component specified in the table (i.e. ELMo embedding replaced with GloVe embedding).
-
-Computational Requirements: HW / average runtime, #trials, #GPU hours
 
 #### Conclusion
 1. ELMo indeed outperforms word2vec by ~10% and GloVe by ~2%.

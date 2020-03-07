@@ -8,12 +8,11 @@ from argparse import ArgumentParser
 from typing import Tuple
 from os.path import isfile
 
-from sklearn.model_selection import train_test_split
 from keras import Sequential
 from keras.layers import LSTM, Dense, Activation, Bidirectional, TimeDistributed
 from keras.optimizers import Adam
 from keras.models import model_from_json
-from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.callbacks import EarlyStopping
 from keras.utils import to_categorical
 from keras_contrib.layers import CRF
 
@@ -21,9 +20,9 @@ from datasets.ptb.penn_treebank import PTB
 from datasets.brown.brown import Brown
 from datasets.conll2000.conll2000 import CoNLL2000
 
-from embeddings.word2vec import Word2Vec
-from embeddings.glove import GloVe
-from embeddings.elmov2 import ELMo
+from embeddings.word2vec.word2vec import Word2Vec
+from embeddings.glove.glove import GloVe
+from embeddings.elmo.elmov2 import ELMo
 
 from helper.multi_gpu import to_multi_gpu
 

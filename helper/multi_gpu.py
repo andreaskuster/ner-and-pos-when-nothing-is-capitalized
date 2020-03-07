@@ -1,7 +1,6 @@
 from __future__ import print_function
-import keras
 from keras.models import *
-from keras.layers import Input, merge, Lambda
+from keras.layers import Input, Lambda
 from keras.layers.merge import Concatenate
 from keras import backend as K
 
@@ -9,6 +8,7 @@ import tensorflow as tf
 
 """
     Multi GPU Support for Keras
+    
     Credits: https://github.com/kuixu/keras_multi_gpu
 """
 

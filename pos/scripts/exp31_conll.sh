@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-#SBATCH --mem 700G
-#SBATCH -c 64
+#SBATCH --mem 500G
+#SBATCH -c 128
 #SBATCH -o /users2/kustera/log/nlp_out_exp31_conll.txt
 #SBATCH -e /users2/kustera/log/nlp_err_exp31_conll.txt
 #SBATCH -t 4:00:00
-#SBATCH --partition intelv100
+#SBATCH --partition amdv100
 
 module load python/3.7.2
 module load CMake
