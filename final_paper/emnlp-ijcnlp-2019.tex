@@ -33,7 +33,7 @@
 \newcommand\confname{EMNLP-IJCNLP 2019}
 \newcommand\conforg{SIGDAT}
 
-\title{reproducing "ner and pos when nothing is capitalized"}
+\title{reproducing ``ner and pos when nothing is capitalized"}
 
 \author{Andreas Kuster \\
     {\tt kustera@student.ethz} \\\And
@@ -80,7 +80,11 @@ Original paper proposes following hypotheses:
 \label{sec:current_hypotheses}
 In addition to hypotheses tested in Section~\ref{sec:original_hypotheses} we also tested:
 \begin{itemize}
-    \item \textcolor{red}{Any experiments beyond original paper go here}
+    \item POS:
+    \begin{itemize}
+        \item Mixing both cased and uncased data leads to the best performance regardless of word embedding and dataset used.
+        \item Using ELMo model with CRF layer in POS task to outperform the one without, regardless of data casing technique. This is based on \cite{BiLSTM-CRF}.
+    \end{itemize}\textcolor{red}{Any experiments beyond original paper go here}
 \end{itemize}
 
 
@@ -90,10 +94,13 @@ Here every experiment is listed briefly.
 Every piece of data should be listed here, with the hypothesis it supports.
 
 \section{Code}
-There are no public repos which do mention the project in their READMEs. However, authors of this papers do have repositories which names and descriptions suggest that they are related to this project.
+There are no public repos which do mention the project in their \textit{READMEs}.
 
-In case of truecasing, primary author of \cite{ner-and-pos-original} has two repositories: \href{https://github.com/mayhewsw/truecaser}{truecaser} and \href{https://github.com/mayhewsw/pytorch-truecaser}{python-truecaser}. The former one refers to the original implementation from \cite{susanto-etal-2016-learning}, while the python one is a port to python. However, to validate results and test ease of application we decided to not use either of these resources and focus on custom implementation.
-Put a link to your code or the original authors' code here. Read instructions in the syllabus.
+However, in case of truecasing, primary author of \cite{ner-and-pos-original} has two repositories: \href{https://github.com/mayhewsw/truecaser}{truecaser} and \href{https://github.com/mayhewsw/pytorch-truecaser}{python-truecaser}. The former one refers to the original implementation from \cite{susanto-etal-2016-learning}, while the python one is a port to python. However, to validate results and test ease of application we decided to not use either of these resources and focus on custom implementation.
+
+We were not able to find publicly available code for either NER or POS parts of the original paper.
+
+Hence we needed to reimplement the code from scratch. All our work is in \href{https://github.com/andreaskuster/uw-nlp}{public github repository}. We tried to make all results as easily accessible as possible, which means that there is significant overlap between this report and the \textit{README} on that repository.
 
 \section{Experimental setup and results}
 
