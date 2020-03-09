@@ -84,11 +84,22 @@ In addition to hypotheses tested in Section~\ref{sec:original_hypotheses} we als
     \begin{itemize}
         \item Mixing both cased and uncased data leads to the best performance regardless of word embedding and dataset used.
         \item Using ELMo model with CRF layer in POS task to outperform the one without, regardless of data casing technique. This is based on \cite{BiLSTM-CRF}.
-    \end{itemize}\textcolor{red}{Any experiments beyond original paper go here}
+    \end{itemize}
+    \item NER:
+    \begin{itemize}
+        \item NER task is transferable to other, similar dataset, such as Groningen Meaning Bank (GMB) in this case.
+    \end{itemize}
 \end{itemize}
 
 
 \subsection{Experiments}
+We conducted two main experiments from the paper, and tried to confirm the reproducibility claim that the original paper made.
+
+For the truecasing we are training a simple Bidirectional LSTM with a logical layer on top, as described in both \cite{ner-and-pos-original} and \cite{susanto-etal-2016-learning}. Since the former paper, does a great job of mentioning hyper-parameters used in the network, the hyperparameter search is not required. However, due to a mistake which was pointed out on feedback of version 1 of this project, the Out Of Vocabulary (OOV) rate was non-standard during training. Due to this fact, we actually get 2 separate results, each for different type of determining whether a token is OOV during training or not. Changing of such technique has an effect on model parameters, which will be discussed in Section \ref{sec:exp-truecase}.
+
+Part of Speech tagging is the most in depth experiment, which lead a lot of additional hypotheses which got tested. Firstly, the
+
+
 Here every experiment is listed briefly.
 \textbf{Every} hypothesis in Section~\ref{sec:current_hypotheses} should be listed and supported by at least one experiment, plot, table, or other type of data. 
 Every piece of data should be listed here, with the hypothesis it supports.
@@ -103,6 +114,9 @@ We were not able to find publicly available code for either NER or POS parts of 
 Hence we needed to reimplement the code from scratch. All our work is in \href{https://github.com/andreaskuster/uw-nlp}{public github repository}. We tried to make all results as easily accessible as possible, which means that there is significant overlap between this report and the \textit{README} on that repository.
 
 \section{Experimental setup and results}
+
+\subsection{Truecasing}
+\label{sec:exp-truecase}
 
 \subsection{Model description}
 See syllabus. If you had to implement the model, record how long each part took.
@@ -120,6 +134,28 @@ Each experiment should have: a clear explanation of how it was run, the high-lev
 See syllabus.
 
 \section{Computational requirements}
+Due to relative lack of overlap between three sections each of us used different computational resources:
+\begin{itemize}
+    \item Truecasing:
+    \begin{itemize}
+        \item GPU: NVIDIA RTX 2080 Super
+        \item CPU: AMD Ryzen 7 3700x
+        \item Runtime: 10h (Original Paper + Debugging)
+    \end{itemize}
+    \item POS:
+    \begin{itemize}
+        \item GPU: 2x NVIDIA V100
+        \item CPU: AMD EPYC 7501
+        \item Runtime: 15h (Original Paper + Additional Experiments + Debugging)
+    \end{itemize}
+    \item NER:
+    \begin{itemize}
+        \item GPU: \textbf{\textcolor{red}{TO BE FILLED}}
+        \item CPU: \textbf{\textcolor{red}{TO BE FILLED}}
+        \item Runtime: \textbf{\textcolor{red}{TO BE FILLED}}
+    \end{itemize}
+\end{itemize}
+
 This is required for every report. Include every item listed in the syllabus, plus any other relevant statistics (e.g. if you have multiple model sizes, report info for each).
 Include the information listed in the syllabus, including the \textbf{total} number of GPU hours used for all experiments, and the number of GPU hours for \textbf{each} experiment.
 
