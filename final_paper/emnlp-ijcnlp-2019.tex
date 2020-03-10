@@ -101,9 +101,11 @@ Part of Speech tagging is the most in depth experiment, which lead a lot of addi
 
 Named Entity Recognition \textbf{\textcolor{red}{TO BE DONE}}
 
+\textcolor{green}{
 Here every experiment is listed briefly.
 \textbf{Every} hypothesis in Section~\ref{sec:current_hypotheses} should be listed and supported by at least one experiment, plot, table, or other type of data. 
 Every piece of data should be listed here, with the hypothesis it supports.
+}
 
 \section{Code}
 There are no public repos which do mention the project in their \textit{READMEs}.
@@ -126,18 +128,6 @@ Datasets were a common resource about all three parts of experiments. Hence we w
     \item Wikipedia - we used data from \href{https://github.com/raymondhs/char-rnn-truecase/tree/master/data/wiki}{github repository}, which we expect is authored by primary author of \cite{susanto-etal-2016-learning}.
 \end{itemize}
 
-
-CoNLL2000
-
-CoNLL2003
-
-Peen Tree Bank
-
-Twitter
-
-Wikipedia
-
-
 \subsection{Truecasing}
 \label{sec:exp-truecase}
 
@@ -146,37 +136,37 @@ Wikipedia
 
     Hence output of this model is 2 dimensional, one specifying that character should be upper cased (true), other that character should be left as is.
 
-    Implementation of this model took 2 hours, mostly due to transposes required by LSTM layers in PyTorch framework. It also helped that homework 1
+    Implementation of this model took 2 hours, mostly due to transposes required by LSTM layers in PyTorch framework. It also helped that assignment 2 required us to implement LSTM model, and we could reuse parts of it.
 
     \subsubsection{Hyperparameters}
-    See syllabus. Describe what you can.
+    \textcolor{green}{See syllabus. Describe what you can.}
 
     \subsubsection{Results}
-    Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.
+    \textcolor{green}{Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.}
 
 \subsection{Part of Speech Tagging}
 \label{sec:exp-pos}
 
     \subsubsection{Model description}
-    See syllabus. If you had to implement the model, record how long each part took.
+    \textcolor{green}{See syllabus. If you had to implement the model, record how long each part took.}
 
     \subsubsection{Hyperparameters}
-    See syllabus. Describe what you can.
+    \textcolor{green}{See syllabus. Describe what you can.}
 
     \subsubsection{Results}
-    Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.
+    \textcolor{green}{Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.}
 
 \subsection{Named Entity Recognition}
 \label{sec:exp-ner}
 
     \subsubsection{Model description}
-    See syllabus. If you had to implement the model, record how long each part took.
+    \textcolor{green}{See syllabus. If you had to implement the model, record how long each part took.}
 
     \subsubsection{Hyperparameters}
-    See syllabus. Describe what you can.
+    \textcolor{green}{See syllabus. Describe what you can.}
 
     \subsubsection{Results}
-    Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.
+    \textcolor{green}{Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.}
 
 \section{Experiments beyond the original paper}
 See syllabus.
