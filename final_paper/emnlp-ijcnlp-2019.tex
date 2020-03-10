@@ -97,8 +97,9 @@ We conducted two main experiments from the paper, and tried to confirm the repro
 
 For the truecasing we are training a simple Bidirectional LSTM with a logical layer on top, as described in both \cite{ner-and-pos-original} and \cite{susanto-etal-2016-learning}. Since the former paper, does a great job of mentioning hyper-parameters used in the network, the hyperparameter search is not required. However, due to a mistake which was pointed out on feedback of version 1 of this project, the Out Of Vocabulary (OOV) rate was non-standard during training. Due to this fact, we actually get 2 separate results, each for different type of determining whether a token is OOV during training or not. Changing of such technique has an effect on model parameters, which will be discussed in Section \ref{sec:exp-truecase}.
 
-Part of Speech tagging is the most in depth experiment, which lead a lot of additional hypotheses which got tested. Firstly, the
+Part of Speech tagging is the most in depth experiment, which lead a lot of additional hypotheses which got tested. Firstly, the \textbf{\textcolor{red}{TO BE DONE}}
 
+Named Entity Recognition \textbf{\textcolor{red}{TO BE DONE}}
 
 Here every experiment is listed briefly.
 \textbf{Every} hypothesis in Section~\ref{sec:current_hypotheses} should be listed and supported by at least one experiment, plot, table, or other type of data. 
@@ -107,7 +108,7 @@ Every piece of data should be listed here, with the hypothesis it supports.
 \section{Code}
 There are no public repos which do mention the project in their \textit{READMEs}.
 
-However, in case of truecasing, primary author of \cite{ner-and-pos-original} has two repositories: \href{https://github.com/mayhewsw/truecaser}{truecaser} and \href{https://github.com/mayhewsw/pytorch-truecaser}{python-truecaser}. The former one refers to the original implementation from \cite{susanto-etal-2016-learning}, while the python one is a port to python. However, to validate results and test ease of application we decided to not use either of these resources and focus on custom implementation.
+However, in case of truecasing, primary author of \cite{ner-and-pos-original} has two repositories: \href{https://github.com/mayhewsw/truecaser}{truecaser} and \href{https://github.com/mayhewsw/pytorch-truecaser}{python-truecaser}. The former one refers to the original implementation from \cite{susanto-etal-2016-learning}, while the python one is a port to python. The (probably) primary author of \cite{susanto-etal-2016-learning} also has a \href{https://github.com/raymondhs/char-rnn-truecase}{github repository} possibly related to truecaser we are trying to reproduce. However, to validate results and test ease of application we decided to not use either of these resources and focus on custom implementation. This also removes dependence on Andrej Karpathy's \href{https://github.com/karpathy/char-rnn}{char-rnn} all of the above mentioned repositories are forks of.
 
 We were not able to find publicly available code for either NER or POS parts of the original paper.
 
@@ -115,20 +116,67 @@ Hence we needed to reimplement the code from scratch. All our work is in \href{h
 
 \section{Experimental setup and results}
 
+\subsection{Datasets}
+Datasets were a common resource about all three parts of experiments. Hence we will describe them separate here, and for each experiment specify which exact dataset was used:
+\begin{itemize}
+    \item Brown
+    \item CoNLL2000
+    \item Peen Tree Bank
+    \item Twitter
+    \item Wikipedia - we used data from \href{https://github.com/raymondhs/char-rnn-truecase/tree/master/data/wiki}{github repository}, which we expect is authored by primary author of \cite{susanto-etal-2016-learning}.
+\end{itemize}
+
+
+CoNLL2000
+
+CoNLL2003
+
+Peen Tree Bank
+
+Twitter
+
+Wikipedia
+
+
 \subsection{Truecasing}
 \label{sec:exp-truecase}
 
-\subsection{Model description}
-See syllabus. If you had to implement the model, record how long each part took.
+    \subsubsection{Model description}
+    We used the exact same model as described in \cite{susanto-etal-2016-learning}, a 2 layer, bidirectional LSTM. Since encoding was not specified, nor any character level encoding was mentioned in class we used a PyTorch \cite{pytorch} Encoder layer, which learned weights from bag-of-words to a feature-sized word representation. Note that in this model size of word embeddings is equal to hidden state size (both 300 dimensional). Then on top of these two layer a binary linear layer was applied.
 
-\subsection{Datasets}
-See syllabus. Include link to download dataset.
+    Hence output of this model is 2 dimensional, one specifying that character should be upper cased (true), other that character should be left as is.
 
-\subsection{Hyperparameters}
-See syllabus. Describe what you can.
+    Implementation of this model took 2 hours, mostly due to transposes required by LSTM layers in PyTorch framework. It also helped that homework 1
 
-\subsection{Results}
-Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.
+    \subsubsection{Hyperparameters}
+    See syllabus. Describe what you can.
+
+    \subsubsection{Results}
+    Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.
+
+\subsection{Part of Speech Tagging}
+\label{sec:exp-pos}
+
+    \subsubsection{Model description}
+    See syllabus. If you had to implement the model, record how long each part took.
+
+    \subsubsection{Hyperparameters}
+    See syllabus. Describe what you can.
+
+    \subsubsection{Results}
+    Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.
+
+\subsection{Named Entity Recognition}
+\label{sec:exp-ner}
+
+    \subsubsection{Model description}
+    See syllabus. If you had to implement the model, record how long each part took.
+
+    \subsubsection{Hyperparameters}
+    See syllabus. Describe what you can.
+
+    \subsubsection{Results}
+    Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.
 
 \section{Experiments beyond the original paper}
 See syllabus.
