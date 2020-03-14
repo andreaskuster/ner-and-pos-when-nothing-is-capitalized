@@ -18,6 +18,7 @@
 \usepackage{hyperref}
 \usepackage{times}
 \usepackage{latexsym}
+\usepackage{graphicx}
 
 %\usepackage{url}
 
@@ -116,9 +117,12 @@ We were not able to find publicly available code for either NER or POS parts of 
 
 Hence we needed to reimplement the code from scratch. All our work is in \href{https://github.com/andreaskuster/uw-nlp}{public github repository}. We tried to make all results as easily accessible as possible, which means that there is significant overlap between this report and the \textit{README} on that repository.
 
+Truecasing and NER were implemented using PyTorch \cite{pytorch}, while POS was implemented in Keras \cite{keras}, on top of TensorFlow \cite{tensorflow2015-whitepaper}.
+
 \section{Experimental setup and results}
 
 \subsection{Datasets}
+\label{sec:datasets}
 Datasets were a common resource about all three parts of experiments. Hence we will describe them separate here, and for each experiment specify which exact dataset was used:
 \begin{itemize}
     \item CoNLL2003 - From \cite{conll2003}. Not publicly available. Shared as part of class.
@@ -126,6 +130,21 @@ Datasets were a common resource about all three parts of experiments. Hence we w
     \item Twitter - From \cite{twitter-dataset}. Specifically we found \href{https://github.com/GateNLP/broad_twitter_corpus}{authors github repository} with data available.
     \item Wikipedia - From \href{https://github.com/raymondhs/char-rnn-truecase/tree/master/data/wiki}{github repository}, which we suspect is authored by primary author of \cite{susanto-etal-2016-learning}. This data was used for truecasing experiment.
 \end{itemize}
+
+Additionally, in case of NER and POS each of these datasets occurs in 5 different experimental flavors:
+\begin{itemize}
+    \item Cased (C) - Standard dataset, as downloaded.
+    \item Uncased (U) - Uncased dataset. It's a standard dataset, with an additional step of converting everything to lowercase.
+    \item Cased + Uncased (C + U) - Combination of both cased and uncased flavors. Hence it is twice the size of either cased or uncased.
+    \item Half Mixed (C + U 50) - Combination of cased and uncased flavors. However, only 50\% of data is lowercase, and remaining half is as-is.
+    \item Truecase Test (TT) - Truecased Test dataset. Training data is the same as cased one. Test is converted to uncased version, and then a trucaser is run on it.
+    \item Truecase All (TA) - Truecased Train and Test dataset. The transformation described for test in TT is applied to both train and test.
+\end{itemize}
+
+\subsection{Padding}
+To remove repetition in description of experiments we also want to discuss padding and how results should be understood.
+
+All experiments described below used padding to the maximum sentence size for training. However, for results on both validation (development) and test such padding was either removed or ignored, and hence it is not affecting the results reported in this paper.
 
 \subsection{Truecasing}
 \label{sec:exp-truecase}
@@ -156,7 +175,6 @@ Datasets were a common resource about all three parts of experiments. Hence we w
     \end{figure}
 
     The performance of the model matched one claimed both by original paper, and original truecasing paper on Wikipedia dataset. However, there was a significant mismatch in performance on other datasets provided in the original paper. This can be seen in Table \ref{tab:truecase-result}. A drop-off between datasets is expected, because as explained in original paper, various sources will use various casing schemes specific to the domain.
-
     \begin{center}
         \begin{table}[h]
             \begin{tabular}{|l|c|c|}
@@ -179,9 +197,7 @@ Datasets were a common resource about all three parts of experiments. Hence we w
             \label{tab:truecase-result}
         \end{table}
     \end{center}
-
     For reference Table \ref{tab:trucase-original-result} contains results from investigated papers. We can see that there is not a high difference in performance between results for Wikipedia dataset, but there is a 10\% difference in both CoNLL and PTB between our results and original ones. The possible reason for it might be the fact that original paper used fork of, before mentioned, \href{https://github.com/karpathy/char-rnn}{char-rnn}. We looked at it, searching for differences between our intuition and actual implementation, but could not find any.
-
     \begin{center}
         \begin{table}[h]
             \begin{tabular}{|l|c|}
@@ -202,24 +218,100 @@ Datasets were a common resource about all three parts of experiments. Hence we w
                 PTB 22-24 & 86.22 \\
                 \hline
             \end{tabular}
-            \caption{F1 scores from reference papers. All entries but ``Wikipedia (Susnato)" are from \cite{ner-and-pos-original}.}
+            \caption{F1 scores from reference papers. All entries but ``Wikipedia (Susanto)" are from \cite{ner-and-pos-original}.}
             \label{tab:trucase-original-result}
         \end{table}
     \end{center}
-
     This leaves us in conclusion that, in terms of performance, this experiment can be only partially reproduced, and it is possible that additional techniques (such as dropout, etc.) were applied during training of the model. However, in terms of between-datasets trends the paper describes, we have confirmed them, and \textbf{were able to (partially) reproduce the first hypothesis of the paper}.
 
 \subsection{Part of Speech Tagging}
 \label{sec:exp-pos}
 
     \subsubsection{Model description}
-    \textcolor{green}{See syllabus. If you had to implement the model, record how long each part took.}
+    Model for POS task is not well described in the original paper, and rather references other papers for implementation details \cite{ma-hovy-2016-end}. This left us with only a rough sketch of a model, and a hyperparameter search for most of variables.
+
+    Model used here is a single BiLSTM layer, followed by a Time Distributed Dense layer, followed by an output CRF layer. We used ELMo as the encoding for the input to BiLSTM layer.
 
     \subsubsection{Hyperparameters}
-    \textcolor{green}{See syllabus. Describe what you can.}
+    As mentioned before, the task required a hyperparameter search. It was performed on standard (Cased) version of PTB dataset. Due to time constraints we opted for grid search with following settings:
+    \begin{table}[h]
+        \begin{tabular}{|l|l|l|}
+            \hline
+            Hyperparameter & Values & Best \\
+            \hline
+            LSTM Hidden Units & $2^{\{0, 1, 2, 3, 5, 7, 9\}}$ & 512 \\
+            \hline
+            LSTM Drop. & 0.0, 0.2, 0.4 & 0.0 \\
+            \hline
+            LSTM Recurr. Drop. & 0.0, 0.2, 0.4 & 0.0 \\
+            \hline
+            learning rate & 0.1, 0.001 & 0.001 \\
+            \hline
+        \end{tabular}
+        \caption{Hyperparamter Search for POS experiment. Values investigated are in the middle column, while optimal combination of hyperparameters is in the right one.}
+        \label{tab:pos-hypersearch}
+    \end{table}
+
+    One of the surprises of optimal setting is that both of dropout's are zero. However, as seen on Fig. \ref{fig:pos-hyperdrop}, we can see that all settings converge to roughly the same performance on validation set, with $0.0$ having the fastest convergence.
+
+    \begin{figure}[h]
+    	\includegraphics[scale=0.3]{pos_hypersearch_drop.png}
+        \caption{Performance of various settings for different dropout values in LSTM layer.}
+        \label{fig:pos-hyperdrop}
+    \end{figure}
+
+    Sizes of Time Distributed Dense layer, and CRF layer are the same, and equal to number of classes given dataset. Additionally size of ELMo encoding (and hence size of input to BiLSTM layer) is 1024.
+
+    Due to time constraints we also used early stopping. Training was stopped either after 40 epochs or if validation accuracy improvement was smaller than 0.001 over 4 epochs.
 
     \subsubsection{Results}
-    \textcolor{green}{Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.}
+    We tested the optimal model on 5 different setups, as described in list of flavors in Sec. \ref{sec:datasets}. The dataset used in this case was PTB, where:
+    \begin{itemize}
+        \item Sections 0-18 are used for training
+        \item Sections 19-21 are used for development, i.e. choosing hyperparameters
+        \item Sections 22-24 are used for test, i.e. reporting accuracy
+    \end{itemize}
+
+    \begin{table}[h]
+        \begin{tabular}{|l|c|c|c|}
+            \hline
+            Exp. & Test (C) & Test (U) & Avg \\
+            \hline
+            C        & 97.30 & 88.29 & 92.78 \\
+            U        & 96.51 & 96.51 & 96.51 \\
+            C + U    & 97.51 & 96.59 & \textbf{97.05} \\
+            C + U 50 & 97.12 & 96.19 & \textbf{96.66} \\
+            TT       & 95.04 & 95.04 & 95.04 \\
+            TA       & 96.61 & 96.61 & 96.61 \\
+            \hline
+        \end{tabular}
+        \caption{Accuracies for the POS task, in our setup. Averages of two best performing flavors are emboldened for readability.}
+        \label{tab:pos-results-our}
+    \end{table}
+
+    \begin{table}[h]
+        \begin{tabular}{|l|c|c|}
+            \hline
+            Exp. & Our & Original \\
+            \hline
+            C        & 92.78 & 93.26 \\
+            U        & 96.51 & 97.45 \\
+            C + U    & \textbf{97.05} & \textbf{97.57} \\
+            C + U 50 & \textbf{96.66} & \textbf{97.61} \\
+            TT       & 95.04 & 95.21 \\
+            TA       & 96.61 & 97.38 \\
+            \hline
+        \end{tabular}
+        \caption{Comparison of average accuracies for the POS task. Results on the left are using our code, while ones of the left are reported in the original paper. For both sources 2 best results are emboldened.}
+        \label{tab:pos-results-comp}
+    \end{table}
+
+    We can see that we agree with the hypothesis that mixing cased and uncased provides the best performance on the Penn Tree Bank as can be seen in Table \ref{tab:pos-results-our}. This confirms the hypothesis.
+
+    However, as in case of Truecasing, we conclude that in terms of absolute performence we did get different results as reference paper. This can be seen in Table \ref{tab:pos-results-comp}, where there is about 1\% difference in accuracy between our implementation and the original one. In addition to this the gain due to mixing cased and uncased data is sometimes smaller than the difference between implementations, such as in case of Uncased flavor, where reference has higher accuracy than our C + U flavor.
+
+    Overall, \textbf{we confirm the hypothesis}, but with a grain of salt due to lack of transparency in implementation in the original paper.
+
 
 \subsection{Named Entity Recognition}
 \label{sec:exp-ner}
