@@ -166,13 +166,7 @@ All experiments described below used padding to the maximum sentence size for tr
     For wikipedia dataset, with first approach we got a dictionary of size 64, and with second approach it was 41.
 
     \subsubsection{Results}
-    We trained these models for 30 epochs, with crossentropy loss. We recorded both training and validation loss for both, and chose the models with lowest validation loss for each of OOV settings. In both cases, such point was reached after around 7-8 epochs, which can be seen on Fig. \ref{fig:truecase-losses}.
-
-    \begin{figure}[h]
-        % TODO: \includegraphics[scale=0.65]{}
-        \caption{Plot of losses for at-the-read OOV experiment (left), and proper experiment, with generating OOV tokens during creation of vocabulary (right).}
-        \label{fig:truecase-losses}
-    \end{figure}
+    We trained these models for 30 epochs, with crossentropy loss. We recorded both training and validation loss for both, and chose the models with lowest validation loss for each of OOV settings. In both cases, such point was reached after around 7-8 epochs.
 
     The performance of the model matched one claimed both by original paper, and original truecasing paper on Wikipedia dataset. However, there was a significant mismatch in performance on other datasets provided in the original paper. This can be seen in Table \ref{tab:truecase-result}. A drop-off between datasets is expected, because as explained in original paper, various sources will use various casing schemes specific to the domain.
     \begin{center}
