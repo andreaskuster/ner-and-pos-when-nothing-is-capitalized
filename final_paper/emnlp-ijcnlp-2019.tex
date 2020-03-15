@@ -83,7 +83,8 @@ In addition to hypotheses tested in Section~\ref{sec:original_hypotheses} we als
 \begin{itemize}
     \item POS:
     \begin{itemize}
-        \item Mixing both cased and uncased data leads to the best performance regardless of word embedding and dataset used.
+        \item Mixing both cased and uncased data leads to the best performance regardless of word \textbf{embedding} used.
+        \item Mixing both cased and uncased data leads to the best performance regardless of word \textbf{dataset} used.
         \item Using ELMo model with CRF layer in POS task to outperform the one without, regardless of data casing technique. This is based on \cite{BiLSTM-CRF}.
     \end{itemize}
     \item NER:
@@ -96,9 +97,9 @@ In addition to hypotheses tested in Section~\ref{sec:original_hypotheses} we als
 \subsection{Experiments}
 We conducted two main experiments from the paper, and tried to confirm the reproducibility claim that the original paper made.
 
-For the truecasing we are training a simple Bidirectional LSTM with a logical layer on top, as described in both \cite{ner-and-pos-original} and \cite{susanto-etal-2016-learning}. Since the former paper, does a great job of mentioning hyper-parameters used in the network, the hyperparameter search is not required. However, due to a mistake which was pointed out on feedback of version 1 of this project, the Out Of Vocabulary (OOV) rate was non-standard during training. Due to this fact, we actually get 2 separate results, each for different type of determining whether a token is OOV during training or not. Changing of such technique has an effect on model parameters, which will be discussed in Section \ref{sec:exp-truecase}.
+For the truecasing we are training a simple Bidirectional LSTM with a logical layer on top, as described in both \cite{ner-and-pos-original} and \cite{susanto-etal-2016-learning}. Since the former paper, does a great job of mentioning hyper-parameters used in the network, the hyperparameter search is not required.
 
-Part of Speech tagging is the most in depth experiment, which lead a lot of additional hypotheses which got tested. Firstly, the \textbf{\textcolor{red}{TO BE DONE}}
+Part of Speech tagging is the most in depth experiment, which lead a lot of additional hypotheses which got tested. Firstly, we had to find optimal hyper-parameter setting. The search was not too large, since a few of the parameters (such as number of layers) were known, but it still took a significant amount of time. After finding such setting we compared its results with ones reported the original paper. Then we investigated whether claims from this paper are applicable to other datasets and encodings. Lastly, we looked at the CRF layer, and what its impact on performance on the whole model is.
 
 Named Entity Recognition \textbf{\textcolor{red}{TO BE DONE}}
 
@@ -126,7 +127,12 @@ Truecasing and NER were implemented using PyTorch \cite{pytorch}, while POS was 
 Datasets were a common resource about all three parts of experiments. Hence we will describe them separate here, and for each experiment specify which exact dataset was used:
 \begin{itemize}
     \item CoNLL2003 - From \cite{conll2003}. Not publicly available. Shared as part of class.
-    \item Peen Tree Bank (PTB) - From \cite{penn-treebank}. Not publicly available. Shared as part of class. We used a loader from \href{https://www.nltk.org/}{nltk} (after appending nonpublic data to it).
+    \item Peen Tree Bank (PTB) - From \cite{penn-treebank}. Not publicly available. Shared as part of class. We used a loader from \href{https://www.nltk.org/}{nltk} (after appending nonpublic data to it). In particular:
+        \begin{itemize}
+            \item Sections 0-18 are used for training
+            \item Sections 19-21 are used for development, i.e. choosing hyperparameters
+            \item Sections 22-24 are used for test, i.e. reporting accuracy
+        \end{itemize}
     \item Twitter - From \cite{twitter-dataset}. Specifically we found \href{https://github.com/GateNLP/broad_twitter_corpus}{authors github repository} with data available.
     \item Wikipedia - From \href{https://github.com/raymondhs/char-rnn-truecase/tree/master/data/wiki}{github repository}, which we suspect is authored by primary author of \cite{susanto-etal-2016-learning}. This data was used for truecasing experiment.
 \end{itemize}
@@ -169,53 +175,51 @@ All experiments described below used padding to the maximum sentence size for tr
     We trained these models for 30 epochs, with crossentropy loss. We recorded both training and validation loss for both, and chose the models with lowest validation loss for each of OOV settings. In both cases, such point was reached after around 7-8 epochs.
 
     The performance of the model matched one claimed both by original paper, and original truecasing paper on Wikipedia dataset. However, there was a significant mismatch in performance on other datasets provided in the original paper. This can be seen in Table \ref{tab:truecase-result}. A drop-off between datasets is expected, because as explained in original paper, various sources will use various casing schemes specific to the domain.
-    \begin{center}
-        \begin{table}[h]
-            \begin{tabular}{|l|c|c|}
-                \hline
-                Dataset & Initial OOV & Proper OOV \\
-                \hline
-                Wikipedia & 92.65 & 92.71\\
-                \hline
-                \hline
-                CoNLL Train & 66.03 & 65.32 \\
-                \hline
-                CoNLL Test & 63.49 & 63.28 \\
-                \hline
-                PTB 01-18 & 78.53 & 78.73 \\
-                \hline
-                PTB 22-24 & 78.47 & 78.69 \\
-                \hline
-            \end{tabular}
-            \caption{F1 scores of best performing model (chosen on validation set of Wikipedia dataset) for various datasets. Initial OOV stands for at-the-read techinque of creating OOV tokens, while proper is the former one of two described above.}
-            \label{tab:truecase-result}
-        \end{table}
-    \end{center}
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|l|c|c|}
+            \hline
+            Dataset & Initial OOV & Proper OOV \\
+            \hline
+            Wikipedia & 92.65 & 92.71\\
+            \hline
+            \hline
+            CoNLL Train & 66.03 & 65.32 \\
+            \hline
+            CoNLL Test & 63.49 & 63.28 \\
+            \hline
+            PTB 01-18 & 78.53 & 78.73 \\
+            \hline
+            PTB 22-24 & 78.47 & 78.69 \\
+            \hline
+        \end{tabular}
+        \caption{F1 scores of best performing model (chosen on validation set of Wikipedia dataset) for various datasets. Initial OOV stands for at-the-read techinque of creating OOV tokens, while proper is the former one of two described above.}
+        \label{tab:truecase-result}
+    \end{table}
     For reference Table \ref{tab:trucase-original-result} contains results from investigated papers. We can see that there is not a high difference in performance between results for Wikipedia dataset, but there is a 10\% difference in both CoNLL and PTB between our results and original ones. The possible reason for it might be the fact that original paper used fork of, before mentioned, \href{https://github.com/karpathy/char-rnn}{char-rnn}. We looked at it, searching for differences between our intuition and actual implementation, but could not find any.
-    \begin{center}
-        \begin{table}[h]
-            \begin{tabular}{|l|c|}
-                \hline
-                Dataset & Original \\
-                \hline
-                Wikipedia (Susanto) & 93.19 \\
-                \hline
-                Wikipedia & 93.01 \\
-                \hline
-                \hline
-                CoNLL Train & 78.85 \\
-                \hline
-                CoNLL Test & 77.35 \\
-                \hline
-                PTB 01-18 & 86.91 \\
-                \hline
-                PTB 22-24 & 86.22 \\
-                \hline
-            \end{tabular}
-            \caption{F1 scores from reference papers. All entries but ``Wikipedia (Susanto)" are from \cite{ner-and-pos-original}.}
-            \label{tab:trucase-original-result}
-        \end{table}
-    \end{center}
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|l|c|}
+            \hline
+            Dataset & Original \\
+            \hline
+            Wikipedia (Susanto) & 93.19 \\
+            \hline
+            Wikipedia & 93.01 \\
+            \hline
+            \hline
+            CoNLL Train & 78.85 \\
+            \hline
+            CoNLL Test & 77.35 \\
+            \hline
+            PTB 01-18 & 86.91 \\
+            \hline
+            PTB 22-24 & 86.22 \\
+            \hline
+        \end{tabular}
+        \caption{F1 scores from reference papers. All entries but ``Wikipedia (Susanto)" are from \cite{ner-and-pos-original}.}
+        \label{tab:trucase-original-result}
+    \end{table}
     This leaves us in conclusion that, in terms of performance, this experiment can be only partially reproduced, and it is possible that additional techniques (such as dropout, etc.) were applied during training of the model. However, in terms of between-datasets trends the paper describes, we have confirmed them, and \textbf{were able to (partially) reproduce the first hypothesis of the paper}.
 
 \subsection{Part of Speech Tagging}
@@ -227,8 +231,10 @@ All experiments described below used padding to the maximum sentence size for tr
     Model used here is a single BiLSTM layer, followed by a Time Distributed Dense layer, followed by an output CRF layer. We used ELMo as the encoding for the input to BiLSTM layer.
 
     \subsubsection{Hyperparameters}
+    \label{sec:exp-pos-hyper}
     As mentioned before, the task required a hyperparameter search. It was performed on standard (Cased) version of PTB dataset. Due to time constraints we opted for grid search with following settings:
     \begin{table}[h]
+        \centering
         \begin{tabular}{|l|l|l|}
             \hline
             Hyperparameter & Values & Best \\
@@ -249,6 +255,7 @@ All experiments described below used padding to the maximum sentence size for tr
     One of the surprises of optimal setting is that both of dropout's are zero. However, as seen on Fig. \ref{fig:pos-hyperdrop}, we can see that all settings converge to roughly the same performance on validation set, with $0.0$ having the fastest convergence.
 
     \begin{figure}[h]
+        \centering
     	\includegraphics[scale=0.3]{pos_hypersearch_drop.png}
         \caption{Performance of various settings for different dropout values in LSTM layer.}
         \label{fig:pos-hyperdrop}
@@ -259,14 +266,10 @@ All experiments described below used padding to the maximum sentence size for tr
     Due to time constraints we also used early stopping. Training was stopped either after 40 epochs or if validation accuracy improvement was smaller than 0.001 over 4 epochs.
 
     \subsubsection{Results}
-    We tested the optimal model on 5 different setups, as described in list of flavors in Sec. \ref{sec:datasets}. The dataset used in this case was PTB, where:
-    \begin{itemize}
-        \item Sections 0-18 are used for training
-        \item Sections 19-21 are used for development, i.e. choosing hyperparameters
-        \item Sections 22-24 are used for test, i.e. reporting accuracy
-    \end{itemize}
+    We tested the optimal model on 5 different setups, as described in list of flavors in Sec. \ref{sec:datasets}. The dataset used in this case was PTB, with splits as described before.
 
     \begin{table}[h]
+        \centering
         \begin{tabular}{|l|c|c|c|}
             \hline
             Exp. & Test (C) & Test (U) & Avg \\
@@ -284,6 +287,7 @@ All experiments described below used padding to the maximum sentence size for tr
     \end{table}
 
     \begin{table}[h]
+        \centering
         \begin{tabular}{|l|c|c|}
             \hline
             Exp. & Our & Original \\
@@ -321,13 +325,94 @@ All experiments described below used padding to the maximum sentence size for tr
 
 \section{Experiments beyond the original paper}
 
-\subsection{Datasets}
-In addition to the datasets used in original paper, we additionally used:
-\begin{itemize}
-    \item Brown - From \href{http://korpus.uib.no/icame/brown/bcm.html}{Brown University}. We used a loader from \href{https://www.nltk.org/}{nltk}.
-    \item CoNLL2000 - From \cite{conll2000}. We used a loader from \href{https://www.nltk.org/}{nltk}.
-    \item \textbf{\textcolor{red}{ADD Groningen Meaning Bank (GMB) dataset}}
-\end{itemize}
+    \subsection{Datasets}
+    In addition to the datasets used in original paper, we additionally used:
+    \begin{itemize}
+        \item Brown - From \href{http://korpus.uib.no/icame/brown/bcm.html}{Brown University}. We used a loader from \href{https://www.nltk.org/}{nltk}.
+        \item CoNLL2000 - From \cite{conll2000}. We used a loader from \href{https://www.nltk.org/}{nltk}.
+        \item PTB Reduced (PTB R) - Same as Penn Tree Bank described in Section \ref{sec:datasets}, but:
+        \begin{itemize}
+            \item Train consists of sections 0-4
+            \item Validation consists of sections 5-6
+            \item Test consists of sections 7-8
+        \end{itemize}
+        \item \textbf{\textcolor{red}{ADD Groningen Meaning Bank (GMB) dataset}}
+    \end{itemize}
+
+    \subsection{Part of Speech Tagging}
+    The aim of the additional experiments is to find out if the hypothesis from the paper is more generally applicable. We run the same experiments on LSTM models with different word embeddings, with or without the CRF layer, and on different datasets.
+
+    \subsubsection{Hyperparameters}
+    Due to results in Section \ref{sec:exp-pos-hyper} the same model was used as in the original experiment.
+
+    One important note for encodings is that they change number of inputs to BiLSTM layer, thus slightly modifying its size. In particular both GloVe and word2vec have size of 300, which is much smaller than 1024 in ELMo.
+
+    \subsubsection{Results}
+    Since there were 3 experiments roughly separate experiments let us present them separately.
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|l|c|c|c|}
+            \hline
+            Exp.     & word2vec       & GloVe          & ELMo \\
+            \hline
+            C        & 83.71          & 91.01          & 92.78 \\
+            U        & 80.97          & 94.67          & 96.51 \\
+            C + U    & \textbf{86.15} & \textbf{96.36} & \textbf{97.05} \\
+            C + U 50 & 85.01          & \textbf{95.35} & \textbf{96.66} \\
+            TT       & 85.74          & 93.82          & 95.04 \\
+            TA       & \textbf{86.64} & 95.20          & 96.61 \\
+            \hline
+        \end{tabular}
+        \caption{Average accuracies for different encodings. Note that ELMo encodings are the exact copy of results from \ref{tab:pos-results-our}. Similarly to other tables 2 best scores are emboldened for readability.}
+        \label{tab:epos-encodings}
+    \end{table}
+
+    Table \ref{tab:epos-encodings} shows results for various encodings. We see that we consistently mixed dataset appears to be in the top 2 results. We can also see that encoding has a strong effect on absolute performance of the model, especially in case of word2vec which has a 10\% drop in accuracy relative to GloVe and ELMo. This is an expected behavior as ELMo is known to outperform both word2vec and GloVe in many cases.
+
+    There is an interesting notion that both of Truecasing flavors tend to perform better than Half Mixed one. However, due to significant drop in word2vec with respect to other encodings we believe that it rather an artifact of the encoding itself rather than a theme. Additionally, performance of all three scenarios is rather close further pointing to encoding specific problem.
+
+    Overall, we believe that the first additional hypothesis is \textbf{supported by the above results}.
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|l|c|c|c|}
+            \hline
+            Exp. & PTB R & Brown & CoNLL2000 \\
+            \hline
+            C        & 92.36          & 89.50          & 92.86\\
+            U        & 95.48          & 92.91          & 96.83 \\
+            C + U    & \textbf{96.22} & \textbf{96.47} & \textbf{99.23} \\
+            C + U 50 & \textbf{95.71} & \textbf{93.92} & \textbf{97.16} \\
+            TT       & 94.62          & 92.11          & 95.40 \\
+            TA       & 95.35          & 92.62          & 96.79 \\
+            \hline
+        \end{tabular}
+        \caption{Average accuracies for different datasets.}
+        \label{tab:epos-results-datasets}
+    \end{table}
+
+    Table \ref{tab:epos-results-datasets} shows results for different dataset. Here results are clear, mixing cased and uncased datasets provides the best result regardless of a dataset. In fact for Brwon CoNLL2000 gaps between this technique and others is even larger than on the original PTB dataset. Hence, these results \textbf{strongly support our second additional hypothesis}.
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|l|c|c|}
+            \hline
+            Exp. & No CRF & CRF \\
+            \hline
+            C        & 92.88 & 92.78 \\
+            U        & 96.52 & 96.51 \\
+            C + U    & 97.02 & 97.05 \\
+            C + U 50 & 96.83 & 96.66 \\
+            TT       & 94.78 & 95.04 \\
+            TA       & 96.56 & 96.61 \\
+            \hline
+        \end{tabular}
+        \caption{Average accuracies for the original model with CRF and without CRF.}
+        \label{tab:epos-results-crf}
+    \end{table}
+
+    Table \ref{tab:epos-results-crf} compares performance of the original model with or without the last layer. Considering that most of results are within a few hundredths between two models, with TT being 0.26\% away from the original implementation, we conclude that CRF can be eliminated from the model without major differences in performance. This is very beneficial on the implementation and runtime side, since CRF is a non-standard library, making model are complicated, and does not have multi-gpu support, causing it to run much longer. These results, \textbf{strongly support our third additional hypothesis}, and we recommend potential future users of BiLSTM to not include CRF layer (at least for POS task).
 
 \section{Computational requirements}
 Due to relative lack of overlap between three sections each of us used different computational resources:
