@@ -231,12 +231,12 @@ BiLSTM-CRF using ELMo + Glove + character embeddings trained on CoNLL
 BiLSTM-CRF using ELMo + Glove + character embeddings trained on CoNLL tested on Twitter Corpus
 | Experiment | Train data | F1 Score |  F1 Score from the paper | 
 | --- | --- | --- | --- |
-| 1.1 | Cased |   | 58.63| 
-| 2 | Uncased |   | 53.13 | 
-| 3 | Augment |   | 66.14| 
-| 3.5 | Half Mixed |     | 64.69 |
-| 4 | Cased |   | 58.22 | 
-| 5 | Truecase |    | 62.66 | 
+| 1.1 | Cased |33.24   | 58.63| 
+| 2 | Uncased |  14.54 | 53.13 | 
+| 3 | Augment | 31.31  | 66.14| 
+| 3.5 | Half Mixed | 32.94    | 64.69 |
+| 4 | Cased-Truecase | 23.45  | 58.22 | 
+| 5 | Truecase |  29.19  | 62.66 | 
 
  
 ### Additional Experiments
