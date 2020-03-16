@@ -308,10 +308,80 @@ All experiments described below used padding to the maximum sentence size for tr
     \textcolor{green}{See syllabus. If you had to implement the model, record how long each part took.}
 
     \subsubsection{Hyperparameters}
+    \textbf{\textcolor{red}{TODO: Describe model hyperparameters. Look at Sections \ref{sec:exp-ner} and \ref{sec:exp-pos} for examples}}
+
     \textcolor{green}{See syllabus. Describe what you can.}
 
     \subsubsection{Results}
-    \textcolor{green}{Each experiment should have: a clear explanation of how it was run, the high-level takeaway, a pointer to the hypothesis it supports, and it should say whether it reproduces the experiments in the original paper or not.}
+    We tested on the same 5 variants as in case of POS experiment. Dataset used was CoNLL2003, similarly to the original paper. Table \ref{tab:ner-results-our} shows results of these variants using our code. We can see that, mixing cased and uncased data is again a very good data pre-processing step, which provides respectively first and third highest F1 score.
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|l|c|c|c|}
+            \hline
+            Exp. & Test (C) & Test (U) & Avg \\
+            \hline
+            C        & 90.63 & 81.47 & 86.05 \\
+            U        & 89.72 & 89.72 & \textbf{89.72} \\
+            C + U    & 90.10 & 88.65 & 89.38 \\
+            C + U 50 & 90.84 & 89.54 & \textbf{90.19} \\
+            TT       & 80.89 & 80.89 & 80.89 \\
+            TA       & 88.43 & 88.43 & 88.43 \\
+            \hline
+        \end{tabular}
+        \caption{F1 scores for NER task, in our setup. Averages of two best performing variants are emboldened.}
+        \label{tab:ner-results-our}
+    \end{table}
+
+    Table \ref{tab:ner-results-comp} compares scores from our implementation to ones from \cite{ner-and-pos-original}. We can see there is a 1-2\% gap in absolute results between our implementation and the original. This can happen due to minor differences in the implementations.
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|l|c|c|}
+            \hline
+            Exp. & Our & Original \\
+            \hline
+            C        & 86.05          & 63.46 \\
+            U        & \textbf{89.72} & 89.32 \\
+            C + U    & 89.38          & \textbf{90.49} \\
+            C + U 50 & \textbf{90.19} & \textbf{90.37} \\
+            TT       & 80.89          & 82.93 \\
+            TA       & 88.43          & 90.25 \\
+            \hline
+        \end{tabular}
+        \caption{Comparison of average F1 scores for the NER task. Results on the left are using our code, while ones of the left are reported in the original paper. For both sources 2 best results are emboldened.}
+        \label{tab:ner-results-comp}
+    \end{table}
+
+    However, the most interesting difference in the cased variant, where there is a above 30\% gap between our and the original implementation. After closer investigation we discovered that the reason for it is huge different in its performance on uncased data (81.47 in our implementation vs 34.46 in original one). We do not have a firm intuition on why this is happening. However, it might be the case that models trained on cased dataset are highly unstable when tested on uncased data.
+
+    Overall, however we can see that relative performance of results is similar, and mixing cased and uncased data provides the best performance with our implementation. Because of this we believe \textbf{our results support second hypothesis of the paper}.
+
+    Another experiment that \cite{ner-and-pos-original} performed is testing how well their model from NER task transfers to other datasets. In particular they used the Twitter dataset, since it has very different properties than CoNLL2003.
+
+    Table \ref{tab:ner-twitter-comp} compares performance of our implementation to the original one when transferred to the Twitter dataset. We see that our implementation performs much worse than the original one (by 30\% or more in each case).
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|l|c|c|}
+            \hline
+            Exp. & Our & Original \\
+            \hline
+            C        & 33.24 & 58.63 \\
+            U        & 14.54 & 53.13 \\
+            C + U    & 31.31 & 66.14 \\
+            C + U 50 & 32.94 & 64.69 \\
+            TT       & 23.45 & 58.22 \\
+            TA       & 29.19 & 62.66 \\
+            \hline
+        \end{tabular}
+        \caption{Comparison of average F1 scores for the NER task, when transferred to the Twitter dataset. Results on the left are using our code, while ones of the left are reported in the original paper. Since, it is a direct comparison we do not embold any results.}
+        \label{tab:ner-twitter-comp}
+    \end{table}
+
+    Comparison here is not relative, but direct, on absolute values, due to the fact that we are testing our performance on a new dataset. This means, that our model did much worse than the original one. This is very counterintuitive, when we consider the fact that in the original dataset, our cased experiment generalized much better. Our intuition is that there was a dropout used in the original implementation, which was undocumented in the paper.
+
+    Overall, we \textbf{cannot support the thrid hypothesis from original paper}.
 
 \section{Experiments beyond the original paper}
 
