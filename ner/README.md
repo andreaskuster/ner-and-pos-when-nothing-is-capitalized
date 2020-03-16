@@ -41,7 +41,7 @@ example command for the "Validation Accuracy over Time" plot:
 ```
 python ner/eval.py --test dataset/eng.testb --case 0 --crf --use_gpu 1 --model_path models/model --map_path models/mapping.pkl 
 ```
-###casing
+### casing
 0: cased
 1: uncased
 2: truecased
