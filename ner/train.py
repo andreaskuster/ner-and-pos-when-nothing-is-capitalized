@@ -52,10 +52,6 @@ optparser.add_option(
     type='int', help="Replace digits with 0"
 )
 optparser.add_option(
-    "-c", "--char_dim", default="25",
-    type='int', help="Char embedding dimension"
-)
-optparser.add_option(
     "-C", "--char_lstm_dim", default="25",
     type='int', help="Char LSTM hidden layer size"
 )
@@ -104,11 +100,7 @@ optparser.add_option(
     type='int', help='whether or not to ues gpu'
 )
 optparser.add_option(
-    '--loss', default='loss.txt',
-    help='loss file location'
-)
-optparser.add_option(
-    '--name', default='mixed_test',
+    '--name', default='model',
     help='model name'
 )
 opts = optparser.parse_args()[0]
@@ -117,7 +109,6 @@ parameters = OrderedDict()
 parameters['tag_scheme'] = opts.tag_scheme
 parameters['lower'] = opts.lower == 1
 parameters['zeros'] = opts.zeros == 1
-parameters['char_dim'] = opts.char_dim
 parameters['char_lstm_dim'] = opts.char_lstm_dim
 parameters['char_bidirect'] = opts.char_bidirect == 1
 parameters['word_dim'] = opts.word_dim
@@ -134,7 +125,7 @@ parameters['name'] = opts.name
 parameters['use_gpu'] = opts.use_gpu == 1 and torch.cuda.is_available()
 use_gpu = parameters['use_gpu']
 
-mapping_file = 'models/mixed_mapping.pkl'
+mapping_file = 'models/mapping.pkl'
 
 name = parameters['name']
 model_name = models_path + name #get_name(parameters)
@@ -144,7 +135,6 @@ tmp_model = model_name + '.tmp'
 assert os.path.isfile(opts.train)
 assert os.path.isfile(opts.dev)
 assert os.path.isfile(opts.test)
-assert parameters['char_dim'] > 0 or parameters['word_dim'] > 0
 assert 0. <= parameters['dropout'] < 1.0
 assert parameters['tag_scheme'] in ['iob', 'iobes']
 assert not parameters['all_emb'] or parameters['pre_emb']
