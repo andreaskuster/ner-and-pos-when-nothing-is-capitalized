@@ -37,11 +37,11 @@
 \title{reproducing ``ner and pos when nothing is capitalized"}
 
 \author{Andreas Kuster \\
-    {\tt kustera@student.ethz} \\\And
+    {\tt kustera@ethz.ch} \\\And
     Jakub Filipek \\
-    {\tt balbok@uw} \\\And
+    {\tt balbok@uw.edu} \\\And
     Viswa Virinchi Muppirala \\
-    {\tt virinchi@uw}}
+    {\tt virinchi@uw.edu}}
 \date{}
 
 \makeatletter
@@ -54,27 +54,27 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-    Capitalization is an important feature in many NLP tasks such as Named Entity Recognition (NER) or Part of Speech Tagging (POS). We are trying to reproduce results of paper which shows how to mitigate a significant performance drop when casing is mismatched between training and testing data. In particular we show that mixing cased and uncased dataset provides the best performance, matching the claims of the original paper. We also show that we got slightly lower performance in almost all experiments we have tried to reproduce, suggesting, that the orginal paper did not fully disclose all of the experimental setup.
+    Capitalization is an important feature in many NLP tasks such as Named Entity Recognition (NER) or Part of Speech Tagging (POS). We are trying to reproduce results of paper which shows how to mitigate a significant performance drop when casing is mismatched between training and testing data. In particular we show that lowercasing 50\% of the dataset provides the best performance, matching the claims of the original paper. We also show that we got slightly lower performance in almost all experiments we have tried to reproduce, suggesting that there might be some hidden factors impacting our performance. Lastly, we make all of our work available in a \href{https://github.com/andreaskuster/uw-nlp}{public github repository}.
 \end{abstract}
 
 \section{Introduction}
-Previous works have shown that there is a significant performance drop when applying models trained on cased data to uncased data and vice-versa \cite{wang-etal-2006-capitalizing}. Since capitalization is not always available due to real world constraints, there have been some methods trying to use casing prediction (called \textit{truecasing}) to battle this trade-off.
+Previous works have shown that there is a significant performance drop when applying models trained on cased data to uncased data and vice-versa \cite{wang-etal-2006-capitalizing}. Since capitalization is not always available due to real world constraints, there have been some methods trying to use casing prediction (called \textit{truecasing}) to tackle this trade-off.
 
-The work we reproduce tries to battle this issue in two popular NLP tasks by mixing both cased and uncased datasets.
+The work we reproduce tries to battle this issue in two popular NLP tasks by lowercasing 50\% of the original datasets.
 
 \section{Contributions}
 This paper effectively shows how well work from \cite{ner-and-pos-original} can be reproducede and how well it applies to a few other settings.\\
-Original paper does show how casing issue in NLP can be effectively solved through a method which requires close to none overhead in terms of development time, and no additional overhead in runtime, especially when compared to methods such as truecasing.\\
-It also serves as a reproducing work to show that truecasing can be reproduced. We show that while truecasing experiment can be reproduced on the same experiment, but claims on applicability to other datasets fail to reproduce.
+The original paper does show how casing issue in NLP can be effectively solved through a method which requires close to none overhead in terms of development time, and no additional overhead in runtime, especially when compared to methods such as truecasing (This is true for mixing 50\% cased and 50\% uncased, if we mix full datasets of both then training will take approximately twice as long).\\
+It also serves as a reproducing work to show that truecasing performance can be reproduced.
 
 \subsection{Hypotheses from original paper}
 \label{sec:original_hypotheses}
 Original paper proposes following hypotheses:
 \begin{itemize}
     \item Truecasing fits strongly to data it is presented leading to performance drops on different datasets.
-    \item Mixing cased and uncased data provides the best performance in NER task on CoNLL 2003 dataset.
+    \item Mixing cased and uncased data provides the best performance in NER task on CoNLL 2003 dataset. This is not due to larger size of the dataset, since the same method works if we only lowercase 50\% of the original dataset.
     \item Such techinque generalizes well on noisy datasets such as Twitter data.
-    \item Mixing cased and uncased data provides the best performance in POS task on Penn Treebank dataset.
+    \item Mixing cased and uncased data provides the best performance in POS task on Penn Treebank dataset. This is not due to larger size of the dataset, since the same method works if we only lowercase 50\% of the original dataset.
 \end{itemize}
 
 \subsection{Hypotheses addressed in this work}
@@ -91,7 +91,7 @@ In addition to hypotheses tested in Section~\ref{sec:original_hypotheses} we als
 
 
 \subsection{Experiments}
-We conducted two main experiments from the paper, and tried to confirm the reproducibility claim that the original paper made.
+We conducted three main experiments from the paper, which were done roughly in parallel to each other.
 
 Truecasing is a task where given all lowercase sentences we have to predict correct casing. Here we trained a simple Bidirectional LSTM with a logical layer on top, as described in both \cite{ner-and-pos-original} and \cite{susanto-etal-2016-learning}. Since the former paper, does a great job of mentioning hyper-parameters used in the network, the hyperparameter search is not required.
 
@@ -133,8 +133,8 @@ Additionally, in case of NER and POS each of these datasets occurs in 5 differen
     \item Uncased (U) - Uncased dataset. It's a standard dataset, with an additional step of converting everything to lowercase.
     \item Cased + Uncased (C + U) - Combination of both cased and uncased flavors. Hence it is twice the size of either cased or uncased.
     \item Half Mixed (C + U 50) - Combination of cased and uncased flavors. However, only 50\% of data is lowercase, and remaining half is as-is.
-    \item Truecase Test (TT) - Truecased Test dataset. Training data is the same as cased one. Test is converted to uncased version, and then a trucaser is run on it.
-    \item Truecase All (TA) - Truecased Train and Test dataset. The transformation described for test in TT is applied to both train and test.
+    \item Truecase Test (TT) - Truecased Test dataset. Training data is the same as cased one. Test is converted to uncased version, and then a trucaser is run on it. The Truecaser is not trained on any data, and is provided (in case of this paper, trucaser trained on Wikipedia dataset is used).
+    \item Truecase All (TA) - Truecased Train and Test dataset. The transformation described for test in TT is applied to both train and test. The Truecaser is not trained on any data, and is provided (in case of this paper, trucaser trained on Wikipedia dataset is used).
 \end{itemize}
 
 \subsection{Padding}
@@ -254,6 +254,8 @@ All experiments described below used padding to the maximum sentence size for tr
     Sizes of Time Distributed Dense layer, and CRF layer are the same, and equal to number of classes given dataset. Additionally size of ELMo encoding (and hence size of input to BiLSTM layer) is 1024.
 
     Due to time constraints we also used early stopping. Training was stopped either after 40 epochs or if validation accuracy improvement was smaller than 0.001 over 4 epochs.
+
+    Lastly, for simplicity of this paper, we are not discussing impact of all hyperparameters here. However, they are discussed in depth, with plots in the \href{https://github.com/andreaskuster/uw-nlp/tree/master/pos}{experiment on the github repository}.
 
     \subsubsection{Results}
     We tested the optimal model on 5 different setups, as described in list of flavors in Sec. \ref{sec:datasets}. The dataset used in this case was PTB, with splits as described before.
