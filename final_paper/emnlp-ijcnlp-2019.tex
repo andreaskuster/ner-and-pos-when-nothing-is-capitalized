@@ -87,27 +87,17 @@ In addition to hypotheses tested in Section~\ref{sec:original_hypotheses} we als
         \item Mixing both cased and uncased data leads to the best performance regardless of word \textbf{dataset} used.
         \item Using ELMo model with CRF layer in POS task to outperform the one without, regardless of data casing technique. This is based on \cite{BiLSTM-CRF}.
     \end{itemize}
-    \item NER:
-    \begin{itemize}
-        \item NER task is transferable to other, similar dataset, such as Groningen Meaning Bank (GMB) in this case.
-    \end{itemize}
 \end{itemize}
 
 
 \subsection{Experiments}
 We conducted two main experiments from the paper, and tried to confirm the reproducibility claim that the original paper made.
 
-For the truecasing we are training a simple Bidirectional LSTM with a logical layer on top, as described in both \cite{ner-and-pos-original} and \cite{susanto-etal-2016-learning}. Since the former paper, does a great job of mentioning hyper-parameters used in the network, the hyperparameter search is not required.
+Truecasing is a task where given all lowercase sentences we have to predict correct casing. Here we trained a simple Bidirectional LSTM with a logical layer on top, as described in both \cite{ner-and-pos-original} and \cite{susanto-etal-2016-learning}. Since the former paper, does a great job of mentioning hyper-parameters used in the network, the hyperparameter search is not required.
 
-Part of Speech tagging is the most in depth experiment, which lead a lot of additional hypotheses which got tested. Firstly, we had to find optimal hyper-parameter setting. The search was not too large, since a few of the parameters (such as number of layers) were known, but it still took a significant amount of time. After finding such setting we compared its results with ones reported the original paper. Then we investigated whether claims from this paper are applicable to other datasets and encodings. Lastly, we looked at the CRF layer, and what its impact on performance on the whole model is.
+Part of Speech tagging is a task in which given a sentence we have to predict part of speech for each word. It is our the most in depth experiment, which lead a lot of additional hypotheses which got tested. Firstly, we had to find optimal hyper-parameter setting. The search was not too large, since a few of the parameters (such as number of layers) were known, but it still took a significant amount of time. After finding such setting we compared its results with ones reported the original paper. Then we investigated whether claims from this paper are applicable to other datasets and encodings. Lastly, we looked at the CRF layer, and what its impact on performance on the whole model is.
 
-Named Entity Recognition \textbf{\textcolor{red}{TO BE DONE}}
-
-\textcolor{green}{
-Here every experiment is listed briefly.
-\textbf{Every} hypothesis in Section~\ref{sec:current_hypotheses} should be listed and supported by at least one experiment, plot, table, or other type of data.
-Every piece of data should be listed here, with the hypothesis it supports.
-}
+Named Entity Recognition is a task in which given a sentence we have to predict which parts of it describe some entity. It had the most sophisticated model out of all the experiments we tried reproducing. Fortunately we did not have to do a hyperparameter search since \cite{ner-and-pos-original} and \cite{ma-hovy-2016-end} described model rather well for NER task.
 
 \section{Code}
 There are no public repos which do mention the project in their \textit{READMEs}.
@@ -336,7 +326,6 @@ All experiments described below used padding to the maximum sentence size for tr
             \item Validation consists of sections 5-6
             \item Test consists of sections 7-8
         \end{itemize}
-        \item \textbf{\textcolor{red}{ADD Groningen Meaning Bank (GMB) dataset}}
     \end{itemize}
 
     \subsection{Part of Speech Tagging}
@@ -421,19 +410,19 @@ Due to relative lack of overlap between three sections each of us used different
     \begin{itemize}
         \item GPU: NVIDIA RTX 2080 Super
         \item CPU: AMD Ryzen 7 3700x
-        \item Runtime: 10h (Original Paper + Debugging)
+        \item Runtime: 10h (Original Paper)
     \end{itemize}
     \item POS:
     \begin{itemize}
         \item GPU: 2x NVIDIA V100
         \item CPU: AMD EPYC 7501
-        \item Runtime: 15h (Original Paper + Additional Experiments + Debugging)
+        \item Runtime: 100h (Original Paper + Additional Experiments)
     \end{itemize}
     \item NER:
     \begin{itemize}
-        \item GPU: \textbf{\textcolor{red}{TO BE FILLED}}
-        \item CPU: \textbf{\textcolor{red}{TO BE FILLED}}
-        \item Runtime: \textbf{\textcolor{red}{TO BE FILLED}}
+        \item GPU: NVIDIA GTX 1080
+        \item CPU: Intel Core i7-6850K
+        \item Runtime: 26h (Original Paper + Twitter Evaluation)
     \end{itemize}
 \end{itemize}
 
