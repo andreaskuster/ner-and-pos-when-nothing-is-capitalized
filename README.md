@@ -218,9 +218,9 @@ Additional details about the part-of-speech tagging part of the paper can be fou
 BiLSTM-CRF using ELMo + Glove + character embeddings trained on CoNLL
 | Experiment | Train data | Test data | F1 Score | Avg | F1 Score from the paper   | Avg from the paper |
 | ---   | --- | --- | --- | --- | --- | --- |
-| 1.1   | Cased | Cased | 89.72 | - | 92.45| - |
+| 1.1   | Cased | Cased | 90.63 | - | 92.45| - |
 | 1.2   | Cased | Uncased |  |  | 34.46 | 63.46 |
-| 2     | Uncased | Uncased |  |  | 89.32 | 89.32 |
+| 2     | Uncased | Uncased | 89.72 |  | 89.32 | 89.32 |
 | 3.1   | Augment | Cased |  |  | 91.67| - |
 | 3.2   | Augment | Uncased |  |  | 89.31 | 90.49 |
 | 3.5.1 | Half Mixed | Cased |  |  | 91.68 | - |
