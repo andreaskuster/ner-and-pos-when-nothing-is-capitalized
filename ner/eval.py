@@ -24,10 +24,7 @@ optparser.add_option(
     # "-t", "--test", default="dataset/twitter.json",
     type='int', help="0 for cased, 1 for lower cased and 2 for truecased"
 )
-optparser.add_option(
-    "-f", "--crf", default="0",
-    type='int', help="Use CRF (0 to disable)"
-)
+
 optparser.add_option(
     "-g", '--use_gpu', default='1',
     type='int', help='whether or not to ues gpu'
