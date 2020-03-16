@@ -500,7 +500,13 @@ This is required for every report. Include every item listed in the syllabus, pl
 Include the information listed in the syllabus, including the \textbf{total} number of GPU hours used for all experiments, and the number of GPU hours for \textbf{each} experiment.
 
 \section{Discussion and recommendations}
-Conclude the report, and summarize which hypotheses from the original paper were reproducible. Include suggestions for future researchers -- what was hard? What worked easily?
+\cite{ner-and-pos-original} is mostly reproducible, with the three out of four original hypothesis reproduced in our report. In particular all hypotheses which were not involving transferring task to a new dataset were successful.
+
+We believe that transferring NER to Twitter is also a feasible claim, but involving a lot of additional tunning to the model, which should be described in the original paper. This is because of our additional experiments in POS, which shown that at least in that task, the same type of model is transferrable to other datasets.
+
+Most of the elements of this paper worked surprisingly well when reproduced, and implementation was not a significant struggle, due to libraries such as PyTorch and Keras. Our main concern is that if we were not provided access to datasets by TAs, it would be a much harder task, since two datasets used in the original paper were not available publicly. Our suggestion to future researches is to use publicly available datasets, if possible.
+
+Overall, we would suggest future researchers to use a mixed cased and uncased data in their work, since it provide a little development time overhead and no additional runtime.
 
 \bibliographystyle{acl_natbib}
 \bibliography{emnlp-ijcnlp-2019}
