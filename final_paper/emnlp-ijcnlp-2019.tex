@@ -97,7 +97,7 @@ Truecasing is a task where given all lowercase sentences we have to predict corr
 
 Part of Speech tagging is a task in which given a sentence we have to predict part of speech for each word. It is our the most in depth experiment, which lead a lot of additional hypotheses which got tested. Firstly, we had to find optimal hyper-parameter setting. The search was not too large, since a few of the parameters (such as number of layers) were known, but it still took a significant amount of time. After finding such setting we compared its results with ones reported the original paper. Then we investigated whether claims from this paper are applicable to other datasets and encodings. Lastly, we looked at the CRF layer, and what its impact on performance on the whole model is.
 
-Named Entity Recognition is a task in which given a sentence we have to predict which parts of it describe some entity. It had the most sophisticated model out of all the experiments we tried reproducing. Fortunately we did not have to do a hyperparameter search since \cite{ner-and-pos-original} and \cite{ma-hovy-2016-end} described model rather well for NER task.
+Named Entity Recognition is a task in which given a sentence we have to predict which parts of it describe some entity. It had the most sophisticated model out of all the experiments we tried reproducing. Fortunately we did not have to do a hyperparameter search since \cite{DBLP:journals/corr/LampleBSKD16} provided a similar model to that of the original paper.
 
 \section{Code}
 There are no public repos which do mention the project in their \textit{READMEs}.
@@ -298,7 +298,7 @@ All experiments described below used padding to the maximum sentence size for tr
 
     We can see that we agree with the hypothesis that mixing cased and uncased provides the best performance on the Penn Tree Bank as can be seen in Table \ref{tab:pos-results-our}. This confirms the hypothesis.
 
-    However, as in case of Truecasing, we conclude that in terms of absolute performence we did get different results as reference paper. This can be seen in Table \ref{tab:pos-results-comp}, where there is about 1\% difference in accuracy between our implementation and the original one. In addition to this the gain due to mixing cased and uncased data is sometimes smaller than the difference between implementations, such as in case of Uncased flavor, where reference has higher accuracy than our C + U flavor.
+    However, as in case of Truecasing, we conclude that in terms of absolute performance we did get different results as reference paper. This can be seen in Table \ref{tab:pos-results-comp}, where there is about 1\% difference in accuracy between our implementation and the original one. In addition to this the gain due to mixing cased and uncased data is sometimes smaller than the difference between implementations, such as in case of Uncased flavor, where reference has higher accuracy than our C + U flavor.
 
     Overall, \textbf{we confirm the hypothesis}, but with a grain of salt due to lack of transparency in implementation in the original paper.
 
@@ -307,18 +307,14 @@ All experiments described below used padding to the maximum sentence size for tr
 \label{sec:exp-ner}
 
     \subsubsection{Model description}
-    % \textcolor{green}{See syllabus. If you had to implement the model, record how long each part took.}
-    Since the model wasn't described well in the original paper we used a fork of \href{https://github.com/ZhixiuYe/NER-pytorch}{NER-pytorch} which implements ~\cite{DBLP:journals/corr/LampleBSKD16}. This implementation has a similar performance to that of the original paper. 
-    
-    This model uses pre-trained GloVe embeddings concatenated with character embeddings trained on the training data using a bi-directional LSTM. The character embeddings length is one of the hyper-parameters for the model.
-    
-    Similar to the pos model, it uses a singel BiLSTM followed by a highway layer and and output CRF layer.
-    
-    \subsubsection{Hyperparameters}
-    % \textbf{\textcolor{red}{TODO: Describe model hyperparameters. Look at Sections \ref{sec:exp-ner} and \ref{sec:exp-pos} for examples}}
+    Since the model wasn't described well in the original paper we used a fork of \href{https://github.com/ZhixiuYe/NER-pytorch}{NER-pytorch} which implements ~\cite{DBLP:journals/corr/LampleBSKD16}. This implementation has a similar performance to that of the original paper.
 
-    % \textcolor{green}{See syllabus. Describe what you can.}
-    The character embedding size and number of hidden units in LSTM served as hyper-parameters for the model. We evaluated the model on the validation set for character embeddings size 25 and 40 along with LSTM hidden layer size of 200, 300 and 400 and found that (25,200) performed slightly better. LSTM Dropout and learning rate could have been other hyper-parameters we could've optimized but we maintained them at  0.5 and 0.015 due to time constraints. 
+    This model uses pre-trained GloVe embeddings concatenated with character embeddings trained on the training data using a bi-directional LSTM. The character embeddings length is one of the hyper-parameters for the model.
+
+    Similar to the pos model, it uses a single BiLSTM followed by a highway layer and and output CRF layer.
+
+    \subsubsection{Hyperparameters}
+    The character embedding size and number of hidden units in LSTM served as hyper-parameters for the model. We evaluated the model on the validation set for character embeddings size 25 and 40 along with LSTM hidden layer size of 200, 300 and 400 and found that (25,200) performed slightly better. LSTM Dropout and learning rate could have been other hyper-parameters we could've optimized but we maintained them at  0.5 and 0.015 due to time constraints.
 
     \subsubsection{Results}
     We tested on the same 5 variants as in case of POS experiment. Dataset used was CoNLL2003, similarly to the original paper. Table \ref{tab:ner-results-our} shows results of these variants using our code. We can see that, mixing cased and uncased data is again a very good data pre-processing step, which provides respectively first and third highest F1 score.
