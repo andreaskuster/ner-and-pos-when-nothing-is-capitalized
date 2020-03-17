@@ -307,12 +307,18 @@ All experiments described below used padding to the maximum sentence size for tr
 \label{sec:exp-ner}
 
     \subsubsection{Model description}
-    \textcolor{green}{See syllabus. If you had to implement the model, record how long each part took.}
-
+    % \textcolor{green}{See syllabus. If you had to implement the model, record how long each part took.}
+    Since the model wasn't described well in the original paper we used a fork of \href{https://github.com/ZhixiuYe/NER-pytorch}{NER-pytorch} which implements ~\cite{DBLP:journals/corr/LampleBSKD16}. This implementation has a similar performance to that of the original paper. 
+    
+    This model uses pre-trained GloVe embeddings concatenated with character embeddings trained on the training data using a bi-directional LSTM. The character embeddings length is one of the hyper-parameters for the model.
+    
+    Similar to the pos model, it uses a singel BiLSTM followed by a highway layer and and output CRF layer.
+    
     \subsubsection{Hyperparameters}
-    \textbf{\textcolor{red}{TODO: Describe model hyperparameters. Look at Sections \ref{sec:exp-ner} and \ref{sec:exp-pos} for examples}}
+    % \textbf{\textcolor{red}{TODO: Describe model hyperparameters. Look at Sections \ref{sec:exp-ner} and \ref{sec:exp-pos} for examples}}
 
-    \textcolor{green}{See syllabus. Describe what you can.}
+    % \textcolor{green}{See syllabus. Describe what you can.}
+    The character embedding size and number of hidden units in LSTM served as hyper-parameters for the model. We evaluated the model on the validation set for character embeddings size 25 and 40 along with LSTM hidden layer size of 200, 300 and 400 and found that (25,200) performed slightly better. LSTM Dropout and learning rate could have been other hyper-parameters we could've optimized but we maintained them at  0.5 and 0.015 due to time constraints. 
 
     \subsubsection{Results}
     We tested on the same 5 variants as in case of POS experiment. Dataset used was CoNLL2003, similarly to the original paper. Table \ref{tab:ner-results-our} shows results of these variants using our code. We can see that, mixing cased and uncased data is again a very good data pre-processing step, which provides respectively first and third highest F1 score.
