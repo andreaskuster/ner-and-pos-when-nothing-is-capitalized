@@ -40,19 +40,19 @@ optparser.add_option(
     type='int', help="Lowercase words (this will not affect character inputs)"
 )
 optparser.add_option(
-    "-l", "--train_mode", default="cased",
-    type='int', help="cased, uncased, augmented, mixed and truecased"
+    "-c", "--train_mode", default="cased",
+     help="cased, uncased, augmented, mixed and truecased"
 )
 optparser.add_option(
-    "-l", "--dev_mode", default="cased",
-    type='int', help="cased, uncased, augmented, mixed and truecased"
+    "-y", "--dev_mode", default="cased",
+     help="cased, uncased, augmented, mixed and truecased"
 )
 optparser.add_option(
     "-z", "--zeros", default="0",
     type='int', help="Replace digits with 0"
 )
 optparser.add_option(
-    "-C", "--char_lstm_dim", default="25",
+    "-C", "--char_lstm_dim", default="40",
     type='int', help="Char LSTM hidden layer size"
 )
 optparser.add_option(
@@ -64,7 +64,7 @@ optparser.add_option(
     type='int', help="Token embedding dimension"
 )
 optparser.add_option(
-    "-W", "--word_lstm_dim", default="200",
+    "-W", "--word_lstm_dim", default="400",
     type='int', help="Token LSTM hidden layer size"
 )
 optparser.add_option(
@@ -100,14 +100,13 @@ optparser.add_option(
     type='int', help='whether or not to ues gpu'
 )
 optparser.add_option(
-    '--name', default='model',
+    '--name', default='mixed_test',
     help='model name'
 )
 opts = optparser.parse_args()[0]
 
 parameters = OrderedDict()
 parameters['tag_scheme'] = opts.tag_scheme
-parameters['lower'] = opts.lower == 1
 parameters['zeros'] = opts.zeros == 1
 parameters['char_lstm_dim'] = opts.char_lstm_dim
 parameters['char_bidirect'] = opts.char_bidirect == 1
@@ -121,11 +120,12 @@ parameters['crf'] = opts.crf == 1
 parameters['dropout'] = opts.dropout
 parameters['reload'] = opts.reload == 1
 parameters['name'] = opts.name
-
+parameters['case'] = opts.case
+case= opts.case
 parameters['use_gpu'] = opts.use_gpu == 1 and torch.cuda.is_available()
 use_gpu = parameters['use_gpu']
 
-mapping_file = 'models/mapping.pkl'
+mapping_file = 'models/mixed_mapping.pkl'
 
 name = parameters['name']
 model_name = models_path + name #get_name(parameters)
@@ -148,19 +148,18 @@ if not os.path.exists(eval_temp):
 if not os.path.exists(models_path):
     os.makedirs(models_path)
 
-lower = parameters['lower']
 zeros = parameters['zeros']
 tag_scheme = parameters['tag_scheme']
 
-train_sentences = loader.load_sentences(opts.train, lower, zeros)
-dev_sentences = loader.load_sentences(opts.dev, lower, zeros)
-test_sentences = loader.load_sentences(opts.test, lower, zeros)
+train_sentences = loader.load_sentences(opts.train, case, zeros)
+dev_sentences = loader.load_sentences(opts.dev, case, zeros)
+test_sentences = loader.load_sentences(opts.test, case, zeros)
 
 update_tag_scheme(train_sentences, tag_scheme)
 update_tag_scheme(dev_sentences, tag_scheme)
 update_tag_scheme(test_sentences, tag_scheme)
 
-dico_words_train = word_mapping(train_sentences, lower)[0]
+dico_words_train = word_mapping(train_sentences, case)[0]
 
 dico_words, word_to_id, id_to_word = augment_with_pretrained(
         dico_words_train.copy(),

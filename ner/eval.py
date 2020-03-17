@@ -20,7 +20,7 @@ optparser.add_option(
     help="Test set location"
 )
 optparser.add_option(
-    "-t", "--case", default="0",
+    "-c", "--case", default="0",
     # "-t", "--test", default="dataset/twitter.json",
     type='int', help="0 for cased, 1 for lower cased and 2 for truecased"
 )
