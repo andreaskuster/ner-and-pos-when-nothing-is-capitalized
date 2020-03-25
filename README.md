@@ -3,6 +3,7 @@
 As part of the CSE517 NLP class at UW, we seek to reproduce the results from the paper __[ner and pos when nothing is capitalized](../master/papers/ner_and_pos_when_nothing_is_capitalized.pdf)__ , provide a working implementation, insight into hyperparameters as well as additional experiments.
 
 [Project Proposal](../master/proposal/document.pdf)
+
 [Final Paper](../master/final_paper/emnlp-ijcnlp-2019.pdf)
 
 # ner and pos when nothing is capitalized  
