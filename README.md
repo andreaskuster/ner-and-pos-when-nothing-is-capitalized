@@ -11,8 +11,6 @@ For those languages which use it, capitalization is an important signal for the 
 
 [Paper](../master/papers/ner_and_pos_when_nothing_is_capitalized.pdf)
 
-# Code
-[https://github.com/andreaskuster/uw-nlp](https://github.com/andreaskuster/uw-nlp)
 
 # Findings
 
