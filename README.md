@@ -130,9 +130,8 @@ Furthermore, we extended the tests to different datasets, namely the Brown corpu
 
 1. For the coparison of the different embeddings (word2vec, glove, elmo) we expect elmo to perform better than the other two. Firstly, because of the better perfomance we concluded during the lecture (for a well trained elmo model) and secondly because it was the choice for this paper.
 2. We expect the ELMo model with CRF layer to outperform the one without due to the findings from the paper linked below.
-3. We expect to be able to conclude the hypothesis from the original experiments for the reduced ptb dastaset, as well as the other datasets (brown and conll2000).
+3. We expect to be able to conclude the hypothesis from the original experiments for the Twitter dataset as well
 
-#### Comparison
 POS on penn treebank reduced dataset, brown and CoNLL2000 dataset, word2vec, glove and elmo, with/without CRF layer (additional experiments)
 
 | Train Data | Test Data | Accuracy Word2vec CRF | Accuracy GloVe CRF | Accuracy ELMo | Accuracy ELMo CRF (paper experiment) |
@@ -215,7 +214,23 @@ In order to compare the outcome from the additional experiments to those from th
 Additional details about the part-of-speech tagging part of the paper can be found in the separate [__pos/README.md__](pos/README.md).
 
 ## NER experiment
+#### Hypothesis
+
+1. Training on cased data does not perform well on uncased data, while training on uncased data performs well on uncased data.
+2. Training on a concatenated dataset of uncased and cased data performs well on cased and uncased data. It does so, not due to the larger dataset, but rather works as good if we (randomly) lowercase 50% of the dataset.
+3. Trying to solve the problem of (1) by truecasing the lowercased test data does not perform well, but it does perform well if the training data has been lowercased and truecased too.
+#### Model
 BiLSTM-CRF using Glove + character embeddings trained on CoNLL
+25 character embeddings trained using a BiLSTM + 300 pre-trained glove embeddings
+BiLSTM Layer with 200 hidden layer dimension (Drop out of 0.5)
+Highway layer
+Output CRF layer
+initial learning rate of 0.15 with adam
+stopping criterion when the F-score doesn't improve over iterations
+
+The model is validated on eng_testa and tested on end_testb
+
+
 | Experiment | Train data | Test data | F1 Score | Avg | F1 Score from the paper   | Avg from the paper |
 | ---   | --- | --- | --- | --- | --- | --- |
 | 1.1   | Cased | Cased | 90.63 | - | 92.45| - |
@@ -241,7 +256,12 @@ BiLSTM-CRF using Glove + character embeddings trained on CoNLL tested on Twitter
  
 # Implications
 
-Description if the results were reproducible, what was not, ... TODO
+The most interesting difference in the cased variant, where there is a above 30\% gap between our and the original implementation. After closer investigation we discovered that the reason for it is huge different in its performance on uncased data (81.47 in our implementation vs 34.46 in original one). We do not have a firm intuition on why this is happening. However, it might be the case that models trained on cased dataset are highly unstable when tested on uncased data.
+
+Overall, however we can see that relative performance of results is similar, and mixing cased and uncased data provides the best performance with our implementation. Because of this we believe our results support second hypothesis of the paper.
+
+Our model did much worse than the original one. This is very counterintuitive, when we consider the fact that in the original dataset, our cased experiment generalized much better. Overall, we cannot support the thrid hypothesis from original paper.
+
 
 # Resources
 
