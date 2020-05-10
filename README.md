@@ -41,8 +41,6 @@ Lastly, to greatly increase training speed, all of our sentences are padded. Eac
 #### Conclusion
 On wikipedia dataset which we trained truecaser on we got performence similar to the one reported in the paper. The [original procedure](https://github.com/raymondhs/char-rnn-truecase) differed slightly from our version (mostly in a sense that it used char-rnn, while we used vanilla PyTorch), which can explain slight differences in results. However, achieving similar performence was not problematic with all information provided in the paper.
 
-<b>TODO</b>: Summarize for other datasets.
-
 ## POS Experiment
 
 ### Paper Reproduction (BiLSTM-CRF+POS+ELMo on PTB)
