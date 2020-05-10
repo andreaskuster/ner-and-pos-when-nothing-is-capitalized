@@ -10,5 +10,5 @@ allennlp
 torch
 matplotlib
 jupyter
-glove==1.0.0
+glove
 git+https://www.github.com/keras-team/keras-contrib.git
