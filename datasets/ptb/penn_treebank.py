@@ -28,6 +28,7 @@ import nltk
 import random
 
 from truecase.external_utils import predict_truecasing
+from datasets import AbstractLoader
 
 """
 
@@ -45,9 +46,11 @@ from truecase.external_utils import predict_truecasing
 """
 
 
-class PTB:
+class PTB(AbstractLoader):
 
     def __init__(self):
+        # initialize super class
+        super().__init__()
         # load config from file
         with open(os.path.join(os.path.dirname(__file__), "ptb_conf.json")) as config:
             self.config = json.load(config)
