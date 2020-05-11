@@ -5,7 +5,7 @@ import os
 
 class CoNLL2003:
 
-    def __init__(self, train_path = None, test_path = None):
+    def __init__(self, train_path=None, test_path=None):
         absFilePath = os.path.abspath(__file__)
         folder_path, _ = os.path.split(absFilePath)
         if train_path is None:
@@ -21,7 +21,6 @@ class CoNLL2003:
         self.train_tags = []
         self.test_words = []
         self.test_tags = []
-
 
     @staticmethod
     def __load_file(file, text_map_func=lambda x: x, tag_map_func=lambda x: x):
@@ -43,7 +42,6 @@ class CoNLL2003:
                 curr_sentence_words.append(text_map_func(line[0]))
                 curr_sentence_tags.append(tag_map_func(line[1:]))
         return result_words, result_tags
-
 
     def load_data(self, text_map_func=lambda x: x, tag_map_func=lambda x: x):
         if len(self.train_words) == 0:

@@ -26,11 +26,14 @@ import nltk
 import random
 
 from truecase.external_utils import predict_truecasing
+from datasets import AbstractLoader
 
 
-class CoNLL2000:
+class CoNLL2000(AbstractLoader):
 
     def __init__(self):
+        # initialize super class
+        super().__init__()
         # download dataset
         nltk.download("conll2000")
 

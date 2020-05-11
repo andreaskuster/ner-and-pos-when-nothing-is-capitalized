@@ -26,11 +26,14 @@ import nltk
 import random
 
 from truecase.external_utils import predict_truecasing
+from datasets import AbstractLoader
 
 
-class Brown:
+class Brown(AbstractLoader):
 
     def __init__(self):
+        # initialize super class
+        super().__init__()
         # download dataset
         nltk.download("brown")
 
