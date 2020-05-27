@@ -25,6 +25,8 @@ __license__ = "GPL"
 import nltk
 import random
 
+from typing import Tuple, List
+
 from truecase.external_utils import predict_truecasing
 from datasets import AbstractLoader
 
@@ -37,9 +39,9 @@ class CoNLL2000(AbstractLoader):
         # download dataset
         nltk.download("conll2000")
 
-    def load_data(self, text_map_func=lambda x: x, tag_map_func=lambda x: x):
+    def load_data(self, text_map_func=lambda x: x, tag_map_func=lambda x: x) -> Tuple[List, List]:
         # split text from pos tag
-        text, tag = [], []
+        text, tag = list(), list()
         for tagged_sentence in nltk.corpus.conll2000.tagged_sents():
             sentence, tags = zip(*tagged_sentence)
             text.append(list(map(text_map_func, sentence)))
@@ -47,22 +49,22 @@ class CoNLL2000(AbstractLoader):
         # return as tuple
         return text, tag
 
-    def load_data_lowercase(self):
+    def load_data_lowercase(self) -> Tuple[List, List]:
         # apply lowercase function to the dataset
         return self.load_data(text_map_func=str.lower)
 
-    def load_data_truecase(self):
+    def load_data_truecase(self) -> Tuple[List, List]:
         # fetch lowercase dataset and truecase it
         lower_sentence, tag = self.load_data_lowercase()
         return predict_truecasing(lower_sentence), tag
 
-    def load_data_cased_and_uncased(self):
+    def load_data_cased_and_uncased(self) -> Tuple[List, List]:
         # fetch cased and uncased dataset and concatenate them
         sentence_c, tag_c = self.load_data()
         sentence_u, tag_u = self.load_data_lowercase()
         return sentence_c + sentence_u, tag_c + tag_u
 
-    def load_data_half_mixed(self):
+    def load_data_half_mixed(self) -> Tuple[List, List]:
         # fetch cased dataset
         sentence, tag = self.load_data()
         # generate 50% random indices from 0..len(sentence)-1
