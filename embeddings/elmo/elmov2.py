@@ -22,6 +22,8 @@ __author__ = "Andreas Kuster"
 __copyright__ = "Copyright 2020"
 __license__ = "GPL"
 
+from typing import List
+
 from allennlp.modules.elmo import Elmo, batch_to_ids
 
 
@@ -35,17 +37,18 @@ class ELMo:
                            "/elmo_2x4096_512_2048cnn_2xhighway_weights.hdf5 "
 
         # instantiate class
-        self.elmo = Elmo(self.options_file,
-                         self.weight_file, 2,
+        self.elmo = Elmo(options_file=self.options_file,
+                         weight_file=self.weight_file,
+                         num_output_representations=2,
                          dropout=0)
         # set embedding dimensionality
         self.dim = 1024
 
-    def word2vec(self, word):
+    def word2vec(self, word) -> List[float]:
         # map the word to its embedding vector
         return self.elmo(batch_to_ids(word))["elmo_representations"]
 
-    def embedding(self, sentences):
+    def embedding(self, sentences) -> List[float]:
         # use batch_to_ids to convert sentences to character ids
         character_ids = batch_to_ids(sentences)
         embeddings = self.elmo(character_ids)["elmo_representations"][0]
