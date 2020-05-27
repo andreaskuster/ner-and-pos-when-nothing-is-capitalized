@@ -27,6 +27,8 @@ import json
 import nltk
 import random
 
+from typing import Tuple, List
+
 from truecase.external_utils import predict_truecasing
 from datasets import AbstractLoader
 
@@ -65,13 +67,13 @@ class PTB(AbstractLoader):
             train_files = [item for item in os.listdir(os.path.join("{}/wsj/{:02}".format(base_path, i)))]
             print("\"{}\":{},".format(i, train_files))
 
-    def load_data(self, sections=list(range(25)), text_map_func=lambda x: x, tag_map_func=lambda x: x):
+    def load_data(self, sections=list(range(25)), text_map_func=lambda x: x, tag_map_func=lambda x: x) -> Tuple[List, List]:
         # get all files
         files = list()
         for i in sections:
             files += self.config["files"][str(i)]
         # split text from pos tag
-        text, tag = [], []
+        text, tag = list(), list()
         for tagged_sentence in nltk.corpus.treebank.tagged_sents(files):
             sentence, tags = zip(*tagged_sentence)
             text.append(list(map(text_map_func, sentence)))
@@ -79,23 +81,23 @@ class PTB(AbstractLoader):
         # return as tuple
         return text, tag
 
-    def load_data_lowercase(self, sections):
+    def load_data_lowercase(self, sections) -> Tuple[List, List]:
         # apply lowercase function to the dataset
         return self.load_data(sections=sections,
                               text_map_func=str.lower)
 
-    def load_data_truecase(self, sections):
+    def load_data_truecase(self, sections) -> Tuple[List, List]:
         # fetch lowercase dataset and truecase it
         lower_sentence, tag = self.load_data_lowercase(sections)
         return predict_truecasing(lower_sentence), tag
 
-    def load_data_cased_and_uncased(self, sections):
+    def load_data_cased_and_uncased(self, sections) -> Tuple[List, List]:
         # fetch cased and uncased dataset and concatenate them
         sentence_c, tag_c = self.load_data(sections=sections)
         sentence_u, tag_u = self.load_data_lowercase(sections=sections)
         return sentence_c + sentence_u, tag_c + tag_u
 
-    def load_data_half_mixed(self, sections):
+    def load_data_half_mixed(self, sections) -> Tuple[List, List]:
         # fetch cased dataset
         sentence, tag = self.load_data(sections=sections)
         # generate 50% random indices from 0..len(sentence)-1
@@ -114,8 +116,8 @@ if __name__ == "__main__":
     # get ptb section 7 and 10, lowercase
     ptb710_lower = ptb.load_data_lowercase([7, 10])
     # get full ptb dataset, truecase
-    data_truecase = ptb.load_data_truecase()
+    data_truecase = ptb.load_data_truecase([2])
     # get c+u ptb data (full dataset cased and uncased)
-    data_cu = ptb.load_data_cased_and_uncased()
+    data_cu = ptb.load_data_cased_and_uncased([3, 4])
     # get hm ptb data (50% randomly lowercase)
-    data_hm = ptb.load_data_half_mixed()
+    data_hm = ptb.load_data_half_mixed([5, 6, 7, 8])
