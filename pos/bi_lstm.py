@@ -27,13 +27,15 @@ from keras.optimizers import Adam
 from keras.layers import LSTM, Dense, Bidirectional
 from keras_contrib.layers import CRF
 from keras_contrib.metrics.crf_accuracies import _get_accuracy
+from numpy import save, load
+
 import numpy as np
+
 from datasets.ptb.penn_treebank import PTB
 from embeddings.word2vec.word2vec import Word2Vec
 from embeddings.elmo.elmov2 import ELMo
 from embeddings.glove.glove import GloVe
 from helper.multi_gpu import to_multi_gpu
-from numpy import save, load
 
 # show only relevant cuda gpu devices (i.e. mask some for parallel jobs)
 # os.environ["CUDA_VISIBLE_DEVICES"] = ""
@@ -60,6 +62,7 @@ def create_joined_crf_loss(crf):
 
     return loss
 
+
 def create_joined_crf_accuracy(crf):
     def accuracy(y_true, y_pred):
         X = crf.input
@@ -68,6 +71,7 @@ def create_joined_crf_accuracy(crf):
         return _get_accuracy(y_true, y_pred, mask, crf.sparse_target)
 
     return accuracy
+
 
 #################################
 # Import data
@@ -92,7 +96,6 @@ else:
     # test: 22..24 -> range(22, 25)
     testX, testY = ptb.load_data(range(22, 25))
 
-
 #################################
 # Pad sequences
 #################################
@@ -103,7 +106,6 @@ token_train_len = [len(x) for x in trainX]
 token_dev_len = [len(x) for x in devX]
 token_test_len = [len(x) for x in testX]
 max_len = max(token_train_len + token_dev_len + token_test_len)
-
 
 for i in range(len(trainX)):
     no_pad = max_len - len(trainX[i])
@@ -124,7 +126,6 @@ for i in range(len(devY)):
 for i in range(len(testY)):
     no_pad = max_len - len(testY[i])
     testY[i] = list(testY[i]) + ([""] * no_pad)
-
 
 #################################
 # Map to embeddings
@@ -149,7 +150,6 @@ elif _EMBEDDINGS == "glove":
 else:
     raise RuntimeError("No embeddings preprocessor selected.")
 
-
 if _EMBEDDINGS == "elmo":
 
     if _SAVE_EMBEDDING_ELMO:
@@ -160,24 +160,24 @@ if _EMBEDDINGS == "elmo":
 
         trainX_embeddings = list()
         for i in range(num_batches):
-            start = i*_BATCH_SIZE_EMBEDDINGS
-            end = (i+1)*_BATCH_SIZE_EMBEDDINGS
+            start = i * _BATCH_SIZE_EMBEDDINGS
+            end = (i + 1) * _BATCH_SIZE_EMBEDDINGS
             trainX_embeddings.append(preprocessor.embedding(trainX[start:end]))
             print("elmo training embedding  round {}...".format(i))
         trainX_embeddings = np.array(trainX_embeddings)
-        trainX_embeddings = trainX_embeddings.reshape(-1, trainX_embeddings[0].shape[-2], trainX_embeddings[0].shape[-1])
+        trainX_embeddings = trainX_embeddings.reshape(-1, trainX_embeddings[0].shape[-2],
+                                                      trainX_embeddings[0].shape[-1])
         if end < len(trainX):
             trainX_embeddings = np.concatenate((trainX_embeddings, preprocessor.embedding(trainX[end:])), axis=0)
             print("elmo training embedding  round remainder...")
         # trainX_embeddings = preprocessor.embedding(trainX)
 
-
         num_batches = int(len(testX) / _BATCH_SIZE_EMBEDDINGS)
 
         testX_embeddings = list()
         for i in range(num_batches):
-            start = i*_BATCH_SIZE_EMBEDDINGS
-            end = (i+1)*_BATCH_SIZE_EMBEDDINGS
+            start = i * _BATCH_SIZE_EMBEDDINGS
+            end = (i + 1) * _BATCH_SIZE_EMBEDDINGS
             testX_embeddings.append(preprocessor.embedding(testX[start:end]))
             print("elmo test embedding  round {}...".format(i))
 
@@ -240,9 +240,9 @@ from keras_contrib.losses import crf_loss
 from keras_contrib.metrics.crf_accuracies import crf_viterbi_accuracy
 
 if isfile("model.h5"):
-    model = load_model("model.h5", custom_objects={"CRF": CRF, "crf_loss": crf_loss, "crf_viterbi_accuracy": crf_viterbi_accuracy})
+    model = load_model("model.h5",
+                       custom_objects={"CRF": CRF, "crf_loss": crf_loss, "crf_viterbi_accuracy": crf_viterbi_accuracy})
 else:
-
 
     model = Sequential()
     model.add(Bidirectional(layer=LSTM(units=1024, return_sequences=True), input_shape=(max_len, dim_embedding_vec)))
@@ -270,13 +270,12 @@ else:
 
 """
     from keras.utils import to_categorical
+
     y = to_categorical(trainY_int, num_classes=num_categories)
 
     model.fit(trainX_embeddings, y, batch_size=1024, epochs=10)  # batch_size=2 steps_per_epoch=128, epochs=40
 
-
     model.save("model.h5")
-
 
 y_pred = model.predict(testX_embeddings)
 
@@ -295,9 +294,4 @@ for sentence in testY_int:
         else:
             count += 1 if word == pred_word else 0
 
-print("accuracy: {}".format(count/total))
-
-
-
-
-
+print("accuracy: {}".format(count / total))
