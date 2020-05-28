@@ -1,3 +1,44 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+
+"""
+    Copyright (C) 2020  Andreas Kuster
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+__author__ = "Andreas Kuster"
+__copyright__ = "Copyright 2020"
+__license__ = "GPL"
+
+
+from keras.models import Sequential
+from keras.layers import Activation
+from keras.optimizers import Adam
+from keras.layers import LSTM, Dense, Bidirectional
+from keras_contrib.layers import CRF
+from keras_contrib.metrics.crf_accuracies import _get_accuracy
+from numpy import save, load
+
+import numpy as np
+
+from datasets.ptb.penn_treebank import PTB
+from embeddings.word2vec.word2vec import Word2Vec
+from embeddings.elmo.elmov2 import ELMo
+from embeddings.glove.glove import GloVe
+from helper.multi_gpu import to_multi_gpu
+
 """
     Improvement ideas:
         - k-fold cross validation: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html
@@ -18,22 +59,6 @@
         - https://www.youtube.com/watch?v=rc3YDj5GiVM
         - http://warmspringwinds.github.io/tensorflow/tf-slim/2016/12/18/image-segmentation-with-tensorflow-using-cnns-and-conditional-random-fields/
 """
-
-from keras.models import Sequential
-from keras.layers import Activation
-from keras.optimizers import Adam
-from keras.layers import LSTM, Dense, Bidirectional
-from keras_contrib.layers import CRF
-from keras_contrib.metrics.crf_accuracies import _get_accuracy
-from numpy import save, load
-
-import numpy as np
-
-from datasets.ptb.penn_treebank import PTB
-from embeddings.word2vec.word2vec import Word2Vec
-from embeddings.elmo.elmov2 import ELMo
-from embeddings.glove.glove import GloVe
-from helper.multi_gpu import to_multi_gpu
 
 # show only relevant cuda gpu devices (i.e. mask some for parallel jobs)
 # os.environ["CUDA_VISIBLE_DEVICES"] = ""
