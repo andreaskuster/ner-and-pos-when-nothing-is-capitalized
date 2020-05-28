@@ -1,6 +1,4 @@
 """
-
-
     Improvement ideas:
         - k-fold cross validation: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html
 
