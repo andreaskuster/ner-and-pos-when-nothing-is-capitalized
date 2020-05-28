@@ -26,16 +26,19 @@ from typing import List
 
 from allennlp.modules.elmo import Elmo, batch_to_ids
 
+from embeddings import AbstractEmbedding
 
-class ELMo:
+
+class ELMo(AbstractEmbedding):
 
     def __init__(self):
+        # initialize super class
+        super().__init__()
         # weights and definition download urls
         self.options_file = "https://allennlp.s3.amazonaws.com/models/elmo/2x4096_512_2048cnn_2xhighway" \
                             "/elmo_2x4096_512_2048cnn_2xhighway_options.json "
         self.weight_file = "https://allennlp.s3.amazonaws.com/models/elmo/2x4096_512_2048cnn_2xhighway" \
                            "/elmo_2x4096_512_2048cnn_2xhighway_weights.hdf5 "
-
         # instantiate class
         self.elmo = Elmo(options_file=self.options_file,
                          weight_file=self.weight_file,
@@ -44,11 +47,11 @@ class ELMo:
         # set embedding dimensionality
         self.dim = 1024
 
-    def word2vec(self, word) -> List[float]:
+    def word2vec(self, word: str) -> List[float]:
         # map the word to its embedding vector
         return self.elmo(batch_to_ids(word))["elmo_representations"]
 
-    def embedding(self, sentences) -> List[float]:
+    def embedding(self, sentences: List[str]) -> List[float]:
         # use batch_to_ids to convert sentences to character ids
         character_ids = batch_to_ids(sentences)
         embeddings = self.elmo(character_ids)["elmo_representations"][0]
@@ -60,5 +63,5 @@ if __name__ == "__main__":
     # instantiate class
     elmov2 = ELMo()
     # get embedding for "Hello World"
-    sentences = ["Hello", "World"]
+    sentence = ["Hello", "World"]
     print("embedding (v2) for \"Hello World\" is {}".format([elmov2.word2vec(word) for word in sentences]))

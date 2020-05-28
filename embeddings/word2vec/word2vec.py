@@ -29,6 +29,8 @@ import numpy as np
 
 from typing import List
 
+from embeddings import AbstractEmbedding
+
 """
     Word2Vec
 
@@ -39,11 +41,13 @@ from typing import List
 """
 
 
-class Word2Vec:
+class Word2Vec(AbstractEmbedding):
 
     def __init__(self):
+        # initialize super class
+        super().__init__()
         self.model = None  # word2vec model instance
-        self.dim = 300  # embedding vector dimension
+        self.dim = 300  # embedding vector dimensionality
 
     def import_pre_trained_data(self, datasource: str = "word2vec-google-news-300"):
         print("Downloading and importing {}, this might take a while...".format(datasource))

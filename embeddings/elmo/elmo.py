@@ -24,6 +24,10 @@ __license__ = "GPL"
 
 import tensorflow_hub as hub
 
+from typing import List
+
+from embeddings import AbstractEmbedding
+
 """
     ELMo: Deep contextualized word representations
 
@@ -37,16 +41,17 @@ import tensorflow_hub as hub
 """
 
 
-class ELMo:
+class ELMo(AbstractEmbedding):
 
-    @staticmethod
-    def embedding(tokens_input, tokens_length):
-
+    def __init__(self):
+        # initialize super class
+        super().__init__()
         # load model from tensorflow hub
-        elmo = hub.Module("https://tfhub.dev/google/elmo/2", trainable=False)
+        self.model = hub.Module("https://tfhub.dev/google/elmo/2", trainable=False)
 
+    def embedding(self, tokens_input: List[List[str]], tokens_length: int) -> List[float]:
         # get embeddings
-        embeddings = elmo(
+        embeddings = self.model(
             inputs={
                 "tokens": tokens_input,
                 "sequence_len": tokens_length
@@ -57,7 +62,9 @@ class ELMo:
 
 
 if __name__ == "__main__":
+    # instantiate class
+    elmo = ELMo()
     # get embedding for "Hello World"
     sentences = [["Hello", "World"]]
     token_lengths = list(map(len, sentences))
-    print("embedding (v1) for \"Hello World\" is {}".format(ELMo.embedding(sentences, token_lengths)))
+    print("embedding (v1) for \"Hello World\" is {}".format(elmo.embedding(sentences, token_lengths)))

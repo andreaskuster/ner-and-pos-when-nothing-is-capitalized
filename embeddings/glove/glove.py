@@ -29,6 +29,10 @@ import os
 
 import numpy as np
 
+from typing import List
+
+from embeddings import AbstractEmbedding
+
 """
     GloVe: Global Vectors for Word Representation
 
@@ -61,9 +65,11 @@ import numpy as np
 """
 
 
-class GloVe:
+class GloVe(AbstractEmbedding):
 
     def __init__(self):
+        # initialize super class
+        super().__init__()
         # source definitions
         self.data_sources = {
             "wikipedia2014_gigaword5_6b_uncased": {
@@ -119,7 +125,7 @@ class GloVe:
         self.pre_trained = None  # flag indicating load pre-trained embedding or manual training
         self.dim = -1  # embedding vector dimension
 
-    def import_pre_trained_data(self, datasource, dataset):
+    def import_pre_trained_data(self, datasource: str, dataset: str):
         print("Importing pre-trained data, this might take a while...")
         # check if file already exists
         if not os.path.isfile(os.path.join(self.base_path, datasource, dataset)):
@@ -132,7 +138,7 @@ class GloVe:
         self.import_pre_trained(datasource, dataset)
         print("Embedding import finished")
 
-    def download_data(self, datasource):
+    def download_data(self, datasource: str):
         # check if folder exists
         if not os.path.isdir(self.base_path):
             # create folder
@@ -142,7 +148,7 @@ class GloVe:
         urllib.request.urlretrieve(self.data_sources[datasource]["url"],
                                    os.path.join(self.base_path, "{}.zip".format(datasource)))
 
-    def unzip_data(self, datasource, dataset):
+    def unzip_data(self, datasource: str, dataset: str):
         # open zip
         zip_ref = zipfile.ZipFile(os.path.join(self.base_path, "{}.zip".format(datasource)), "r")
         # create director
@@ -153,7 +159,7 @@ class GloVe:
         # close file handler
         zip_ref.close()
 
-    def import_pre_trained(self, datasource, dataset):
+    def import_pre_trained(self, datasource: str, dataset: str):
         # set embedding vector dimensionality
         self.dim = self.data_sources[datasource][dataset]["dim"]
         print("Importing embedding {}, this might take a while...".format(dataset))
@@ -168,13 +174,13 @@ class GloVe:
         # set pre-trained flag
         self.pre_trained = True
 
-    def token_iter(self, path):
+    def token_iter(self, path: str):
         # iterate over the tokens, without reading the whole file at once (for memory efficiency)
         with open(path, "r") as file:
             for line in file:
                 yield line.split()
 
-    def word_to_no(self, word):
+    def word_to_no(self, word: str):
         # check if word is already in the dictionary
         if word in self.word2no:
             # return the assigned index
@@ -186,7 +192,7 @@ class GloVe:
             self.counter += 1
             return self.word2no[word]
 
-    def create_co_occurrence_matrix(self, path, sliding_window_size=3):
+    def create_co_occurrence_matrix(self, path: str, sliding_window_size: int = 3):
         # create sliding window
         window = list()
         # get token iterator
@@ -220,7 +226,7 @@ class GloVe:
         # set flag to self-trained
         self.pre_trained = False
 
-    def word2vec(self, word):
+    def word2vec(self, word: str):
         # check whether model is self-trained or not
         if self.pre_trained:
             # return vector if word present, else return the zero vector
@@ -228,12 +234,12 @@ class GloVe:
                 return self.embeddings[word]
             else:
                 return np.zeros(self.dim)
-        elif self.pre_trained == False:
+        elif not self.pre_trained:
             return self.model.W[self.word2no[word]]
         else:
             raise RuntimeError("No vectors trained.")
 
-    def vec2word(self, vec):
+    def vec2word(self, vec: List[float]):
         raise NotImplementedError()
 
 
