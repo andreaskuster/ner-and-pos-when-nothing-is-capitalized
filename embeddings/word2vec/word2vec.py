@@ -24,7 +24,10 @@ __license__ = "GPL"
 
 import gensim.models
 import gensim.downloader as api
+
 import numpy as np
+
+from typing import List
 
 """
     Word2Vec
@@ -42,30 +45,30 @@ class Word2Vec:
         self.model = None  # word2vec model instance
         self.dim = 300  # embedding vector dimension
 
-    def import_pre_trained_data(self, datasource):
+    def import_pre_trained_data(self, datasource: str = "word2vec-google-news-300"):
         print("Downloading and importing {}, this might take a while...".format(datasource))
         # load pre-trained model from file
         self.model = api.load(datasource)
         print("Embedding import finished")
 
-    def word2vec(self, word):
+    def word2vec(self, word: str) -> List[float]:
         # return word vector if the word exists, return the zero vector otherwise
         if word in self.model:
             return self.model[word]
         else:
             return np.zeros(self.dim)
 
-    def vec2word(self, vec):
+    def vec2word(self, vec: List[float]) -> str:
         # return closest word (by cosine similarity)
         return self.model.most_similar(positive=[vec], topn=1)
 
-    def training_file_iter(self, training_file):
+    def training_file_iter(self, training_file: str):
         # iterate over the tokens, without reading the whole file at once (for memory efficiency)
         with open(training_file, "r") as file:
             for line in file:
                 yield line.split()
 
-    def train_model(self, training_file):
+    def train_model(self, training_file: str):
         # train the model
         self.model = gensim.models.Word2Vec(sentences=self.training_file_iter(training_file),
                                             iter=10,  # number of training iterations, default: 5
@@ -73,11 +76,11 @@ class Word2Vec:
                                             size=200,  # NN size, default: 100
                                             min_count=5)  # ignore words with < min_count, default: 1
 
-    def store_model(self, path):
+    def store_model(self, path: str):
         # save trained model
         self.model.save(path)
 
-    def load_model(self, path):
+    def load_model(self, path: str):
         # load trained model
         self.model = gensim.models.Word2Vec.load(path)
 
