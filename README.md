@@ -260,10 +260,20 @@ Overall, however we can see that relative performance of results is similar, and
 
 Our model did much worse than the original one. This is very counterintuitive, when we consider the fact that in the original dataset, our cased experiment generalized much better. Overall, we cannot support the thrid hypothesis from original paper.
 
+# Citation
 
-# Resources
+You can cite this unpublished paper:
+```bibtex
+@unpublished{ nlp_ner_pos_capitalization,
+  author    = {Kuster, Andreas and Filipek, Jakub and Muppirala, Viswa Virinchi},
+  title     = {reproducing "ner and pos when nothing is capitalized"},
+  year      = {2020}
+  url       = {github.com/andreaskuster/uw-nlp}
+}
+```
 
-## Papers
+
+# References
 [ner and pos when nothing is capitalized](../master/papers/ner_and_pos_when_nothing_is_capitalized.pdf)
 
 [ner and pos when nothing is capitalized poster](../master/papers/poster.pdf)
