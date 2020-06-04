@@ -1,6 +1,6 @@
 
 # University of Washington CSE 517 A Wi 20: Natural Language Processing - Project
-As part of the CSE517 NLP class at UW, we seek to reproduce the results from the paper __[ner and pos when nothing is capitalized](../master/papers/ner_and_pos_when_nothing_is_capitalized.pdf)__ , provide a working implementation, insight into hyperparameters as well as additional experiments.
+As part of the CSE517 NLP class at UW, we seek to reproduce the results from the paper __[ner and pos when nothing is capitalized](../master/papers/ner_and_pos_when_nothing_is_capitalized.pdf)__ , provide a working implementation, insight into hyperparameters as well as conducting additional experiments.
 
 [Project Proposal](../master/proposal/document.pdf)
 
