@@ -268,7 +268,7 @@ You can cite this unpublished paper:
   author    = {Kuster, Andreas and Filipek, Jakub and Muppirala, Viswa Virinchi},
   title     = {reproducing "ner and pos when nothing is capitalized"},
   year      = {2020}
-  url       = {github.com/andreaskuster/uw-nlp}
+  url       = {github.com/andreaskuster/ner-and-pos-when-nothing-is-capitalized}
 }
 ```
 
