@@ -33,6 +33,11 @@ from argparse import ArgumentParser
 
 from pos import Model, CaseType
 
+"""
+    This script generates all the pos graphs from the experiment log data.
+"""
+
+
 _BASE_PATH = "pos/results"  # path to the experiment output files
 
 
