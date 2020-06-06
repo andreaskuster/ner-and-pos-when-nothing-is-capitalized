@@ -51,12 +51,20 @@ from embeddings.elmo.elmov2 import ELMo
 from helper.multi_gpu import to_multi_gpu
 
 
+"""
+    This is the complete parts-of-speech tagging class, including data reading, pre-processing, embedding, training, and
+    evaluation of the different combination of data, processing and evaluation routines.
+"""
+
+
+# enumeration for log output verbosity
 class LogLevel(Enum):
     NO: int = 0
     LIMITED: int = 1
     FULL: int = 2
 
 
+# enumeration for dataset choice
 class Dataset(Enum):
     PTB = auto()
     PTB_DUMMY = auto()
@@ -65,6 +73,7 @@ class Dataset(Enum):
     CONLL2000 = auto()
 
 
+# enumeration for case type
 class CaseType(Enum):
     CASED = auto()
     UNCASED = auto()
@@ -73,20 +82,24 @@ class CaseType(Enum):
     HALF_MIXED = auto()
 
 
+# enumeration for word embedding
 class Embedding(Enum):
     GLOVE = auto()
     WORD2VEC = auto()
     ELMO = auto()
 
 
+# word2vec data source enum
 class DataSourceWord2Vec(Enum):
     GOOGLE_NEWS_300: str = "word2vec-google-news-300"
 
 
+# glove data source enum
 class DataSourceGlove(Enum):
     COMMON_CRAWL_840B_CASED_300D: Tuple[str, str] = ("common_crawl_840b_cased", "glove.840B.300d.txt")
 
 
+# neural network models enum
 class Model(Enum):
     BILSTM = "bilstm"
     BILSTM_CRF = "bilstmcrf"
@@ -100,11 +113,11 @@ class POS:
                  data_source_glove: DataSourceGlove = DataSourceGlove.COMMON_CRAWL_840B_CASED_300D,
                  batch_size_embedding: int = 4096):
         """
-        TODO: add description
-        :param log_level:
-        :param data_source_word2vec:
-        :param data_source_glove:
-        :param batch_size_embedding:
+        Initialize internal data structures.
+        :param log_level: log verbosity level: 0: none, 1: limited, 2: full
+        :param data_source_word2vec: Word2Vec data source
+        :param data_source_glove: GloVe data source
+        :param batch_size_embedding: batch size for the embedding routine
         """
         # log level
         self.log_level: LogLevel = log_level  # 0: none, 1: limited, 2: full
@@ -171,13 +184,14 @@ class POS:
                     test_size: float = 0.1,
                     dev_size: float = 0.1):
         """
-        TODO: add description
-        :param dataset:
-        :param train_casetype:
-        :param test_casetype:
-        :param test_size:
-        :param dev_size:
-        :return:
+        Load data from the different data sources, process the required casing, and split it into training, testing and
+        developing data sets.
+        :param dataset: data source
+        :param train_casetype: training dataset casing
+        :param test_casetype: testing dataset casing
+        :param dev_casetype: development dataset casing
+        :param test_size: test dataset size as a fraction of the whole dataset
+        :param dev_size: dev dataset size as a fraction of the whole dataset
         """
         # report action
         if self.log_level.value >= LogLevel.LIMITED.value:
@@ -343,8 +357,7 @@ class POS:
 
     def pad_sequence(self):
         """
-        TODO: add description
-        :return:
+        Pad all sentences to the length of the longest sentence by appending zero-length (null) worlds.
         """
         # report action
         if self.log_level.value >= LogLevel.LIMITED.value:
@@ -365,9 +378,8 @@ class POS:
 
     def embedding(self, embedding: Embedding):
         """
-        TODO: add description
-        :param embedding:
-        :return:
+        Convert the sentence (string) vectors to embedded float vector representation according to the given scheme.
+        :param embedding: embedding scheme
         """
         # report action
         if self.log_level.value >= LogLevel.LIMITED.value:
@@ -460,8 +472,8 @@ class POS:
 
     def map_y(self):
         """
-        TODO: add description
-        :return:
+        Convert the y vector from a string representation to a automatically assigned category id (integer) to simplify
+        further processing.
         """
         # report action
         if self.log_level.value >= LogLevel.LIMITED.value:
@@ -485,8 +497,8 @@ class POS:
 
     def model_name(self) -> str:
         """
-        TODO: add description
-        :return:
+        Generate a non-ambiguous string that describes the current model in use.
+        :return: the model name
         """
         if self.model_details is None:
             return ""
@@ -507,13 +519,12 @@ class POS:
                             num_gpus=1,
                             learning_rate=1e-3):
         """
-        TODO: add description
-        :param lstm_hidden_units:
-        :param lstm_dropout:
-        :param lstm_recurrent_dropout:
-        :param num_gpus:
-        :param learning_rate:
-        :return:
+        Instantiate the actual bidirectional long short-term memory (BiLSTM) model.
+        :param lstm_hidden_units: number of hidden units
+        :param lstm_dropout: lstm dropout rate
+        :param lstm_recurrent_dropout: recurrent lstm dropout rate
+        :param num_gpus: number of gpus available
+        :param learning_rate: learning rate
         """
         # create model
         self.model = Sequential()
@@ -522,7 +533,7 @@ class POS:
                                                 dropout=lstm_dropout,
                                                 recurrent_dropout=lstm_recurrent_dropout),
                                      input_shape=(self.max_sentence_length, self.dim_embedding_vec)))
-        self.model.add(Dense(self.num_categories)) # self.model.add(TimeDistributed(Dense(self.num_categories, activation="relu")))
+        self.model.add(Dense(self.num_categories))
         self.model.add(Activation("softmax"))
         self.model = to_multi_gpu(self.model, n_gpus=num_gpus)
         self.model.compile(loss="categorical_crossentropy",
@@ -538,13 +549,12 @@ class POS:
                             num_gpus=1,
                             learning_rate=1e-3):
         """
-        TODO: add description
-        :param lstm_hidden_units:
-        :param lstm_dropout:
-        :param lstm_recurrent_dropout:
-        :param num_gpus:
-        :param learning_rate:
-        :return:
+        Instantiate the actual bidirectional long short-term memory (BiLSTM) model with an additional CRF layer.
+        :param lstm_hidden_units: number of hidden units
+        :param lstm_dropout: lstm dropout rate
+        :param lstm_recurrent_dropout: recurrent lstm dropout rate
+        :param num_gpus: number of gpus available
+        :param learning_rate: learning rate
         """
         # create model
         self.model = Sequential()
@@ -564,8 +574,7 @@ class POS:
 
     def save_model(self):
         """
-        TODO: add description
-        :return:
+        Store the trained model to disk for later re-use without re-training.
         """
         if self.log_level.value >= LogLevel.LIMITED.value:
             print("Save model to file...")
@@ -579,8 +588,8 @@ class POS:
 
     def try_load_model(self) -> bool:
         """
-        TODO: add description
-        :return:
+        Check if the model is available, and try to load it.
+        :return: indication about success
         """
         return False  # save/load doesn't match (https://github.com/keras-team/keras/issues/4875) -> temporary disabled
         if isfile("{}.json".format(self.model_name())) and isfile("{}.h5".format(self.model_name())):
@@ -609,16 +618,14 @@ class POS:
                     batch_size=1024,
                     epochs=40):
         """
-        TODO: add description
-        :param batch_size:
-        :param epochs:
-        :return:
+        Train the model.
+        :param batch_size: training SGD batch size
+        :param epochs: maximum number of training epochs (early stopping might trigger earlier)
         """
         if self.model_details["model"] == Model.BILSTM_CRF:
             es = EarlyStopping(monitor="crf_viterbi_accuracy", mode="max", verbose=1, patience=4, min_delta=1e-3)
         else:
             es = EarlyStopping(monitor="val_accuracy", mode="max", verbose=1, patience=4, min_delta=1e-3)
-        # mc = ModelCheckpoint('best_model.h5', monitor='val_accuracy', mode='max', verbose=1, save_best_only=True)
         # fit model
         history = self.model.fit(self.train_x_embedded, to_categorical(self.train_y_int, self.num_categories),
                                  batch_size=batch_size,
@@ -639,8 +646,8 @@ class POS:
 
     def model_accuracy(self, X_embedded, y_int, dataset:str):
         """
-        TODO: add description
-        :return:
+        Compute the accuracy using the pre-trained model and store it in log.
+        :return: accuracy value
         """
         y_pred = self.model.predict(X_embedded)
 
@@ -671,14 +678,13 @@ class POS:
                             num_gpus=1,
                             learning_rate=1e-3):
         """
-        TODO: add description
-        :param model:
-        :param lstm_hidden_units:
-        :param lstm_dropout:
-        :param lstm_recurrent_dropout:
-        :param num_gpus:
-        :param learning_rate:
-        :return:
+        Set internal model parameter fields.
+        :param model: model type
+        :param lstm_hidden_units: number of hidden units
+        :param lstm_dropout: dropout
+        :param lstm_recurrent_dropout: recurrent dropout
+        :param num_gpus: number of gpus
+        :param learning_rate: learning rate
         """
         # set model details
         self.model_details = dict()
@@ -691,8 +697,7 @@ class POS:
 
     def create_model(self):
         """
-        TODO: add description
-        :return:
+        Instantiate the actual BiLSTM/BiLSTM CRF keras model.
         """
         if self.model_details["model"] == Model.BILSTM:
             self.create_model_bilstm(
@@ -703,18 +708,18 @@ class POS:
                 learning_rate=self.model_details["learning_rate"])
         elif self.model_details["model"] == Model.BILSTM_CRF:
             self.create_model_bilstm_crf(
-                lstm_hidden_units = self.model_details["lstm_hidden_units"],
-                lstm_dropout = self.model_details["lstm_dropout"],
-                lstm_recurrent_dropout = self.model_details["lstm_recurrent_dropout"],
-                num_gpus = self.model_details["num_gpus"],
-                learning_rate = self.model_details["learning_rate"])
+                lstm_hidden_units=self.model_details["lstm_hidden_units"],
+                lstm_dropout=self.model_details["lstm_dropout"],
+                lstm_recurrent_dropout=self.model_details["lstm_recurrent_dropout"],
+                num_gpus=self.model_details["num_gpus"],
+                learning_rate=self.model_details["learning_rate"])
         else:
             raise RuntimeError("Undefined model.")
 
 
 if __name__ == "__main__":
     """
-    TODO: add description
+    Command line grid search interface.
     """
     # parse arguments
     parser: ArgumentParser = ArgumentParser()
@@ -740,7 +745,7 @@ if __name__ == "__main__":
     parser.add_argument("-s", "--hyperparamsearch", default="False", choices=["True", "False"])
     parser.add_argument("-c", "--cudadevices", default="None")
 
-
+    # parse the arguments
     args = parser.parse_args()
 
     # convert args to correct data types
@@ -748,7 +753,6 @@ if __name__ == "__main__":
     train_casetype: CaseType = CaseType[args.traincasetype]
     test_casetype: CaseType = CaseType[args.testcasetype]
     dev_casetype: CaseType = CaseType[args.devcasetype]
-
     log_level: LogLevel = LogLevel[args.loglevel]
     embedding: Embedding = Embedding[args.embedding]
     datasource_word2vec: DataSourceWord2Vec = DataSourceWord2Vec[args.datasource_word2vec]
@@ -764,12 +768,12 @@ if __name__ == "__main__":
     hyperparameter_search: bool = args.hyperparamsearch == "True"
     cuda_devices: str = None if args.cudadevices == "None" else args.cudadevices
 
+    # print argument values
     if log_level.value >= LogLevel.LIMITED.value:
         print("Dataset is: {}".format(dataset.name))
         print("Casetype training data is: {}".format(train_casetype.name))
         print("Casetype test data is: {}".format(test_casetype.name))
         print("Casetype dev data is: {}".format(dev_casetype.name))
-
         print("Log level is: {}".format(log_level.name))
         print("Embedding is: {}".format(embedding.name))
         if embedding == Embedding.WORD2VEC:
@@ -786,56 +790,64 @@ if __name__ == "__main__":
         print("Hyperparameter search is: {}".format(hyperparameter_search))
         print("Visible cuda devies: {}".format(cuda_devices))
         print("Number of GPUs is: {}".format(num_gpus))
-
+    # instantiate class
     pos = POS(log_level=log_level,
               data_source_word2vec=datasource_word2vec,
               data_source_glove=datasource_glove)
+    # set visible cuda device environment variables (for parallel execution of the program)
     pos.set_cuda_visible_devices(devices=cuda_devices)
+    # import data
     pos.import_data(dataset=dataset,
                     train_casetype=train_casetype,
                     test_casetype=test_casetype,
                     dev_casetype=dev_casetype)
-    pos.pad_sequence()
-    pos.embedding(embedding=embedding)
-    pos.map_y()
+    pos.pad_sequence()  # pad sentences
+    pos.embedding(embedding=embedding)  # apply embedding
+    pos.map_y()  # convert y to categorical
 
+    # run a hyper-parameter search with the given corner points
     if hyperparameter_search:
+        # corner points
         _MODELS = [Model.BILSTM_CRF]
         _LSTM_HIDDEN_UNITS = [1, 2, 4, 8, 32, 128, 512]
         _LSTM_DROPOUT = [0.0, 0.2, 0.4]
         _LSTM_RECURRENT_DROPOUT = _LSTM_DROPOUT
         _LEARNING_RATE = [1e-1, 1e-3]
-
+        # iterate
         for model in _MODELS:
             for lstm_hidden_units in _LSTM_HIDDEN_UNITS:
                 for lstm_dropout in _LSTM_DROPOUT:
                     for lstm_recurrent_dropout in _LSTM_RECURRENT_DROPOUT:
                         for learning_rate in _LEARNING_RATE:
+                            # apply current model parameters
                             pos.set_model_params(model=model,
                                                  lstm_hidden_units=lstm_hidden_units,
                                                  lstm_dropout=lstm_dropout,
                                                  lstm_recurrent_dropout=lstm_recurrent_dropout,
                                                  num_gpus=num_gpus,
                                                  learning_rate=learning_rate)
-
+                            # either load model or generate it from scratch
                             if not pos.try_load_model():
                                 pos.create_model()
                                 pos.train_model()
                                 pos.save_model()
+                            # compute accuracy
                             pos.model_accuracy(X_embedded=pos.dev_x_embedded, y_int=pos.dev_y_int, dataset="dev")
                             pos.model_accuracy(X_embedded=pos.test_x_embedded, y_int=pos.test_y_int, dataset="test")
     else:
+        # apply current model parameters
         pos.set_model_params(model=model,
                              lstm_hidden_units=lstm_hidden_units,
                              lstm_dropout=lstm_dropout,
                              lstm_recurrent_dropout=lstm_recurrent_dropout,
                              num_gpus=num_gpus,
                              learning_rate=learning_rate)
-
+        # either load model or generate it from scratch
         if not pos.try_load_model():
             pos.create_model()
             pos.train_model()
             pos.save_model()
+        # compute accuracy
         pos.model_accuracy(X_embedded=pos.dev_x_embedded, y_int=pos.dev_y_int, dataset="dev")
         pos.model_accuracy(X_embedded=pos.test_x_embedded, y_int=pos.test_y_int, dataset="test")
         
